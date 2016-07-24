@@ -9,7 +9,6 @@ tmp/
 *.swp
 *~.nib
 .classpath
-.settings/
 .loadpath
-/nbproject/
+
 

@@ -59,7 +59,7 @@ public class Main extends Application {
     
     public void showKaixoInterface() throws IOException{
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("KaixoInterface.fxml"));
+        loader.setLocation(Main.class.getResource("GUI/login.fxml"));
         KaixoInterface = (BorderPane) loader.load();
 
         rootLayout.setCenter(KaixoInterface); 

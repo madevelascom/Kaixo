@@ -1,5 +1,9 @@
 .background {
-    -fx-background-color: #FDFDF9;
+    -fx-background-color: derive(#FCFEF5,20%);
+}
+
+.pane  {
+    -fx-background-color: derive(#FCFEF5,20%);
 }
 
 .label {
@@ -8,7 +12,6 @@
     -fx-text-fill: #1C140D;
     -fx-opacity: 0.8;
 }
-
 
 .label-bright {
     -fx-font-size: 11pt;
@@ -91,10 +94,20 @@
 
 .text-field {
     -fx-font-size: 12pt;
+    -fx-border-color: #E0E4CC;
+    -fx-border-width: 1.5;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
-
+.password-field{
+    -fx-border-color: #E0E4CC;
+    -fx-border-width: 1.5;
+    -fx-font-size: 12pt;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #1C140D;
@@ -151,24 +164,23 @@
 
 .tab{
 	-fx-padding: 5 22 5 22;   
-    -fx-border-color: #1C140D;
+    -fx-border-color: #FFFEE4;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #FDFDF9;
-    -fx-border-style: solid, segments(1, 1);
+    -fx-background-color: derive(#FDFDF9,20%);;
     -fx-border-radius: 0;
     -fx-border-insets: 1 1 1 1, 0;
 
 }
 .tab-pane .tab
 {
-    -fx-background-color: #FDFDF9;
+    -fx-background-color: derive(#FFFEE4,20%);;
 
 }
 
 .tab-pane .tab:selected
 {
-    -fx-background-color: #69D2E7;
+    -fx-background-color: derive(#FFFEE4,20%);;
     -fx-text-fill: #1C140D;
     
 }

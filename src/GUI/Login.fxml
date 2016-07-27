@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="450.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="450.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginController">
    <left>
       <ImageView fitHeight="173.0" fitWidth="169.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
@@ -31,7 +31,7 @@
       </ImageView>
    </left>
    <top>
-      <MenuBar prefHeight="8.0" prefWidth="439.0" style="-fx-background-color: ;" BorderPane.alignment="CENTER">
+      <MenuBar prefHeight="8.0" prefWidth="439.0" styleClass="background" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Ayuda">
             <items>
@@ -67,7 +67,7 @@
                   <Label text="Usuario" textAlignment="RIGHT" GridPane.halignment="LEFT" />
                   <Label text="Contraseña" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
                   <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" />
+                  <TextField styleClass="text-field" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <HBox alignment="TOP_CENTER" prefHeight="55.0" prefWidth="262.0" spacing="20.0" GridPane.rowIndex="3">

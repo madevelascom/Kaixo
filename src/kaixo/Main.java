@@ -5,6 +5,7 @@
  */
 package kaixo;
 
+import GUI.LoginController;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -44,7 +45,7 @@ public class Main extends Application {
     
     public void initRootLayout() throws IOException {
         // Load root layout from fxml file.
-        String css = Main.class.getResource("style.css").toExternalForm();
+        String css = LoginController.class.getResource("style.css").toExternalForm();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("RootLayout.fxml"));
         rootLayout = (BorderPane) loader.load();    
@@ -59,7 +60,7 @@ public class Main extends Application {
     
     public void showKaixoInterface() throws IOException{
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("GUI/login.fxml"));
+        loader.setLocation(LoginController.class.getResource("Login.fxml"));
         KaixoInterface = (BorderPane) loader.load();
 
         rootLayout.setCenter(KaixoInterface); 

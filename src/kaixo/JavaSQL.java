@@ -21,12 +21,15 @@ public class JavaSQL {
     private final String password; 
     
     public JavaSQL(){
+        
         //Connection information. This can change from host to host.
-        this.url = "jdbc:mysql://localhost:3306/rubik"; 
+        // driver on win this.driver = "com.mysql.jdbc.Driver"; 
+        // url on made's win:  "jdbc:mysql://localhost:3306/rubik"; 
+        this.url = "jdbc:mariadb://localhost:3306/"; 
         this.dbName = "kaixo"; 
-        this.driver = "com.mysql.jdbc.Driver";  
+        this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "rubik"; 
+        this.password = "kaixokaixo"; 
     }
 
     public Connection openConnection() throws NamingException{

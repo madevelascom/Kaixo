@@ -72,12 +72,13 @@ public class Main extends Application {
      */
     public static void main(String[] args)throws NamingException, SQLException {
         
-        actualDB = instanceDB.openConnection();
+            actualDB = instanceDB.openConnection();
         
         if(actualDB != null){
             System.out.println("Successful connection");        
+            launch(args);
         }
-        launch(args);
+        
     }
     
 }

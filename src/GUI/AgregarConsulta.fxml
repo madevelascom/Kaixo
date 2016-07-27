@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="428.0" prefWidth="295.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.Ventana3Controller">
+<AnchorPane id="AnchorPane" prefHeight="428.0" prefWidth="295.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.Ventana3Controller">
    <children>
       <VBox prefHeight="416.0" prefWidth="295.0">
          <children>
@@ -84,16 +84,16 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox prefHeight="54.0" prefWidth="265.0">
+            <HBox prefHeight="54.0" prefWidth="265.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="GUARDAR">
+                  <Button mnemonicParsing="false" text="Guardar">
                      <HBox.margin>
-                        <Insets left="40.0" />
+                        <Insets />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="CANCELAR">
+                  <Button mnemonicParsing="false" text="Cancelar">
                      <HBox.margin>
-                        <Insets left="80.0" />
+                        <Insets />
                      </HBox.margin>
                   </Button>
                </children>

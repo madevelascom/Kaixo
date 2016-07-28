@@ -29,7 +29,7 @@ public class JavaSQL {
         this.dbName = "kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "kaixokaixo"; 
+        this.password = "rubik"; 
     }
 
     public Connection openConnection() throws NamingException{

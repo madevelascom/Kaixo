@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
@@ -33,11 +36,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Kaixo");  
+        this.primaryStage.setTitle("Kaixo Login");  
         
-        /* TODO 
-        Image applicationIcon = new Image(getClass().getResourceAsStream("rubik_s_cube.png"));
-        this.primaryStage.getIcons().add(applicationIcon);*/
+        Image applicationIcon = new Image(getClass().getResourceAsStream("/resources/icon.png"));
+        this.primaryStage.getIcons().add(applicationIcon);
         
         initRootLayout();
         showKaixoInterface(); 
@@ -77,6 +79,12 @@ public class Main extends Application {
         if(actualDB != null){
             System.out.println("Successful connection");        
             launch(args);
+        }else{
+            Alert no_conn = new Alert(AlertType.ERROR);
+            no_conn.setTitle("Error");
+            no_conn.setHeaderText("Hubo en error al conectar la base de datos");
+            no_conn.setContentText("Verifica que esté la base de datos activa. "
+                    + "En caso contrario, contacta con uno de los desarrolladores.");
         }
         
     }

@@ -4,133 +4,75 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="465.0" prefWidth="451.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.Ventana5Controller">
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="380.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.Ventana5Controller">
     <stylesheets>
         <URL value="@ventana5.css" />
+      <URL value="@style.css" />
     </stylesheets>
    <children>
-      <VBox prefHeight="465.0" prefWidth="433.0">
+      <GridPane layoutX="30.0" layoutY="17.0" prefHeight="462.0" prefWidth="340.0" stylesheets="@../../../proyectosGit/Kaixo2/src/GUI/style.css" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="17.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="103.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.0" minWidth="10.0" prefWidth="217.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Region prefHeight="39.0" prefWidth="309.0" />
-            <HBox>
+            <Label text="Fecha" GridPane.rowIndex="1" />
+            <Label text="Estado" GridPane.rowIndex="3" />
+            <Label text="Diagnóstico" GridPane.rowIndex="4" />
+            <TextArea prefHeight="116.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+            <ChoiceBox prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <HBox prefHeight="95.0" prefWidth="440.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>
-                  <Label prefHeight="25.0" prefWidth="130.0" text="id Consulta">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="25.0" prefWidth="171.0">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </TextField>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox>
-               <children>
-                  <Label prefHeight="25.0" prefWidth="130.0" text="Nombre Paciente">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="25.0" prefWidth="169.0">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </TextField>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox>
-               <children>
-                  <Label prefHeight="25.0" prefWidth="130.0" text="Cédula Paciente">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="25.0" prefWidth="169.0">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </TextField>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox>
-               <children>
-                  <Label prefHeight="25.0" prefWidth="130.0" text="Estado">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <ChoiceBox prefHeight="25.0" prefWidth="169.0">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </ChoiceBox>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox prefHeight="148.0" prefWidth="393.0">
-               <children>
-                  <Label prefHeight="25.0" prefWidth="130.0" text="Diagnóstico">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextArea prefHeight="97.0" prefWidth="200.0">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </TextArea>
-                  <ScrollBar orientation="VERTICAL" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button id="botonGuardar" mnemonicParsing="false" prefHeight="58.0" prefWidth="100.0" styleClass="mainFxmlClass" stylesheets="@ventana5.css" text="GUARDAR">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="58.0" prefWidth="100.0" text="CANCELAR">
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar">
                      <HBox.margin>
                         <Insets left="40.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="58.0" prefWidth="100.0" text="AGREGAR &#10;  RECETA">
-                     <HBox.margin>
-                        <Insets left="40.0" />
-                     </HBox.margin>
-                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
                </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="40.0" top="10.0" />
-               </VBox.margin>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </HBox>
+            <Label text="Receta" GridPane.rowIndex="6" />
+            <DatePicker prefHeight="25.0" prefWidth="227.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label prefHeight="19.0" prefWidth="381.0" text="Nombre Paciente" GridPane.columnSpan="2">
+               <padding>
+                  <Insets left="100.0" />
+               </padding>
+            </Label>
+            <Label text="Hora" GridPane.rowIndex="2" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Crear" />
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
             </HBox>
          </children>
-      </VBox>
+      </GridPane>
    </children>
 </AnchorPane>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -14,65 +19,50 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="380.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.Ventana5Controller">
-    <stylesheets>
-        <URL value="@ventana5.css" />
-      <URL value="@style.css" />
-    </stylesheets>
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="360.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane layoutX="30.0" layoutY="17.0" prefHeight="462.0" prefWidth="340.0" stylesheets="@../../../proyectosGit/Kaixo2/src/GUI/style.css" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="17.0">
+      <GridPane layoutX="30.0" layoutY="17.0" prefHeight="437.0" prefWidth="340.0" stylesheets="@../../../proyectosGit/Kaixo2/src/GUI/style.css" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="103.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.0" minWidth="10.0" prefWidth="217.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="91.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="249.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="40.0" minHeight="9.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="277.0" minHeight="10.0" prefHeight="271.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" />
         </rowConstraints>
          <children>
-            <Label text="Fecha" GridPane.rowIndex="1" />
-            <Label text="Estado" GridPane.rowIndex="3" />
-            <Label text="Diagnóstico" GridPane.rowIndex="4" />
-            <TextArea prefHeight="116.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
-            <ChoiceBox prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <HBox prefHeight="95.0" prefWidth="440.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar">
-                     <HBox.margin>
-                        <Insets left="40.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </HBox>
-            <Label text="Receta" GridPane.rowIndex="6" />
-            <DatePicker prefHeight="25.0" prefWidth="227.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label prefHeight="19.0" prefWidth="381.0" text="Nombre Paciente" GridPane.columnSpan="2">
-               <padding>
-                  <Insets left="100.0" />
-               </padding>
-            </Label>
-            <Label text="Hora" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Label text="Fecha" />
+            <Label text="Estado" GridPane.rowIndex="2" />
+            <Label text="Diagnóstico" GridPane.rowIndex="3" />
+            <ChoiceBox prefHeight="35.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Receta" GridPane.rowIndex="4" />
+            <DatePicker prefHeight="35.0" prefWidth="220.0" GridPane.columnIndex="1" />
+            <Label text="Hora" GridPane.rowIndex="1" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Crear" />
                   <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                </children>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
             </HBox>
+            <ChoiceBox prefHeight="35.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea prefHeight="200.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextArea>
          </children>
       </GridPane>
+      <HBox alignment="CENTER" layoutX="80.0" layoutY="479.0" prefHeight="40.0" prefWidth="265.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

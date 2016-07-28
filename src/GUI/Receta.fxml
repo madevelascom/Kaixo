@@ -17,54 +17,45 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="469.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AgregarRecetaController">
+<AnchorPane id="AnchorPane" prefHeight="469.0" prefWidth="600.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane prefHeight="425.0" prefWidth="530.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+      <GridPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="306.0" minWidth="10.0" prefWidth="123.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="407.0" minWidth="10.0" prefWidth="407.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="306.0" minWidth="10.0" prefWidth="94.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="467.0" minWidth="10.0" prefWidth="466.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="96.0" minHeight="7.0" prefHeight="50.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="204.0" minHeight="10.0" prefHeight="204.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nombre Medicina" />
-            <Label text="Dosificación" GridPane.rowIndex="1" />
-            <TableView editable="true" prefHeight="150.0" prefWidth="520.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
-              <columns>
-                <TableColumn prefWidth="98.0" text="Número" />
-                <TableColumn prefWidth="105.0" text="Nombre" />
-                  <TableColumn prefWidth="83.0" text="Dosis" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <TextField prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </TextField>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </TextField>
-            <HBox prefHeight="39.0" prefWidth="530.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="120.0" text="Aceptar" />
-                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Eliminar" />
-               </children>
-               <GridPane.margin>
-                  <Insets top="20.0" />
-               </GridPane.margin>
-            </HBox>
-            <ComboBox prefHeight="35.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Medicina" />
+            <Label text="Frecuencia" GridPane.rowIndex="1" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
+      <HBox alignment="CENTER" layoutX="214.0" layoutY="369.0" prefHeight="39.0" prefWidth="268.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
+         </children>
+      </HBox>
+      <TableView layoutX="200.0" layoutY="142.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="140.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Medicina" />
+          <TableColumn prefWidth="75.0" text="Frecuencia" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <VBox layoutX="460.0" layoutY="161.0" prefHeight="134.0" prefWidth="120.0" spacing="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Añadir" />
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Modificar" />
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="300.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="300.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ConsultaController">
    <children>
       <GridPane layoutX="24.0" prefHeight="127.0" prefWidth="256.0" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>

@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="320.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="320.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MedicinaController">
    <children>
       <GridPane layoutX="100.0" layoutY="110.0" prefHeight="141.0" prefWidth="296.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
@@ -22,9 +21,9 @@
             <Label text="Nombre" />
             <Label text="Concentración" GridPane.rowIndex="1" />
             <Label text="Presentación" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ChoiceBox prefHeight="36.0" prefWidth="178.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="nombre" GridPane.columnIndex="1" />
+            <TextField fx:id="concentracion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="presentacion" prefHeight="36.0" prefWidth="178.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <HBox alignment="CENTER" layoutX="137.0" layoutY="278.0" prefHeight="33.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">

@@ -5,33 +5,44 @@
  */
 package kaixo;
 
+import utils.JavaSQL;
 import GUI.LoginController;
+import GUI.MedicinaController;
+import elements.Distribuidor;
+import elements.Medicina;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
 
 /**
  *
- * @author Administrator
+ * @author made
  */
 public class Main extends Application {
     
-    private Stage primaryStage;
+    private static Stage primaryStage;
     private BorderPane rootLayout;
     private BorderPane KaixoInterface;
     private Scene scene;
     
     public static Connection actualDB;
     public static JavaSQL instanceDB = new JavaSQL();
+    
+    public static ObservableList<Medicina> medData = FXCollections.observableArrayList();
+    public static ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -67,6 +78,37 @@ public class Main extends Application {
 
         rootLayout.setCenter(KaixoInterface); 
     }
+    
+    public static boolean showMedicinaDialog(Medicina med){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Medicina.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            Stage dialogStage = new Stage();
+	    dialogStage.setTitle("Crear/Editar Medicina");
+	    dialogStage.initModality(Modality.WINDOW_MODAL);
+	    dialogStage.initOwner(primaryStage);
+	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+	    Scene scene = new Scene(page);
+	    dialogStage.setScene(scene);
+            
+            MedicinaController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMedicina(med);
+
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+	    return controller.isOkClicked();
+        }catch (IOException e){
+            return false;
+        }
+    }
+    
+    public static ObservableList<Medicina> getMedData() {
+        return medData;
+    }
     /**
      * @param args the command line arguments
      * @throws javax.naming.NamingException
@@ -77,7 +119,9 @@ public class Main extends Application {
             actualDB = instanceDB.openConnection();
         
         if(actualDB != null){
-            System.out.println("Successful connection");        
+            System.out.println("Successful connection"); 
+            medData = JavaSQL.loadMedicinas(actualDB);
+            distData = JavaSQL.loadDistribuidor(actualDB);
             launch(args);
         }else{
             Alert no_conn = new Alert(AlertType.ERROR);

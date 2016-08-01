@@ -247,10 +247,10 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <TextField layoutX="14.0" layoutY="14.0" prefHeight="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <TableView layoutX="49.0" layoutY="49.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+                              <TextField fx:id="medSearch" layoutX="14.0" layoutY="14.0" prefHeight="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TableView fx:id="medTable" layoutX="49.0" layoutY="49.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Empresa" />
+                                  <TableColumn fx:id="nomMed" prefWidth="75.0" text="Medicina" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -262,9 +262,9 @@
                            <children>
                               <HBox prefHeight="35.0" prefWidth="381.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+                                    <Button mnemonicParsing="false" onAction="#handleNewMedicina" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
+                                    <Button mnemonicParsing="false" onAction="#handleEditMedicina" prefHeight="35.0" prefWidth="120.0" text="Editar" />
+                                    <Button mnemonicParsing="false" onAction="#handleDelMed" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
                                  </children>
                               </HBox>
                               <Label layoutX="35.0" layoutY="29.0" styleClass="label-header" text="Información de la medicina" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
@@ -283,11 +283,11 @@
                                     <Label text="Nombre" />
                                     <Label text="Concentración" GridPane.rowIndex="1" />
                                     <Label text="Presentación" GridPane.rowIndex="2" />
-                                    <Label text="00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="Jarabe para la tos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label text="Ñamñam" GridPane.columnIndex="1" />
+                                    <Label fx:id="medCon" text="00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="medPres" text="Jarabe para la tos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="medNom" text="Ñamñam" GridPane.columnIndex="1" />
                                     <Label text="Distribuidores" GridPane.rowIndex="3" />
-                                    <Label text="Caritafeliz" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label fx:id="medDist" text="Caritafeliz" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                  </children>
                               </GridPane>
                            </children>
@@ -302,10 +302,10 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <TextField layoutY="47.0" prefHeight="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <TableView layoutX="25.0" layoutY="57.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+                              <TextField fx:id="distSearch" layoutY="47.0" prefHeight="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TableView fx:id="distTable" layoutX="25.0" layoutY="57.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Nombre" />
+                                  <TableColumn fx:id="nomDist" prefWidth="75.0" text="Distribuidor" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -337,9 +337,9 @@
                                     <Label text="Nombre" />
                                     <Label text="Teléfono" GridPane.rowIndex="1" />
                                     <Label text="Dirección" GridPane.rowIndex="2" />
-                                    <Label text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="Al final del arcoiris" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label text="MedicinaFeliz" GridPane.columnIndex="1" />
+                                    <Label fx:id="distTel" text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="distDir" text="Al final del arcoiris" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="distNom" text="MedicinaFeliz" GridPane.columnIndex="1" />
                                  </children>
                               </GridPane>
                            </children>

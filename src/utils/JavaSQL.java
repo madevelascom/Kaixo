@@ -32,8 +32,8 @@ public class JavaSQL {
         //Connection information. This can change from host to host.
         // driver on win this.driver = "com.mysql.jdbc.Driver"; 
         // url on made's win:  "jdbc:mysql://localhost:3306/rubik"; 
-        this.url = "jdbc:mariadb://localhost:3306/"; 
-        this.dbName = "kaixo"; 
+        this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
+        this.dbName = "Kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
         this.password = "rubik"; 
@@ -64,7 +64,7 @@ public class JavaSQL {
     public static ObservableList<Medicina> loadMedicinas(Connection conn) throws SQLException{
         ObservableList<Medicina> medData = FXCollections.observableArrayList();
         Statement  stmt = conn.createStatement();
-        String sql = "SELECT nombre, concentracion, presentacion FROM medicinas";
+        String sql = "SELECT nombre, concentracion, presentacion FROM medicinas;";
         ResultSet rs = stmt.executeQuery(sql);
         
         if(rs.next()){
@@ -81,7 +81,7 @@ public class JavaSQL {
     public static ObservableList<Distribuidor> loadDistribuidor(Connection conn) throws SQLException{
         ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
         Statement  stmt = conn.createStatement();
-        String sql = "SELECT nombre, direccion, telefono FROM distribuidores";
+        String sql = "SELECT nombre, direccion, telefono FROM distribuidores;";
         ResultSet rs = stmt.executeQuery(sql);
         
         if(rs.next()){
@@ -93,6 +93,32 @@ public class JavaSQL {
         }
         
         return distData;
+    }
+    
+    public static boolean loginSession(Connection conn, String user, String pass) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT username, password, telefono FROM users WHERE username = '"
+                +user+"' AND password = '"+pass+"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if(rs.next()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public static int userLevel (Connection conn, String user) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT level FROM users WHERE username = '"+user+"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        int level = 0;
+        if(rs.next()){
+            level = rs.getInt("level");
+        }
+        
+        return level;
     }
     
 }

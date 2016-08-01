@@ -33,8 +33,9 @@ import javax.naming.NamingException;
  */
 public class Main extends Application {
     
-    private static Stage primaryStage;
+    public static Stage primaryStage;
     private BorderPane rootLayout;
+    private BorderPane KaixoLogin;
     private BorderPane KaixoInterface;
     private Scene scene;
     
@@ -53,7 +54,7 @@ public class Main extends Application {
         this.primaryStage.getIcons().add(applicationIcon);
         
         initRootLayout();
-        showKaixoInterface(); 
+        showKaixoLogin(); 
     }
     
     public void initRootLayout() throws IOException {
@@ -71,12 +72,20 @@ public class Main extends Application {
         primaryStage.show();        
     }
     
-    public void showKaixoInterface() throws IOException{
+    public void showKaixoLogin() throws IOException{
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(LoginController.class.getResource("Login.fxml"));
+        KaixoLogin = (BorderPane) loader.load();
+
+        rootLayout.setCenter(KaixoLogin); 
+    }
+    
+    public void showKaixoMain() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LoginController.class.getResource("KaixoMain.fxml"));
         KaixoInterface = (BorderPane) loader.load();
 
-        rootLayout.setCenter(KaixoInterface); 
+        rootLayout.setCenter(KaixoInterface);
     }
     
     public static boolean showMedicinaDialog(Medicina med){
@@ -116,8 +125,8 @@ public class Main extends Application {
      */
     public static void main(String[] args)throws NamingException, SQLException {
         
-            actualDB = instanceDB.openConnection();
-        
+        actualDB = instanceDB.openConnection();
+                
         if(actualDB != null){
             System.out.println("Successful connection"); 
             medData = JavaSQL.loadMedicinas(actualDB);

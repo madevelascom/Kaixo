@@ -66,14 +66,14 @@
                <children>
                   <Label text="Usuario" textAlignment="RIGHT" GridPane.halignment="LEFT" />
                   <Label text="Contraseña" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField styleClass="text-field" GridPane.columnIndex="1" />
+                  <PasswordField fx:id="pass" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="user" styleClass="text-field" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <HBox alignment="TOP_CENTER" prefHeight="55.0" prefWidth="262.0" spacing="20.0" GridPane.rowIndex="3">
                <children>
-                  <Button maxHeight="30.0" maxWidth="120.0" minHeight="35.0" minWidth="120.0" mnemonicParsing="false" text="Ingresar" />
-                  <Button maxHeight="30.0" maxWidth="120.0" minHeight="35.0" minWidth="120.0" mnemonicParsing="false" text="Salir" />
+                  <Button maxHeight="30.0" maxWidth="120.0" minHeight="35.0" minWidth="120.0" mnemonicParsing="false" onAction="#handleEnter" text="Ingresar" />
+                  <Button maxHeight="30.0" maxWidth="120.0" minHeight="35.0" minWidth="120.0" mnemonicParsing="false" onAction="#handleExit" text="Salir" />
                </children>
             </HBox>
          </children>

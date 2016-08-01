@@ -26,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
+import static utils.CryptMD5.cryptWithMD5;
 
 /**
  *
@@ -37,7 +38,8 @@ public class Main extends Application {
     private BorderPane rootLayout;
     private BorderPane KaixoLogin;
     private BorderPane KaixoInterface;
-    private Scene scene;
+    private Scene sceneLogin;
+    private Scene sceneMain;
     
     public static Connection actualDB;
     public static JavaSQL instanceDB = new JavaSQL();
@@ -58,17 +60,16 @@ public class Main extends Application {
     }
     
     public void initRootLayout() throws IOException {
-        // Load root layout from fxml file.
         String css = LoginController.class.getResource("style.css").toExternalForm();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("RootLayout.fxml"));
         rootLayout = (BorderPane) loader.load();    
 
         // Show the scene containing the root layout.
-        scene = new Scene(rootLayout);           
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);
-        primaryStage.setScene(scene);         
+        sceneLogin = new Scene(rootLayout);           
+        sceneLogin.getStylesheets().clear();
+        sceneLogin.getStylesheets().add(css);
+        primaryStage.setScene(sceneLogin);         
         primaryStage.show();        
     }
     
@@ -81,11 +82,17 @@ public class Main extends Application {
     }
     
     public void showKaixoMain() throws IOException{
+        String css = LoginController.class.getResource("style.css").toExternalForm();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(LoginController.class.getResource("KaixoMain.fxml"));
         KaixoInterface = (BorderPane) loader.load();
+        
+        sceneMain = new Scene(KaixoInterface);           
+        sceneMain.getStylesheets().clear();
+        sceneMain.getStylesheets().add(css);
+        primaryStage.setScene(sceneMain);         
+        primaryStage.show();  
 
-        rootLayout.setCenter(KaixoInterface);
     }
     
     public static boolean showMedicinaDialog(Medicina med){
@@ -106,7 +113,6 @@ public class Main extends Application {
             controller.setDialogStage(dialogStage);
             controller.setMedicina(med);
 
-            // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
 
 	    return controller.isOkClicked();
@@ -126,7 +132,7 @@ public class Main extends Application {
     public static void main(String[] args)throws NamingException, SQLException {
         
         actualDB = instanceDB.openConnection();
-                
+        //System.out.println(cryptWithMD5("123456mon"+"test"));
         if(actualDB != null){
             System.out.println("Successful connection"); 
             medData = JavaSQL.loadMedicinas(actualDB);

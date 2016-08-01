@@ -27,11 +27,11 @@ public class RegexMatcher {
     }
     
     public static boolean testUser(String user){
-        return Pattern.matches("[a-zA-Z]+", user);
+        return Pattern.matches("^(?=.*[a-zA-Z]).{6,}+", user);
     }
     
     public static boolean testPassword(String pass){
-        return Pattern.matches("([a-zA-Z]+|[0-9]+)+", pass);
+        return Pattern.matches("^(?=.*[a-zA-Z]).{6,}", pass);
     }
 
 }

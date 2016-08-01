@@ -3,16 +3,16 @@
   * To change this template file, choose Tools | Templates
   * and open the template in the editor.
   */
- package GUI;
+package GUI;
  
 import java.io.IOException;
- import java.net.URL;
+import java.net.URL;
 import java.sql.SQLException;
- import java.util.ResourceBundle;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
- import javafx.fxml.FXML;
- import javafx.fxml.Initializable;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
@@ -21,7 +21,8 @@ import kaixo.Main;
 import static utils.CryptMD5.cryptWithMD5;
 import static utils.JavaSQL.loginSession;
 import static utils.JavaSQL.userLevel;
-import utils.RegexMatcher;
+import static utils.RegexMatcher.testPassword;
+
  
  /**
   *
@@ -40,49 +41,49 @@ import utils.RegexMatcher;
          String userm = user.getText();
          String passmd5 = pass.getText();
          
-         if (userm.equals(null) || passmd5.equals(null)){
-             passmd5 = "";
-         }else{
-             passmd5 = cryptWithMD5(pass.getText().concat(userm));
-         }
-         
-        if(notEmpty(userm, passmd5)){
-            if (loginSession(actualDB, userm, passmd5)){
-                int level = userLevel(actualDB,userm);
-                 try {
-                     showKaixoMain();
-                 } catch (IOException ex) {
-                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-
-            }else{
-                user.clear();
-                pass.clear();
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Kaixo Error #1");
-                alert.setContentText("La información que ingresaste no es válida. "
-                        + "Por favor revisa el usuario y contraseña que escribiste");
-
-                alert.showAndWait();
-            }
-        }else{
+        if (userm.equals("") || passmd5.equals("")){
+            userm = "";
+            passmd5 = "";
+            user.clear();
+            pass.clear();
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
             alert.setHeaderText("Kaixo Error #1");
-            alert.setContentText("La información que ingresaste no es válida. "
-                    + "Por favor revisa el usuario y contraseña que escribiste");
+            alert.setContentText("Ingresa tu información de usuario y contraseña");
 
             alert.showAndWait();
-        }
-        
+        }else{
+            if (testPassword(pass.getText())){
+                passmd5 = cryptWithMD5(pass.getText().concat(userm));              
+                if (loginSession(actualDB, userm, passmd5)){
+                    int level = userLevel(actualDB,userm);
+                     try {
+                         showKaixoMain();
+                     } catch (IOException ex) {
+                         Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+
+                }else{
+                    user.clear();
+                    pass.clear();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #2");
+                    alert.setContentText("La información que ingresaste no es válida. "
+                            + "Por favor revisa el usuario y contraseña que escribiste");
+
+                    alert.showAndWait();
+                }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #3");
+                alert.setContentText("Las contraseñas sólo deben contener "
+                        + "letras y números con una longitud mayor a 6");
+
+                alert.showAndWait();
+            }  
+        }   
      }
 
-    private boolean notEmpty(String user, String pass){  
-        System.out.println(RegexMatcher.testUser(pass));
-        System.out.println(RegexMatcher.testPassword(user));
-         return (RegexMatcher.testPassword(pass) && RegexMatcher.testUser(user));
-    }
+    
      @FXML
      private void handleExit(){
          primaryStage.close();

@@ -97,7 +97,7 @@ public class JavaSQL {
     
     public static boolean loginSession(Connection conn, String user, String pass) throws SQLException{
         Statement  stmt = conn.createStatement();
-        String sql = "SELECT username, password, telefono FROM users WHERE username = '"
+        String sql = "SELECT username, password FROM users WHERE username = '"
                 +user+"' AND password = '"+pass+"';";
         ResultSet rs = stmt.executeQuery(sql);
         

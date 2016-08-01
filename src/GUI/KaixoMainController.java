@@ -26,7 +26,7 @@ import kaixo.Main;
  *
  * @author made
  */
-public class KaixoMainController implements Initializable {
+public class KaixoMainController extends Main implements Initializable {
     
     private ObservableList<Medicina> masterMedData = Main.getMedData();
     //Medicina

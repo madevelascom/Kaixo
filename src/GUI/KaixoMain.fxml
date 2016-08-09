@@ -161,9 +161,9 @@
                            <children>
                               <Label text="Cédula" />
                               <Label text="Nombres y apellidos" GridPane.columnIndex="3" />
-                              <TextField prefWidth="155.0" GridPane.columnIndex="1" />
-                              <TextField GridPane.columnIndex="4" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
+                              <TextField fx:id="paxCISearch" prefWidth="155.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="paxNomSearch" GridPane.columnIndex="4" />
+                              <Button mnemonicParsing="false" onAction="#handleSearchCI" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding>
@@ -171,7 +171,7 @@
                                     <Insets left="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="5">
+                              <Button mnemonicParsing="false" onAction="#handleSearchNom" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="5">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin>
@@ -203,25 +203,24 @@
                               <Label text="Casa" GridPane.rowIndex="6" />
                               <Label text="Dirección" GridPane.rowIndex="7" />
                               <Label text="Email" GridPane.rowIndex="8" />
-                              <Label text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Nomnomnom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label text="1-1-2000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="O+" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label text="0999999999" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Label text="Cdla Nueva Kennedy" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <Label text="drlara@gmail.com" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="paxNombre" text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="paxApellido" text="Nomnomnom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="paxNacimiento" text="1-1-2000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="paxSangre" text="O+" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="paxCelular" text="0999999999" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label fx:id="paxCasa" text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label fx:id="paxDi" text="Cdla Nueva Kennedy" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label fx:id="paxEmail" text="drlara@gmail.com" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                               <Label text="Cédula" />
-                              <Label text="1234567890" GridPane.columnIndex="1" />
+                              <Label fx:id="paxCI" text="1234567890" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <Label layoutX="279.0" layoutY="79.0" styleClass="label-header" text="Información del paciente" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0" />
-                        <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="510.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                        <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="379.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
                               <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Consulta" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+                              <Button mnemonicParsing="false" onAction="#handleNewPax" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
+                              <Button mnemonicParsing="false" onAction="#handleEditPax" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                            </children>
                         </HBox>
                         <GridPane layoutX="569.0" layoutY="133.0" prefHeight="168.0" prefWidth="230.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
@@ -237,7 +236,6 @@
                               <Label text="Pollo" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
-                        <Label text="Label" />
                      </children></AnchorPane>
             </content>
           </Tab>

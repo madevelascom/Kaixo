@@ -7,6 +7,7 @@ package utils;
 
 import elements.Distribuidor;
 import elements.Medicina;
+import elements.Paciente;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -101,11 +102,7 @@ public class JavaSQL {
                 +user+"' AND password = '"+pass+"';";
         ResultSet rs = stmt.executeQuery(sql);
         
-        if(rs.next()){
-            return true;
-        }else{
-            return false;
-        }
+        return rs.next();
     }
     
     public static int userLevel (Connection conn, String user) throws SQLException{
@@ -119,6 +116,66 @@ public class JavaSQL {
         }
         
         return level;
+    }
+    
+    public static Paciente searchPaxCI(Connection conn, String pax) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT * FROM paciente WHERE CI = '"+pax+"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if (rs.next()){
+            Paciente paciente = new Paciente (rs.getString("CI"), rs.getString("nombres"),
+            rs.getString("apellidos"), rs.getString("fechanacimiento"), rs.getString("tiposangre"),
+            rs.getString("numcelular"), rs.getString("numcasa"), rs.getString("dircasa"), rs.getString("email"));
+            return paciente;
+        }else{
+            Paciente paciente = new Paciente();
+            return paciente;
+        }
+    }
+    
+    public static Paciente searchPaxNom(Connection conn, String pax) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT * FROM paciente WHERE CI IN "
+                + "(SELECT CI FROM paciente WHERE CONCAT(nombres, ' ', apellidos)='"+pax+"');";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if (rs.next()){
+            Paciente paciente = new Paciente (rs.getString("CI"), rs.getString("nombres"),
+            rs.getString("apellidos"), rs.getString("fechanacimiento"), rs.getString("tiposangre"),
+            rs.getString("numcelular"), rs.getString("numcasa"), rs.getString("dircasa"), rs.getString("email"));
+            return paciente;
+        }else{
+            Paciente paciente = new Paciente();
+            return paciente;
+        }
+    }
+    
+    public static void insertNewPax(Connection conn, Paciente pax) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "INSERT INTO `paciente` VALUES ('"+pax.getCI().getValue()+"',"
+                + " '"+pax.getNombres().getValue()+"',"
+                + " '"+pax.getApellidos().getValue()+"', "
+                + " '"+pax.getNacimiento().getValue()+"', "
+                + " '"+pax.getSangre().getValue()+"',"
+                + " '"+pax.getCelular().getValue()+"',"
+                + " '"+pax.getCasa().getValue()+"',"
+                + " '"+pax.getDireccion().getValue()+"',"
+                + " '"+pax.getEmail().getValue()+"') ";
+        stmt.executeQuery(sql);
+    }
+    
+    public static void updatePax(Connection conn, Paciente pax)throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "UPDATE `paciente` SET   WHERE CI = '"+pax.getCI().getValue()+"';";
+        stmt.executeQuery(sql);
+    }
+    public static boolean existsPax(Connection conn, String CI) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT * FROM paciente WHERE CI = '"+CI+"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        return rs.next();
     }
     
 }

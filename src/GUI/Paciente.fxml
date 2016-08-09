@@ -35,21 +35,21 @@
             <Label text="Casa" GridPane.rowIndex="6" />
             <Label text="Dirección" GridPane.rowIndex="7" />
             <Label text="Email" GridPane.rowIndex="8" />
-            <TextField prefWidth="210.0" GridPane.columnIndex="1" />
-            <TextField prefHeight="20.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField prefHeight="20.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextArea maxHeight="150.0" maxWidth="210.0" prefHeight="150.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField prefHeight="52.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <DatePicker prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ChoiceBox prefHeight="33.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="paxCI" prefWidth="210.0" GridPane.columnIndex="1" />
+            <TextField fx:id="paxNombre" prefHeight="20.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="paxApellido" prefHeight="20.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="paxCelular" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="paxCasa" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextArea fx:id="paxDi" maxHeight="150.0" maxWidth="210.0" prefHeight="150.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="paxEmail" prefHeight="52.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <DatePicker fx:id="paxNacimiento" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ChoiceBox fx:id="paxSangre" prefHeight="33.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <HBox alignment="BOTTOM_CENTER" layoutX="112.0" layoutY="261.0" prefHeight="37.0" prefWidth="360.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
+            <Button mnemonicParsing="false" onAction="#handleOk" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
+            <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
          </children>
       </HBox>
       <GridPane layoutX="436.0" layoutY="62.0" prefHeight="200.0" prefWidth="150.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0">

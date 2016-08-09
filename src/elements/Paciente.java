@@ -20,15 +20,27 @@ public class Paciente {
 
     public Paciente(String CI, String apellidos, String nombres, String nacimiento,
             String sangre, String celular, String casa, String direccion, String email) {
-        this.CI = new SimpleStringProperty(CI);
-        this.apellidos = new SimpleStringProperty(apellidos);
-        this.nombres = new SimpleStringProperty(nombres);
+        this.CI         = new SimpleStringProperty(CI);
+        this.apellidos  = new SimpleStringProperty(apellidos);
+        this.nombres    = new SimpleStringProperty(nombres);
         this.nacimiento = new SimpleStringProperty(nacimiento);
-        this.sangre = new SimpleStringProperty(sangre);
-        this.celular = new SimpleStringProperty(celular);
-        this.casa = new SimpleStringProperty(casa);
-        this.direccion = new SimpleStringProperty(direccion);
-        this.email = new SimpleStringProperty(email);
+        this.sangre     = new SimpleStringProperty(sangre);
+        this.celular    = new SimpleStringProperty(celular);
+        this.casa       = new SimpleStringProperty(casa);
+        this.direccion  = new SimpleStringProperty(direccion);
+        this.email      = new SimpleStringProperty(email);
+    }
+    
+    public Paciente(){
+        this.CI         = new SimpleStringProperty("");
+        this.apellidos  = new SimpleStringProperty("");
+        this.nombres    = new SimpleStringProperty("");
+        this.nacimiento = new SimpleStringProperty("");
+        this.sangre     = new SimpleStringProperty("");
+        this.celular    = new SimpleStringProperty("");
+        this.casa       = new SimpleStringProperty("");
+        this.direccion  = new SimpleStringProperty("");
+        this.email      = new SimpleStringProperty("");
     }
 
     public StringProperty getCI() {

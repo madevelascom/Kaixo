@@ -2,7 +2,10 @@ package GUI;
 
 import elements.Distribuidor;
 import elements.Medicina;
+import elements.Paciente;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -11,15 +14,25 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import kaixo.Main;
+import static utils.JavaSQL.insertNewPax;
+import static utils.RegexMatcher.testPaxCISearch;
+import static utils.RegexMatcher.testPaxNomSearch;
+import static utils.JavaSQL.searchPaxCI;
+import static utils.JavaSQL.searchPaxNom;
+import static utils.JavaSQL.updatePax;
+import static utils.JavaSQL.existsPax;
 
 /**
  * FXML Controller class
@@ -58,6 +71,31 @@ public class KaixoMainController extends Main implements Initializable {
     private Label distTel;
     @FXML
     private Label distDir;
+    
+    /*Pacientes*/
+    @FXML
+    private Label paxCI;
+    @FXML
+    private Label paxNombre;
+    @FXML
+    private Label paxApellido;
+    @FXML
+    private Label paxNacimiento;
+    @FXML
+    private Label paxSangre;
+    @FXML
+    private Label paxCelular;
+    @FXML
+    private Label paxCasa;
+    @FXML
+    private Label paxDi;
+    @FXML
+    private Label paxEmail;
+    @FXML
+    private TextField paxCISearch;
+    @FXML
+    private TextField paxNomSearch;
+
     
     private void showMedDetails(Medicina med){
         if (med != null){
@@ -127,7 +165,7 @@ public class KaixoMainController extends Main implements Initializable {
    }
     
     public void buscarMedicina(){
-        nomMed.setCellValueFactory ( cellData -> cellData.getValue().nomProperty()); 	
+        nomMed.setCellValueFactory ( cellData -> cellData.getValue().getNombre()); 	
         FilteredList<Medicina> filteredData = new FilteredList<>(masterMedData, p -> true);	
         medSearch.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(med -> {               
@@ -144,19 +182,111 @@ public class KaixoMainController extends Main implements Initializable {
             sortedData.comparatorProperty().bind((ObservableValue<? extends Comparator<? super Medicina>>) medTable.comparatorProperty());		
             medTable.setItems(sortedData);
 
-	}
+    }
+    
+    /*PACIENTES*/
+    private void ShowPaxDetails (Paciente pax){
+        if (pax != null){
+           paxCI.setText(pax.getCI().getValue());
+           paxNombre.setText(pax.getNombres().getValue());
+           paxApellido.setText(pax.getApellidos().getValue());
+           paxNacimiento.setText(pax.getNacimiento().getValue());
+           paxSangre.setText(pax.getSangre().getValue());
+           paxCelular.setText(pax.getCelular().getValue());
+           paxCasa.setText(pax.getCasa().getValue());
+           paxDi.setText(pax.getDireccion().getValue());
+           paxEmail.setText(pax.getEmail().getValue());
+        }else{
+           paxCI.setText("");
+           paxNombre.setText("");
+           paxApellido.setText("");
+           paxNacimiento.setText("");
+           paxSangre.setText("");
+           paxCelular.setText("");
+           paxCasa.setText("");
+           paxDi.setText("");
+           paxEmail.setText("");
+        }
+    }
+    
+    @FXML 
+    private void handleSearchCI() throws SQLException{
+        String searchCI = paxCISearch.getText();
+        if (!searchCI.equals("")){
+            if(testPaxCISearch(searchCI)){
+                Paciente pac = searchPaxCI(actualDB, searchCI);
+                ShowPaxDetails(pac);
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText("Ingresa datos válidos");
+                alert.showAndWait();
+            }
+        }else{
+            paxCISearch.clear();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText("Campo vacío");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleSearchNom() throws SQLException{
+        String searchNom = paxNomSearch.getText();
+        if(!searchNom.equals("")){
+            if (testPaxNomSearch(searchNom)){
+                Paciente pac = searchPaxNom(actualDB, searchNom);
+                ShowPaxDetails(pac);
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText("Ingresa datos válidos");
+                alert.showAndWait();
+            }
+        }else{
+            paxNomSearch.clear();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText("Campo vacío");
+            alert.showAndWait();
+        }
+    }
+    
+    @FXML
+    private void handleNewPax() throws SQLException{
+        Paciente temp = new Paciente();
+        boolean okClicked = Main.showPaxNewDialog(temp);
+        if (okClicked){
+            insertNewPax(actualDB, temp);
+        }
+    }
+    
+    @FXML 
+    private void handleEditPax() throws SQLException{
+        if (existsPax(actualDB, paxCI.getText())){
+            Paciente temp = searchPaxCI(actualDB, paxCI.getText());
+            boolean okClicked = Main.showPaxeEditDialog(temp);
+            if (okClicked){
+                updatePax(actualDB, temp);
+            }
+        }else{
+            /*ALERT NO PAX SELECTED*/
+        }
+    }
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());
         nomMed.setCellValueFactory(cellData -> cellData.getValue().getNombre());
-        
+
         buscarMedicina();
-        
+
         showMedDetails(null);
-        
+
         medTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> showMedDetails(newValue));
-        
+                    (observable, oldValue, newValue) -> showMedDetails(newValue));
+
     }    
     
 }

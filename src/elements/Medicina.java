@@ -49,13 +49,4 @@ public class Medicina {
         this.presentacion = presentacion;
     }
 
-    public StringProperty nomProperty() {
-        return nombre;
-    }
-    public StringProperty conProperty() {
-        return concentracion;
-    }
-    public StringProperty preCodigo() {
-        return presentacion;
-    }
 }

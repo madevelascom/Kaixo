@@ -7,11 +7,8 @@ import java.util.regex.Pattern;
  * @author made
  */
 public class RegexMatcher {
+    
     static String regex;
-   
-    public static boolean testCI(String CI){
-        return Pattern.matches("[0-9]{10}", CI);
-    }
     
     public static boolean testEmail(String email) {
         return Pattern.matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*\n" +
@@ -32,6 +29,14 @@ public class RegexMatcher {
     
     public static boolean testPassword(String pass){
         return Pattern.matches("^(?=.*[a-zA-Z]).{6,}", pass);
+    }
+    
+    public static boolean testPaxCISearch(String CI){
+        return Pattern.matches("[0-9]{10}", CI);
+    }
+    
+    public static boolean testPaxNomSearch(String nom){
+        return Pattern.matches("^\\pL+[\\pL\\pZ\\pP]{0,}$", nom);
     }
 
 }

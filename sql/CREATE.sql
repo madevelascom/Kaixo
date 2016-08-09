@@ -12,74 +12,6 @@ COLLATE='utf16_spanish2_ci'
 ENGINE=InnoDB
 ;
 
-CREATE TABLE `consultas` (
-	`id` INT(11) NOT NULL,
-	`fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`paciente` VARCHAR(10) NULL DEFAULT NULL COMMENT 'Identificacion del paciente' COLLATE 'utf16_spanish2_ci',
-	`estado` VARCHAR(50) NOT NULL DEFAULT 'Por asistir' COLLATE 'utf16_spanish2_ci',
-	`diagnostico` TEXT NULL COLLATE 'utf16_spanish2_ci',
-	`id_valoracion` INT(11) NULL DEFAULT NULL,
-	PRIMARY KEY (`id`),
-	INDEX `FK_paciente` (`paciente`),
-	INDEX `FK_valoracion` (`id_valoracion`),
-	CONSTRAINT `FK_paciente` FOREIGN KEY (`paciente`) REFERENCES `paciente` (`CI`),
-	CONSTRAINT `FK_valoracion` FOREIGN KEY (`id_valoracion`) REFERENCES `paciente_valoracion` (`id`)
-)
-COMMENT='Kaixo - Registro de consultas'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `consulta_medicina` (
-	`id_consulta` INT(11) NOT NULL,
-	`id_medicina` INT(11) NOT NULL,
-	`frecuencia` TEXT NULL COLLATE 'utf16_spanish2_ci',
-	PRIMARY KEY (`id_consulta`, `id_medicina`),
-	INDEX `FK_consulta_medicina_medicinas` (`id_medicina`),
-	CONSTRAINT `FK_consulta` FOREIGN KEY (`id_consulta`) REFERENCES `consultas` (`id`),
-	CONSTRAINT `FK_consulta_medicina_medicinas` FOREIGN KEY (`id_medicina`) REFERENCES `medicinas` (`id`)
-)
-COMMENT='Kaixo - Receta del paciente tras atender a la consulta'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `distribuidores` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`nombre` VARCHAR(200) NOT NULL COLLATE 'utf16_spanish2_ci',
-	`direccion` TEXT NOT NULL COLLATE 'utf16_spanish2_ci',
-	`telefono` VARCHAR(50) NOT NULL COMMENT 'Telefono principal del distribuidor de medicinas' COLLATE 'utf16_spanish2_ci',
-	PRIMARY KEY (`id`)
-)
-COMMENT='Kaixo - Distribuidores de medicina'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `medicinas` (
-	`id` INT(11) NOT NULL,
-	`nombre` VARCHAR(100) NULL COLLATE 'utf16_spanish2_ci',
-	`concentracion` VARCHAR(50) NULL COLLATE 'utf16_spanish2_ci',
-	PRIMARY KEY (`id`)
-)
-COMMENT='Kaixo - Medicinas'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `medicina_dist` (
-	`id_medicina` INT(11) NOT NULL,
-	`id_distribuidor` INT(11) NOT NULL,
-	PRIMARY KEY (`id_medicina`, `id_distribuidor`),
-	INDEX `FK_distribuidor` (`id_distribuidor`),
-	CONSTRAINT `FK_distribuidor` FOREIGN KEY (`id_distribuidor`) REFERENCES `distribuidores` (`id`),
-	CONSTRAINT `FK_medicina` FOREIGN KEY (`id_medicina`) REFERENCES `medicinas` (`id`)
-)
-COMMENT='Kaixo - Disponibilidad de las medicinas en los distribuidores'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
 CREATE TABLE `paciente` (
 	`CI` VARCHAR(10) NOT NULL DEFAULT '9999999999' COMMENT 'Cedula de identidad' COLLATE 'utf16_spanish2_ci',
 	`nombres` VARCHAR(100) NOT NULL COLLATE 'utf16_spanish2_ci',
@@ -121,6 +53,80 @@ COMMENT='Kaixo - Valoracion de los pacientes'
 COLLATE='utf16_spanish2_ci'
 ENGINE=InnoDB
 ;
+
+
+CREATE TABLE `consultas` (
+	`id` INT(11) NOT NULL,
+	`fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`paciente` VARCHAR(10) NULL DEFAULT NULL COMMENT 'Identificacion del paciente' COLLATE 'utf16_spanish2_ci',
+	`estado` VARCHAR(50) NOT NULL DEFAULT 'Por asistir' COLLATE 'utf16_spanish2_ci',
+	`diagnostico` TEXT NULL COLLATE 'utf16_spanish2_ci',
+	`id_valoracion` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	INDEX `FK_paciente` (`paciente`),
+	INDEX `FK_valoracion` (`id_valoracion`),
+	CONSTRAINT `FK_paciente` FOREIGN KEY (`paciente`) REFERENCES `paciente` (`CI`),
+	CONSTRAINT `FK_valoracion` FOREIGN KEY (`id_valoracion`) REFERENCES `paciente_valoracion` (`id`)
+)
+COMMENT='Kaixo - Registro de consultas'
+COLLATE='utf16_spanish2_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `medicinas` (
+	`id` INT(11) NOT NULL,
+	`nombre` VARCHAR(100) NULL COLLATE 'utf16_spanish2_ci',
+	`concentracion` VARCHAR(50) NULL COLLATE 'utf16_spanish2_ci',
+	`presentacion` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf16_spanish2_ci',
+	PRIMARY KEY (`id`)
+)
+COMMENT='Kaixo - Medicinas'
+COLLATE='utf16_spanish2_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE TABLE `consulta_medicina` (
+	`id_consulta` INT(11) NOT NULL,
+	`id_medicina` INT(11) NOT NULL,
+	`frecuencia` TEXT NULL COLLATE 'utf16_spanish2_ci',
+	PRIMARY KEY (`id_consulta`, `id_medicina`),
+	INDEX `FK_consulta_medicina_medicinas` (`id_medicina`),
+	CONSTRAINT `FK_consulta` FOREIGN KEY (`id_consulta`) REFERENCES `consultas` (`id`),
+	CONSTRAINT `FK_consulta_medicina_medicinas` FOREIGN KEY (`id_medicina`) REFERENCES `medicinas` (`id`)
+)
+COMMENT='Kaixo - Receta del paciente tras atender a la consulta'
+COLLATE='utf16_spanish2_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `distribuidores` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre` VARCHAR(200) NOT NULL COLLATE 'utf16_spanish2_ci',
+	`direccion` TEXT NOT NULL COLLATE 'utf16_spanish2_ci',
+	`telefono` VARCHAR(50) NOT NULL COMMENT 'Telefono principal del distribuidor de medicinas' COLLATE 'utf16_spanish2_ci',
+	PRIMARY KEY (`id`)
+)
+COMMENT='Kaixo - Distribuidores de medicina'
+COLLATE='utf16_spanish2_ci'
+ENGINE=InnoDB
+;
+
+
+
+CREATE TABLE `medicina_dist` (
+	`id_medicina` INT(11) NOT NULL,
+	`id_distribuidor` INT(11) NOT NULL,
+	PRIMARY KEY (`id_medicina`, `id_distribuidor`),
+	INDEX `FK_distribuidor` (`id_distribuidor`),
+	CONSTRAINT `FK_distribuidor` FOREIGN KEY (`id_distribuidor`) REFERENCES `distribuidores` (`id`),
+	CONSTRAINT `FK_medicina` FOREIGN KEY (`id_medicina`) REFERENCES `medicinas` (`id`)
+)
+COMMENT='Kaixo - Disponibilidad de las medicinas en los distribuidores'
+COLLATE='utf16_spanish2_ci'
+ENGINE=InnoDB
+;
+
 
 CREATE TABLE `users` (
 	`username` VARCHAR(50) NOT NULL DEFAULT 'test' COLLATE 'utf16_spanish2_ci',

@@ -1,4 +1,4 @@
-CREATE DATABASE `kaixo` /*!40100 COLLATE 'utf16_swedish_ci' */
+CREATE DATABASE `kaixo` /*!40100 COLLATE 'utf16_swedish_ci' */;
 
 USE `kaixo`;
 

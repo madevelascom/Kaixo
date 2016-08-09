@@ -3,12 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/KaixoMainController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/LoginController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/utils/RegexMatcher.java</file>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/utils/CryptMD5.java</file>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/utils/JavaSQL.java</file>
-            <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/kaixo/Main.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/utils/CryptMD5.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/elements/Medicina.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/elements/Distribuidor.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/resources/icon.png</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/utils/JavaSQL.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/resources/Kaixo.png</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/elements/Alergia.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/utils/RegexMatcher.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/kaixo/Main.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/GUI/Consulta.fxml</file>
         </group>
     </open-files>
 </project-private>

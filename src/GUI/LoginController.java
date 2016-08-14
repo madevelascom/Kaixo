@@ -19,6 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import kaixo.Main;
 import static utils.CryptMD5.cryptWithMD5;
+import static utils.JavaSQL.errorMsg;
 import static utils.JavaSQL.loginSession;
 import static utils.JavaSQL.userLevel;
 import static utils.RegexMatcher.testPassword;
@@ -48,7 +49,7 @@ import static utils.RegexMatcher.testPassword;
             pass.clear();
             Alert alert = new Alert(AlertType.ERROR);
             alert.setHeaderText("Kaixo Error #1");
-            alert.setContentText("Ingresa tu información de usuario y contraseña");
+            alert.setContentText(errorMsg(actualDB, 1));
 
             alert.showAndWait();
         }else{
@@ -67,16 +68,14 @@ import static utils.RegexMatcher.testPassword;
                     pass.clear();
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setHeaderText("Kaixo Error #2");
-                    alert.setContentText("La información que ingresaste no es válida. "
-                            + "Por favor revisa el usuario y contraseña que escribiste");
+                    alert.setContentText(errorMsg(actualDB, 2));
 
                     alert.showAndWait();
                 }
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Kaixo Error #3");
-                alert.setContentText("Las contraseñas sólo deben contener "
-                        + "letras y números con una longitud mayor a 6");
+                alert.setContentText(errorMsg(actualDB, 3));
 
                 alert.showAndWait();
             }  

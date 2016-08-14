@@ -1,5 +1,6 @@
-package GUI;
+    package GUI;
 
+import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
@@ -26,6 +27,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import kaixo.Main;
+import static kaixo.Main.actualDB;
+import static utils.JavaSQL.errorMsg;
 import static utils.JavaSQL.insertNewPax;
 import static utils.RegexMatcher.testPaxCISearch;
 import static utils.RegexMatcher.testPaxNomSearch;
@@ -33,6 +36,7 @@ import static utils.JavaSQL.searchPaxCI;
 import static utils.JavaSQL.searchPaxNom;
 import static utils.JavaSQL.updatePax;
 import static utils.JavaSQL.existsPax;
+import static utils.JavaSQL.insertConsulta;
 
 /**
  * FXML Controller class
@@ -271,10 +275,30 @@ public class KaixoMainController extends Main implements Initializable {
                 updatePax(actualDB, temp);
             }
         }else{
-            /*ALERT NO PAX SELECTED*/
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
         }
     }
-   
+    
+    @FXML
+    private void handleNewConsult() throws SQLException{
+        if (existsPax(actualDB, paxCI.getText())){
+            Consulta temp = new Consulta(paxCI.getText());
+            boolean okClicked = Main.showPaxNewConsulta(temp);
+            if (okClicked){
+                insertConsulta(actualDB, temp);
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());

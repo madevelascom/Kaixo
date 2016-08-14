@@ -5,10 +5,12 @@
  */
 package kaixo;
 
+import GUI.ConsultaController;
 import utils.JavaSQL;
 import GUI.LoginController;
 import GUI.MedicinaController;
 import GUI.PacienteController;
+import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
@@ -52,7 +54,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Kaixo Login");  
+        this.primaryStage.setTitle("Kaixo");  
         
         Image applicationIcon = new Image(getClass().getResourceAsStream("/resources/icon.png"));
         this.primaryStage.getIcons().add(applicationIcon);
@@ -145,6 +147,36 @@ public class Main extends Application {
             controller.setUpdate(false);
             controller.setPaciente(pat);
             controller.disableCI();
+            
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+        }catch(IOException e){
+            return false;
+        }
+    }
+    
+    public static boolean showPaxNewConsulta(Consulta con){
+        try{
+             // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Consulta.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Consulta");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Set the person into the controller.
+            ConsultaController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setConsulta(con);
             
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();

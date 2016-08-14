@@ -3,7 +3,12 @@ package GUI;
 import elements.Paciente;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -13,9 +18,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import kaixo.Main;
 import static utils.RegexMatcher.testEmail;
 import static utils.JavaSQL.existsPax;
+import static utils.RegexMatcher.testCasa;
+import static utils.RegexMatcher.testCel;
 import static utils.RegexMatcher.testPaxCISearch;
 import static utils.RegexMatcher.testPaxNomSearch;
 
@@ -49,12 +57,16 @@ public class PacienteController extends Main implements Initializable {
     private Paciente pat;
     private boolean okClicked = false;
     private boolean isUpdate = true;
+    
+    ObservableList<String> SangreOpt = FXCollections.observableArrayList(
+    "O+", "O-","A+", "A-", "B+", "B-", "AB+", "AB-");
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        paxSangre.setItems(SangreOpt);
+        paxSangre.setValue("O+");        
     }    
     
     public void setDialogStage(Stage dialogStage) {
@@ -63,11 +75,15 @@ public class PacienteController extends Main implements Initializable {
     
     public void setPaciente(Paciente pat){
         this.pat = pat;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(pat.getNacimiento().getValue(), formatter);
+        
         paxCI.setText(pat.getCI().getValue());
         paxNombre.setText(pat.getNombres().getValue());
         paxApellido.setText(pat.getApellidos().getValue());
-        //paxNacimiento.set
-        //paxSangre
+        paxNacimiento.setPromptText(pat.getNacimiento().getValue().toLowerCase());
+        paxNacimiento.setValue(date);
+        paxSangre.setValue(pat.getSangre().getValue());
         paxCelular.setText(pat.getCelular().getValue());
         paxCasa.setText(pat.getCasa().getValue());
         paxDi.setText(pat.getDireccion().getValue());
@@ -93,16 +109,19 @@ public class PacienteController extends Main implements Initializable {
     @FXML
     public void handleOk() throws SQLException{
         if(isInputValid()){
-            /*paxCI.setText(pat.getCI().getValue());
-        paxNombre.setText(pat.getNombres().getValue());
-        paxApellido.setText(pat.getApellidos().getValue());
-        //paxNacimiento.set
-        //paxSangre
-        paxCelular.setText(pat.getCelular().getValue());
-        paxCasa.setText(pat.getCasa().getValue());
-        paxDi.setText(pat.getDireccion().getValue());
-        paxEmail.setText(pat.getEmail().getValue()); */
-                  
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            pat.setCI(new SimpleStringProperty(paxCI.getText()));
+            pat.setNombres(new SimpleStringProperty(paxNombre.getText()));
+            pat.setApellidos(new SimpleStringProperty(paxApellido.getText()));
+            pat.setNacimiento(new SimpleStringProperty(paxNacimiento.getValue().format(fmt)));
+            pat.setSangre(new SimpleStringProperty(paxSangre.getValue().toString()));
+            pat.setCelular(new SimpleStringProperty(paxCelular.getText()));
+            pat.setCasa(new SimpleStringProperty(paxCasa.getText()));
+            pat.setDireccion(new SimpleStringProperty(paxDi.getText()));
+            pat.setEmail(new SimpleStringProperty(paxEmail.getText()));
+
+            okClicked = true;
+            dialogStage.close();
         }
     }
     
@@ -115,6 +134,41 @@ public class PacienteController extends Main implements Initializable {
         String errorMessage = "";
         
         if (isUpdatePax()){
+            if (!paxNombre.getText().equals("")){
+                if (!testPaxNomSearch(paxNombre.getText())){
+                    errorMessage += "Los nombres sólo tienen letras. \n"; 
+                }
+            }else{
+                errorMessage += "Campo Nombre vacío \n"; 
+            }
+            
+            if (!paxApellido.getText().equals("")){
+                if (!testPaxNomSearch(paxNombre.getText())){
+                    errorMessage += "Los apellidos sólo tienen letras. \n"; 
+                }
+            }else{
+                errorMessage += "Campo Apellido vacío \n";
+            }
+            
+            if (!paxCelular.getText().equals("")){
+                 if (!testCel(paxCI.getText())){
+                    errorMessage += "Los números celulares tienen 10 dígitos \n";
+                 }
+            }else{
+                errorMessage += "Campo Celular vacío \n";
+            }
+            
+            if (!paxCasa.getText().equals("")){
+                if (!testCasa(paxCasa.getText())){
+                    errorMessage += "Los teléfonos tienen 9 dígitos \n";
+                }
+            }else{
+                errorMessage += "Campo Casa vacío \n";
+            }
+            
+            if (paxDi.getText().equals("")){
+                errorMessage += "Campo Direccion vacío \n";
+            }
             
         }else{
             if (!paxCI.getText().equals("")){
@@ -137,33 +191,34 @@ public class PacienteController extends Main implements Initializable {
             }
             if (!paxApellido.getText().equals("")){
                 if (!testPaxNomSearch(paxNombre.getText())){
-                    errorMessage += "Los nombres sólo tienen letras. \n"; 
+                    errorMessage += "Los apellidos sólo tienen letras. \n"; 
                 }
             }else{
                 errorMessage += "Campo Apellido vacío \n";
             }
             if (!paxCelular.getText().equals("")){
-
+                 if (!testCel(paxCI.getText())){
+                    errorMessage += "Los números celulares tienen 10 dígitos \n";
+                 }
             }else{
                 errorMessage += "Campo Celular vacío \n";
             }
             if (!paxCasa.getText().equals("")){
-
+                if (!testCasa(paxCasa.getText())){
+                    errorMessage += "Los teléfonos tienen 9 dígitos \n";
+                }
             }else{
                 errorMessage += "Campo Casa vacío \n";
             }
-            if (!paxDi.getText().equals("")){
-
-            }else{
+            if (paxDi.getText().equals("")){
                 errorMessage += "Campo Direccion vacío \n";
             }
         }
-        
-        
-        
+             
         if (!paxEmail.getText().equals("")){
-            if (!testEmail(paxEmail.getText())){
-                errorMessage += "Cantidad de créditos te�ricos vac�o \n"; 
+            if (!testEmail(paxEmail.getText().toLowerCase())){
+                System.out.println(paxEmail.getText());
+                errorMessage += "El correo que ingresaste no es válido \n"; 
             }
         }
             

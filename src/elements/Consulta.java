@@ -25,9 +25,15 @@ public class Consulta {
     }
 
     public Consulta(String fecha, String paciente, String estado) {
-        this.fecha = new SimpleStringProperty(fecha);
-        this.paciente = new SimpleStringProperty(paciente);
-        this.estado = new SimpleStringProperty(estado);
+        this.fecha      = new SimpleStringProperty(fecha);
+        this.paciente   = new SimpleStringProperty(paciente);
+        this.estado     = new SimpleStringProperty(estado);
+    }
+    
+    public Consulta(String paciente){
+        this.fecha      = new SimpleStringProperty("");
+        this.paciente   = new SimpleStringProperty(paciente);
+        this.estado     = new SimpleStringProperty("");
     }
 
     public StringProperty getFecha() {

@@ -5,6 +5,7 @@
  */
 package utils;
 
+import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
@@ -38,6 +39,14 @@ public class JavaSQL {
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
         this.password = "rubik"; 
+        
+        /*
+        this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
+        this.dbName = "Kaixo"; 
+        this.driver = "org.mariadb.jdbc.Driver";  
+        this.userName = "root"; 
+        this.password = "rubik"; 
+        */
     }
 
     public Connection openConnection() throws NamingException{
@@ -118,6 +127,17 @@ public class JavaSQL {
         return level;
     }
     
+    public static String errorMsg(Connection conn, int id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String result = "";
+        String sql = "SELECT error FROM errores WHERE id = "+String.valueOf(id)+";";
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()){
+            result = rs.getString("error");
+        }
+        return result;
+    }
+    
     public static Paciente searchPaxCI(Connection conn, String pax) throws SQLException{
         Statement stmt = conn.createStatement();
         String sql = "SELECT * FROM paciente WHERE CI = '"+pax+"';";
@@ -151,8 +171,8 @@ public class JavaSQL {
         }
     }
     
-    public static void insertNewPax(Connection conn, Paciente pax) throws SQLException{
-        Statement stmt = conn.createStatement();
+    public static void insertNewPax(Connection conn, Paciente pax) throws SQLException{ 
+       Statement stmt = conn.createStatement();
         String sql = "INSERT INTO `paciente` VALUES ('"+pax.getCI().getValue()+"',"
                 + " '"+pax.getNombres().getValue()+"',"
                 + " '"+pax.getApellidos().getValue()+"', "
@@ -167,7 +187,16 @@ public class JavaSQL {
     
     public static void updatePax(Connection conn, Paciente pax)throws SQLException{
         Statement stmt = conn.createStatement();
-        String sql = "UPDATE `paciente` SET   WHERE CI = '"+pax.getCI().getValue()+"';";
+        String sql = "UPDATE `paciente` SET   "
+                + "nombres = '"+pax.getNombres().getValue()+"', "
+                + "apellidos = '"+pax.getApellidos().getValue()+"', "
+                + "fechanacimiento = '"+pax.getNacimiento().getValue()+"', "
+                + "tiposangre = '"+pax.getSangre().getValue()+"', "
+                + "numcelular = '"+pax.getCelular().getValue()+"', "
+                + "numcasa = '"+pax.getCasa().getValue()+"', "
+                + "dircasa = '"+pax.getDireccion().getValue()+"', "
+                + "email = '"+pax.getEmail().getValue()+"' "
+                + "WHERE CI = '"+pax.getCI().getValue()+"';";
         stmt.executeQuery(sql);
     }
     public static boolean existsPax(Connection conn, String CI) throws SQLException{
@@ -176,6 +205,15 @@ public class JavaSQL {
         ResultSet rs = stmt.executeQuery(sql);
         
         return rs.next();
+    }
+    
+    public static void insertConsulta(Connection conn, Consulta con) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "INSERT INTO consultas (`fecha`, `paciente`, `estado`) VALUES "
+                + "("+con.getFecha().getValue()+", "
+                + " "+con.getPaciente().getValue()+","
+                + " "+con.getEstado().getValue()+");";
+        stmt.executeQuery(sql);
     }
     
 }

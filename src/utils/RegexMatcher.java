@@ -1,6 +1,12 @@
 package utils;
 
 import java.util.regex.Pattern;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
+/*
+https://java.net/projects/javamail/pages/Home
+*/
 
 /**
  * http://beginnersbook.com/2014/08/java-regex-tutorial/
@@ -11,8 +17,14 @@ public class RegexMatcher {
     static String regex;
     
     public static boolean testEmail(String email) {
-        return Pattern.matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*\n" +
-            "@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$;", email.toLowerCase());
+        boolean result = true;
+        try{
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        }catch (AddressException ex){
+            result = false;
+        }
+         return result;
     }
     
     public static boolean testCel(String cel){
@@ -36,7 +48,8 @@ public class RegexMatcher {
     }
     
     public static boolean testPaxNomSearch(String nom){
-        return Pattern.matches("^\\pL+[\\pL\\pZ\\pP]{0,}$", nom);
-    }
+        return Pattern.matches("^\\pL+[\\pL\\pZ\\pP]{1,}$", nom);
+    }   
+    
 
 }

@@ -35,7 +35,7 @@ public class Paciente {
         this.CI         = new SimpleStringProperty("");
         this.apellidos  = new SimpleStringProperty("");
         this.nombres    = new SimpleStringProperty("");
-        this.nacimiento = new SimpleStringProperty("");
+        this.nacimiento = new SimpleStringProperty("2000-01-01");
         this.sangre     = new SimpleStringProperty("");
         this.celular    = new SimpleStringProperty("");
         this.casa       = new SimpleStringProperty("");

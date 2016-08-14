@@ -4,25 +4,25 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,6 +37,7 @@ import static utils.JavaSQL.searchPaxNom;
 import static utils.JavaSQL.updatePax;
 import static utils.JavaSQL.existsPax;
 import static utils.JavaSQL.insertConsulta;
+import static utils.JavaSQL.selecPaxNameConcat;
 
 /**
  * FXML Controller class
@@ -100,6 +101,15 @@ public class KaixoMainController extends Main implements Initializable {
     @FXML
     private TextField paxNomSearch;
 
+    //Consultas de hoy
+    @FXML
+    private TableView<Consulta> distConHoy;
+    @FXML
+    private TableColumn<Consulta, String> horaConHoy;
+    @FXML
+    private TableColumn<Consulta, String> paxConHoy;
+    @FXML
+    private TableColumn<Consulta, String> estConHoy;
     
     private void showMedDetails(Medicina med){
         if (med != null){
@@ -180,8 +190,8 @@ public class KaixoMainController extends Main implements Initializable {
                     return true; 
                 }else 
             return false; // Does not match.
+            });
         });
-    });
             SortedList<Medicina> sortedData = new SortedList<>(filteredData);
             sortedData.comparatorProperty().bind((ObservableValue<? extends Comparator<? super Medicina>>) medTable.comparatorProperty());		
             medTable.setItems(sortedData);
@@ -303,10 +313,48 @@ public class KaixoMainController extends Main implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());
         nomMed.setCellValueFactory(cellData -> cellData.getValue().getNombre());
+        distConHoy.setItems(Main.getTodayConData());
+        horaConHoy.setCellValueFactory(cellData -> cellData.getValue().getFecha());
+        horaConHoy.setCellFactory(column -> {
+            return new TableCell<Consulta, String>(){
+                @Override
+                protected void updateItem(String date, boolean empty){
+                    super.updateItem(date, empty);
+                    if(date == null || empty){
+                        setText(null);
+                    }else{
+                        String[] parts = date.split(" ");  
+                        setText(parts[1]);
+                    }
+                }
+            };
+        });
+        paxConHoy.setCellValueFactory(cellData-> cellData.getValue().getPaciente());      
+        paxConHoy.setCellFactory(column -> {
+            return new TableCell<Consulta, String>(){
+                @Override
+                protected void updateItem(String CI, boolean empty){
+                    super.updateItem(CI, empty);
+                    
+                    if(CI == null || empty){
+                        setText(null);
+                    }else{
+                        try {
+                            setText(selecPaxNameConcat(actualDB, CI));
+                        } catch (SQLException ex) {
+                            Logger.getLogger(KaixoMainController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            };
+        });
+        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());
+
 
         buscarMedicina();
 
         showMedDetails(null);
+        ShowPaxDetails(null);
 
         medTable.getSelectionModel().selectedItemProperty().addListener(
                     (observable, oldValue, newValue) -> showMedDetails(newValue));

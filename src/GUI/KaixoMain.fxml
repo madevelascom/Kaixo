@@ -43,11 +43,11 @@
                                     <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                                  </children>
                               </HBox>
-                              <TableView editable="true" layoutX="34.0" layoutY="65.0" prefHeight="150.0" prefWidth="400.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="50.0">
+                              <TableView fx:id="distConHoy" editable="true" layoutX="34.0" layoutY="65.0" prefHeight="150.0" prefWidth="500.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="50.0">
                                  <columns>
-                                    <TableColumn prefWidth="50.0" text="Hora" />
-                                    <TableColumn prefWidth="256.0" text="Paciente" />
-                                    <TableColumn prefWidth="75.0" text="Estado" />
+                                    <TableColumn fx:id="horaConHoy" prefWidth="50.0" text="Hora" />
+                                    <TableColumn fx:id="paxConHoy" prefWidth="256.0" text="Paciente" />
+                                    <TableColumn fx:id="estConHoy" prefWidth="75.0" text="Estado" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -90,7 +90,7 @@
                                     </Button>
                                  </children>
                               </GridPane>
-                              <TableView editable="true" layoutX="36.0" layoutY="85.0" prefHeight="170.0" prefWidth="400.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
+                              <TableView editable="true" layoutX="36.0" layoutY="85.0" prefHeight="170.0" prefWidth="500.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0">
                                  <columns>
                                     <TableColumn prefWidth="75.0" text="Hora" />
                                     <TableColumn prefWidth="75.0" text="Paciente" />
@@ -218,7 +218,7 @@
                         <Label layoutX="279.0" layoutY="79.0" styleClass="label-header" text="Información del paciente" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0" />
                         <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="379.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Consulta" />
+                              <Button mnemonicParsing="false" onAction="#handleNewConsult" prefHeight="35.0" prefWidth="120.0" text="Consulta" />
                               <Button mnemonicParsing="false" onAction="#handleNewPax" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
                               <Button mnemonicParsing="false" onAction="#handleEditPax" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                            </children>

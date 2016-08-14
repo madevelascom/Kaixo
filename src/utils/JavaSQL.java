@@ -185,6 +185,20 @@ public class JavaSQL {
         stmt.executeQuery(sql);
     }
     
+    public static String selecPaxNameConcat(Connection conn, String id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String rslt = "";
+        String sql = "SELECT CONCAT(paciente.nombres, ' ', paciente.apellidos) "
+                + "AS 'paciente' FROM paciente WHERE CI = '"+id+"';";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()){
+            rslt = rs.getString("paciente");
+        }
+        return rslt;
+        
+    }
+    
     public static void updatePax(Connection conn, Paciente pax)throws SQLException{
         Statement stmt = conn.createStatement();
         String sql = "UPDATE `paciente` SET   "
@@ -210,10 +224,44 @@ public class JavaSQL {
     public static void insertConsulta(Connection conn, Consulta con) throws SQLException{
         Statement  stmt = conn.createStatement();
         String sql = "INSERT INTO consultas (`fecha`, `paciente`, `estado`) VALUES "
-                + "("+con.getFecha().getValue()+", "
-                + " "+con.getPaciente().getValue()+","
-                + " "+con.getEstado().getValue()+");";
+                + "('"+con.getFecha().getValue()+"', "
+                + " '"+con.getPaciente().getValue()+"',"
+                + " '"+con.getEstado().getValue()+"');";
         stmt.executeQuery(sql);
+    }
+    
+    public static ObservableList<Consulta> loadConsultasHoy(Connection conn) throws SQLException{
+        ObservableList<Consulta> distConHoy = FXCollections.observableArrayList();
+        Statement  stmt = conn.createStatement();
+        
+        /*SELECT TIME(consultas.fecha) as 'hora_con', consultas.fecha, 
+        CONCAT(paciente.nombres, ' ', paciente.apellidos) as 'paciente', 
+        consultas.estado FROM consultas JOIN paciente 
+        ON consultas.paciente = paciente.CI  
+        WHERE DATE(consultas.fecha) = DATE(NOW()) ;*/
+        
+        String sql = "SELECT fecha, paciente, estado FROM consultas "
+                + "WHERE DATE(consultas.fecha) = DATE(NOW());";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if(rs.next()){
+            do{                      
+            Consulta con = new Consulta(rs.getString("fecha"),rs.getString("paciente") , 
+                    rs.getString("estado"));
+            distConHoy.add(con);
+            }while(rs.next());
+        }
+        
+        return distConHoy;
+    }
+    
+    public static boolean existsCons(Connection conn, String date) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT * FROM consultas WHERE fecha = '"+date+"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        return rs.next();
     }
     
 }

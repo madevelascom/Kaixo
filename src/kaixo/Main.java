@@ -50,6 +50,7 @@ public class Main extends Application {
     
     public static ObservableList<Medicina> medData = FXCollections.observableArrayList();
     public static ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
+    public static ObservableList<Consulta> conHoyData = FXCollections.observableArrayList();
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -221,6 +222,10 @@ public class Main extends Application {
     public static ObservableList<Medicina> getMedData() {
         return medData;
     }
+    
+    public static ObservableList<Consulta> getTodayConData(){
+        return conHoyData;
+    }
     /**
      * @param args the command line arguments
      * @throws javax.naming.NamingException
@@ -234,6 +239,7 @@ public class Main extends Application {
             System.out.println("Successful connection"); 
             medData = JavaSQL.loadMedicinas(actualDB);
             distData = JavaSQL.loadDistribuidor(actualDB);
+            conHoyData = JavaSQL.loadConsultasHoy(actualDB);
             launch(args);
         }else{
             Alert no_conn = new Alert(AlertType.ERROR);

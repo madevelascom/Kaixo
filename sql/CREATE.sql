@@ -2,15 +2,6 @@ CREATE DATABASE `kaixo` /*!40100 COLLATE 'utf16_swedish_ci' */;
 
 USE `kaixo`;
 
-CREATE TABLE `alergias` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`nombrealergia` VARCHAR(50) NOT NULL DEFAULT 'alergia' COLLATE 'utf16_spanish2_ci',
-	PRIMARY KEY (`id`)
-)
-COMMENT='Kaixo - Alergias existentes'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
 
 CREATE TABLE `paciente` (
 	`CI` VARCHAR(10) NOT NULL DEFAULT '9999999999' COMMENT 'Cedula de identidad' COLLATE 'utf16_spanish2_ci',
@@ -25,19 +16,6 @@ CREATE TABLE `paciente` (
 	PRIMARY KEY (`CI`)
 )
 COMMENT='Kaixo - Informacion de pacientes'
-COLLATE='utf16_spanish2_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `paciente_alergias` (
-	`id_paciente` VARCHAR(10) NOT NULL COLLATE 'utf16_spanish2_ci',
-	`id_alergia` INT(11) NOT NULL,
-	PRIMARY KEY (`id_paciente`, `id_alergia`),
-	INDEX `FK_alergia` (`id_alergia`),
-	CONSTRAINT `FK_alergia` FOREIGN KEY (`id_alergia`) REFERENCES `alergias` (`id`),
-	CONSTRAINT `FK_pacientes` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`CI`)
-)
-COMMENT='Kaixo - Alergias de los pacientes'
 COLLATE='utf16_spanish2_ci'
 ENGINE=InnoDB
 ;
@@ -74,7 +52,7 @@ ENGINE=InnoDB
 ;
 
 CREATE TABLE `medicinas` (
-	`id` INT(11) NOT NULL,
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`nombre` VARCHAR(100) NULL COLLATE 'utf16_spanish2_ci',
 	`concentracion` VARCHAR(50) NULL COLLATE 'utf16_spanish2_ci',
 	`presentacion` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf16_spanish2_ci',
@@ -83,6 +61,7 @@ CREATE TABLE `medicinas` (
 COMMENT='Kaixo - Medicinas'
 COLLATE='utf16_spanish2_ci'
 ENGINE=InnoDB
+AUTO_INCREMENT=2
 ;
 
 
@@ -137,4 +116,14 @@ CREATE TABLE `users` (
 COMMENT='Kaixo - login'
 COLLATE='utf16_spanish2_ci'
 ENGINE=MyISAM
+;
+
+CREATE TABLE `errores` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`error` TEXT NULL COLLATE 'utf16_swedish_ci',
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf16_swedish_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=5
 ;

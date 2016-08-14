@@ -133,44 +133,48 @@ public class PacienteController extends Main implements Initializable {
     private boolean isInputValid() throws SQLException{
         String errorMessage = "";
         
-        if (isUpdatePax()){
-            if (!paxNombre.getText().equals("")){
-                if (!testPaxNomSearch(paxNombre.getText())){
-                    errorMessage += "Los nombres sólo tienen letras. \n"; 
-                }
-            }else{
-                errorMessage += "Campo Nombre vacío \n"; 
+        if (!paxNombre.getText().equals("")){
+            if (!testPaxNomSearch(paxNombre.getText())){
+                errorMessage += "Los nombres sólo tienen letras. \n"; 
             }
-            
-            if (!paxApellido.getText().equals("")){
-                if (!testPaxNomSearch(paxNombre.getText())){
-                    errorMessage += "Los apellidos sólo tienen letras. \n"; 
-                }
-            }else{
-                errorMessage += "Campo Apellido vacío \n";
-            }
-            
-            if (!paxCelular.getText().equals("")){
-                 if (!testCel(paxCI.getText())){
-                    errorMessage += "Los números celulares tienen 10 dígitos \n";
-                 }
-            }else{
-                errorMessage += "Campo Celular vacío \n";
-            }
-            
-            if (!paxCasa.getText().equals("")){
-                if (!testCasa(paxCasa.getText())){
-                    errorMessage += "Los teléfonos tienen 9 dígitos \n";
-                }
-            }else{
-                errorMessage += "Campo Casa vacío \n";
-            }
-            
-            if (paxDi.getText().equals("")){
-                errorMessage += "Campo Direccion vacío \n";
-            }
-            
         }else{
+            errorMessage += "Campo Nombre vacío \n"; 
+        }
+            
+        if (!paxApellido.getText().equals("")){
+            if (!testPaxNomSearch(paxNombre.getText())){
+                errorMessage += "Los apellidos sólo tienen letras. \n"; 
+            }
+        }else{
+            errorMessage += "Campo Apellido vacío \n";
+        }
+            
+        if (!paxCelular.getText().equals("")){
+             if (!testCel(paxCI.getText())){
+                errorMessage += "Los números celulares tienen 10 dígitos \n";
+             }
+        }else{
+            errorMessage += "Campo Celular vacío \n";
+        }
+            
+        if (!paxCasa.getText().equals("")){
+            if (!testCasa(paxCasa.getText())){
+                errorMessage += "Los teléfonos tienen 9 dígitos \n";
+            }
+        }else{
+            errorMessage += "Campo Casa vacío \n";
+        }
+            
+        if (paxDi.getText().equals("")){
+            errorMessage += "Campo Direccion vacío \n";
+        }
+        
+        if(paxNacimiento.getValue().isAfter(LocalDate.now()) ){
+            errorMessage += "La fecha de nacimiento es incorrecta. "
+                    + "No puede ser mayor al día de hoy \n";
+        }
+        
+        if (!isUpdatePax()){           
             if (!paxCI.getText().equals("")){
                 if (testPaxCISearch(paxCI.getText())){
                     if (existsPax(actualDB, paxCI.getText())){
@@ -181,44 +185,6 @@ public class PacienteController extends Main implements Initializable {
                 }                
             }else{
                 errorMessage += "Campo CI vacío \n"; 
-            }
-            if (!paxNombre.getText().equals("")){
-                if (!testPaxNomSearch(paxNombre.getText())){
-                    errorMessage += "Los nombres sólo tienen letras. \n"; 
-                }
-            }else{
-                errorMessage += "Campo Nombre vacío \n"; 
-            }
-            if (!paxApellido.getText().equals("")){
-                if (!testPaxNomSearch(paxNombre.getText())){
-                    errorMessage += "Los apellidos sólo tienen letras. \n"; 
-                }
-            }else{
-                errorMessage += "Campo Apellido vacío \n";
-            }
-            if (!paxCelular.getText().equals("")){
-                 if (!testCel(paxCI.getText())){
-                    errorMessage += "Los números celulares tienen 10 dígitos \n";
-                 }
-            }else{
-                errorMessage += "Campo Celular vacío \n";
-            }
-            if (!paxCasa.getText().equals("")){
-                if (!testCasa(paxCasa.getText())){
-                    errorMessage += "Los teléfonos tienen 9 dígitos \n";
-                }
-            }else{
-                errorMessage += "Campo Casa vacío \n";
-            }
-            if (paxDi.getText().equals("")){
-                errorMessage += "Campo Direccion vacío \n";
-            }
-        }
-             
-        if (!paxEmail.getText().equals("")){
-            if (!testEmail(paxEmail.getText().toLowerCase())){
-                System.out.println(paxEmail.getText());
-                errorMessage += "El correo que ingresaste no es válido \n"; 
             }
         }
             

@@ -146,9 +146,7 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
-    
-    
-        
+            
     public void buscarDistribuidor(){
         ObservableList<Distribuidor> masterDistData = Main.getDistData();
         nomDist.setCellValueFactory ( cellData -> cellData.getValue().getNombre()); 	
@@ -254,10 +252,7 @@ public class KaixoMainController extends Main implements Initializable {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;}
                 String lowerCaseFilter = newValue.toLowerCase();
-                if (( med.getNombre().getValue()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                }else 
-            return false; // Does not match.
+                return ( med.getNombre().getValue()).toLowerCase().contains(lowerCaseFilter); // Does not match.
             });
         });
             SortedList<Medicina> sortedData = new SortedList<>(filteredData);

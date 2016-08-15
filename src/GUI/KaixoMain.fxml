@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -16,41 +20,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
+<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="background" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab closable="false" text="Consultas">
                <content>
-                  <SplitPane dividerPositions="0.39928057553956836" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="background">
+                  <SplitPane orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="background">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <GridPane layoutX="483.0" layoutY="78.0" prefHeight="100.0" prefWidth="250.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.0" minWidth="10.0" prefWidth="84.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="173.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Label text="Paciente" />
-                                    <Label text="Estado" GridPane.rowIndex="1" />
-                                    <Label text="Edad" GridPane.rowIndex="2" />
-                                    <Label text="Nombre" GridPane.columnIndex="1" />
-                                    <Label text="Pendiente" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="XX" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                 </children>
-                              </GridPane>
-                              <HBox layoutX="476.0" layoutY="206.0" prefHeight="41.0" prefWidth="256.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Nueva" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                                 </children>
-                              </HBox>
                               <TableView fx:id="distConHoy" editable="true" layoutX="34.0" layoutY="65.0" prefHeight="150.0" prefWidth="500.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="50.0">
                                  <columns>
                                     <TableColumn fx:id="horaConHoy" prefWidth="50.0" text="Hora" />
@@ -62,88 +41,15 @@
                                  </columnResizePolicy>
                               </TableView>
                               <Label layoutX="34.0" layoutY="14.0" styleClass="label-header" text="Consultas del día" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="206.0" prefWidth="800.0">
-                           <children>
-                              <GridPane layoutX="50.0" layoutY="25.0" prefHeight="45.0" prefWidth="700.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="69.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0" prefWidth="151.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="138.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="138.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="174.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="134.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
+                              <VBox layoutX="573.0" layoutY="93.0" prefHeight="214.0" prefWidth="123.0" spacing="20.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="85.0">
                                  <children>
-                                    <Label text="Cédula" />
-                                    <Label text="Nombres y apellidos" GridPane.columnIndex="3" />
-                                    <TextField prefWidth="155.0" GridPane.columnIndex="1" />
-                                    <TextField GridPane.columnIndex="4" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
-                                       <padding>
-                                          <Insets right="10.0" />
-                                       </padding>
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </Button>
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="5">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </Button>
+                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Asistió" />
+                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Valoración" />
+                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Diagnóstico" />
+                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="No asistió" />
+                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                                  </children>
-                              </GridPane>
-                              <TableView editable="true" layoutX="36.0" layoutY="85.0" prefHeight="170.0" prefWidth="500.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0">
-                                 <columns>
-                                    <TableColumn prefWidth="75.0" text="Hora" />
-                                    <TableColumn prefWidth="75.0" text="Paciente" />
-                                    <TableColumn prefWidth="75.0" text="Estado" />
-                                 </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <GridPane layoutX="568.0" layoutY="110.0" prefHeight="100.0" prefWidth="250.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.0" minWidth="10.0" prefWidth="84.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="173.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <Label text="Paciente" />
-                                    <Label text="Estado" GridPane.rowIndex="1" />
-                                    <Label text="Edad" GridPane.rowIndex="2" />
-                                    <Label text="Nombre" GridPane.columnIndex="1" />
-                                    <Label text="Pendiente" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="XX" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                 </children>
-                              </GridPane>
-                              <GridPane layoutX="592.0" layoutY="191.0" prefHeight="66.0" prefWidth="251.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints maxHeight="24.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Label text="Diagnóstico" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Label text="Receta" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Ver" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-                                    <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Ver" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-                                 </children>
-                              </GridPane>
-                              <Label layoutX="69.0" layoutY="27.0" styleClass="label-header" text="Consultas pasadas" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                              </VBox>
                            </children>
                         </AnchorPane>
                     </items>
@@ -186,10 +92,10 @@
                               </Button>
                            </children>
                         </GridPane>
-                        <GridPane layoutX="21.0" layoutY="117.0" prefHeight="300.0" prefWidth="500.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="120.0">
+                        <GridPane layoutX="21.0" layoutY="117.0" prefHeight="300.0" prefWidth="402.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="120.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="153.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.0" minWidth="10.0" prefWidth="329.0" />
+                            <ColumnConstraints halignment="RIGHT" maxWidth="235.0" minWidth="10.0" prefWidth="144.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.0" minWidth="10.0" prefWidth="258.0" />
                           </columnConstraints>
                           <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -203,14 +109,14 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Nombres" GridPane.rowIndex="1" />
-                              <Label text="Apellidos" GridPane.rowIndex="2" />
-                              <Label text="Fecha de nacimiento" GridPane.rowIndex="3" />
-                              <Label text="Tipo de sangre" GridPane.rowIndex="4" />
-                              <Label text="Celular" GridPane.rowIndex="5" />
-                              <Label text="Casa" GridPane.rowIndex="6" />
-                              <Label text="Dirección" GridPane.rowIndex="7" />
-                              <Label text="Email" GridPane.rowIndex="8" />
+                              <Label text="Nombres  " GridPane.rowIndex="1" />
+                              <Label text="Apellidos  " GridPane.rowIndex="2" />
+                              <Label text="Fecha de nacimiento  " GridPane.rowIndex="3" />
+                              <Label text="Tipo de sangre  " GridPane.rowIndex="4" />
+                              <Label text="Celular  " GridPane.rowIndex="5" />
+                              <Label text="Casa  " GridPane.rowIndex="6" />
+                              <Label text="Dirección  " GridPane.rowIndex="7" />
+                              <Label text="Email  " GridPane.rowIndex="8" />
                               <Label fx:id="paxNombre" text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="paxApellido" text="Nomnomnom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label fx:id="paxNacimiento" text="1-1-2000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -219,11 +125,11 @@
                               <Label fx:id="paxCasa" text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <Label fx:id="paxDi" text="Cdla Nueva Kennedy" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                               <Label fx:id="paxEmail" text="drlara@gmail.com" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                              <Label text="Cédula" />
+                              <Label text="Cédula  " />
                               <Label fx:id="paxCI" text="1234567890" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
-                        <Label layoutX="279.0" layoutY="79.0" styleClass="label-header" text="Información del paciente" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0" />
+                        <Label layoutX="279.0" layoutY="79.0" styleClass="label-header" text="Información" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0" />
                         <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="379.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#handleNewConsult" prefHeight="35.0" prefWidth="120.0" text="Consulta" />
@@ -231,6 +137,17 @@
                               <Button mnemonicParsing="false" onAction="#handleEditPax" prefHeight="35.0" prefWidth="120.0" text="Editar" />
                            </children>
                         </HBox>
+                        <TableView layoutX="431.0" layoutY="120.0" prefHeight="300.0" prefWidth="400.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="120.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Fecha" />
+                            <TableColumn prefWidth="75.0" text="Estado" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Label layoutX="420.0" layoutY="70.0" styleClass="label-header" text="Consultas pasadas" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="70.0" />
+                        <Button layoutX="571.0" layoutY="435.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Ver" AnchorPane.rightAnchor="160.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -263,7 +180,7 @@
                               <Label layoutX="35.0" layoutY="29.0" styleClass="label-header" text="Información de la medicina" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
                               <GridPane layoutX="28.0" layoutY="96.0" prefHeight="120.0" prefWidth="350.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0">
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="114.0" />
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="114.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="188.0" />
                                 </columnConstraints>
                                 <rowConstraints>
@@ -273,13 +190,13 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label text="Nombre" />
-                                    <Label text="Concentración" GridPane.rowIndex="1" />
-                                    <Label text="Presentación" GridPane.rowIndex="2" />
+                                    <Label text="Nombre  " />
+                                    <Label text="Concentración  " GridPane.rowIndex="1" />
+                                    <Label text="Presentación  " GridPane.rowIndex="2" />
                                     <Label fx:id="medCon" text="00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Label fx:id="medPres" text="Jarabe para la tos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label fx:id="medNom" text="Ñamñam" GridPane.columnIndex="1" />
-                                    <Label text="Distribuidores" GridPane.rowIndex="3" />
+                                    <Label text="Distribuidores  " GridPane.rowIndex="3" />
                                     <Label fx:id="medDist" text="Caritafeliz" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                  </children>
                               </GridPane>
@@ -318,7 +235,7 @@
                               <Label layoutX="46.0" layoutY="51.0" styleClass="label-header" text="Información del distribuidor" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
                               <GridPane prefHeight="90.0" prefWidth="350.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0">
                                  <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="114.0" />
+                                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="114.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="188.0" />
                                  </columnConstraints>
                                  <rowConstraints>
@@ -327,9 +244,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Label text="Nombre" />
-                                    <Label text="Teléfono" GridPane.rowIndex="1" />
-                                    <Label text="Dirección" GridPane.rowIndex="2" />
+                                    <Label text="Nombre  " />
+                                    <Label text="Teléfono  " GridPane.rowIndex="1" />
+                                    <Label text="Dirección  " GridPane.rowIndex="2" />
                                     <Label fx:id="distTel" text="042999999" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Label fx:id="distDir" text="Al final del arcoiris" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label fx:id="distNom" text="MedicinaFeliz" GridPane.columnIndex="1" />

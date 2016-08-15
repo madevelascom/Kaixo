@@ -11,6 +11,13 @@ public class Distribuidor {
     private StringProperty nombre;
     private StringProperty direccion;
     private StringProperty telefono;
+    
+    public Distribuidor(){
+        this.nombre     = new SimpleStringProperty("");
+        this.direccion  = new SimpleStringProperty ("");
+        this.telefono   = new SimpleStringProperty("");
+    
+    }
 
     public Distribuidor(String nombre, String direccion, String telefono) {
         this.nombre     = new SimpleStringProperty(nombre);
@@ -41,4 +48,11 @@ public class Distribuidor {
     public void setTelefono(StringProperty telefono) {
         this.telefono = telefono;
     }
+
+    @Override
+    public String toString() {
+        return "Distribuidor{" + "nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + '}';
+    }
+    
+    
 }

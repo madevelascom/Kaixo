@@ -101,7 +101,6 @@ public class JavaSQL {
             distData.add(dist);
             }while(rs.next());
         }
-        
         return distData;
     }
     
@@ -263,5 +262,7 @@ public class JavaSQL {
         
         return rs.next();
     }
+    
+    
     
 }

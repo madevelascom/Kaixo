@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="320.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DistribuidorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="320.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DistribuidorController">
    <children>
       <GridPane layoutX="78.0" layoutY="74.0" prefHeight="143.0" prefWidth="280.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
@@ -24,15 +26,15 @@
             <Label text="Nombre" />
             <Label text="Teléfono" GridPane.rowIndex="1" />
             <Label alignment="TOP_CENTER" text="Dirección" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="nombre" GridPane.columnIndex="1" />
+            <TextField fx:id="telefono" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea fx:id="direccion" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <HBox alignment="CENTER" layoutX="88.0" layoutY="244.0" prefHeight="35.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
+            <Button mnemonicParsing="false" onAction="#handleGuardar" prefHeight="35.0" prefWidth="120.0" text="Guardar" />
+            <Button mnemonicParsing="false" onAction="#handleCancelar" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
          </children>
       </HBox>
    </children>

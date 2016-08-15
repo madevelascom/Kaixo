@@ -123,7 +123,8 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
-    private void ShowDistDetails (Distribuidor dist){
+    /*Distribuidores*/
+    private void showDistDetails (Distribuidor dist){
         if (dist != null){
             distNom.setText(dist.getNombre().getValue());
             distTel.setText(dist.getTelefono().getValue());
@@ -135,6 +136,41 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
+    
+    @FXML
+    private void handleNewDestribuidor(){
+        Distribuidor dist = new Distribuidor();
+        boolean onClicked = Main.showDistribuidorDialog(dist);
+        if (onClicked){
+            Main.getDistData().add(dist); 
+        }
+    }
+    
+    
+    
+        
+    public void buscarDistribuidor(){
+        ObservableList<Distribuidor> masterDistData = Main.getDistData();
+        nomDist.setCellValueFactory ( cellData -> cellData.getValue().getNombre()); 	
+        FilteredList<Distribuidor> filteredData = new FilteredList<>(masterDistData, p -> true);	
+        distSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(dist -> {               
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;}
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (( dist.getNombre().getValue()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; 
+                }else 
+            return false; // Does not match.
+            });
+        });
+            SortedList<Distribuidor> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind((ObservableValue<? extends Comparator<? super Distribuidor>>) distTable.comparatorProperty());		
+            distTable.setItems(sortedData);
+
+    }
+    
+    
     @FXML
     private void handleNewMedicina(){
        Medicina temp = new Medicina();
@@ -144,6 +180,38 @@ public class KaixoMainController extends Main implements Initializable {
        }
     }
     
+    @FXML
+    private void handleEditDistribuidor(){
+        int selectedIndex = distTable.getSelectionModel().getSelectedIndex();	
+            if (selectedIndex >= 0) {			
+                    Distribuidor selected = distTable.getItems().get(selectedIndex);
+                    if (selected != null) {
+                    boolean okClicked = Main.showDistribuidorDialog(selected);
+                    if (okClicked) {
+                        showDistDetails(selected);
+                    }
+                } 
+            }    
+    }
+    
+    @FXML
+    private void handleDelDist(){
+        int selectedIndex = distTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+
+                alert.setTitle("Confirmación de borrado");
+                alert.setHeaderText("Vas a borrar el distribuidor que escogiste");
+                alert.setContentText("¿Estás seguro?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){ 
+                    distTable.getItems().remove(selectedIndex);
+                    
+                }  
+        }
+   }
     @FXML
     private void handleEditMedicina(){
         int selectedIndex = medTable.getSelectionModel().getSelectedIndex();	
@@ -197,9 +265,9 @@ public class KaixoMainController extends Main implements Initializable {
             medTable.setItems(sortedData);
 
     }
-    
+
     /*PACIENTES*/
-    private void ShowPaxDetails (Paciente pax){
+    private void showPaxDetails (Paciente pax){
         if (pax != null){
            paxCI.setText(pax.getCI().getValue());
            paxNombre.setText(pax.getNombres().getValue());
@@ -229,7 +297,7 @@ public class KaixoMainController extends Main implements Initializable {
         if (!searchCI.equals("")){
             if(testPaxCISearch(searchCI)){
                 Paciente pac = searchPaxCI(actualDB, searchCI);
-                ShowPaxDetails(pac);
+                showPaxDetails(pac);
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Kaixo Error #5");
@@ -251,7 +319,7 @@ public class KaixoMainController extends Main implements Initializable {
         if(!searchNom.equals("")){
             if (testPaxNomSearch(searchNom)){
                 Paciente pac = searchPaxNom(actualDB, searchNom);
-                ShowPaxDetails(pac);
+                showPaxDetails(pac);
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Kaixo Error #5");
@@ -349,15 +417,26 @@ public class KaixoMainController extends Main implements Initializable {
             };
         });
         estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());
+        
+        distTable.setItems(Main.getDistData());
+        nomDist.setCellValueFactory(cellData -> cellData.getValue().getNombre());
+        
 
 
         buscarMedicina();
+        buscarDistribuidor();
 
         showMedDetails(null);
-        ShowPaxDetails(null);
+        showPaxDetails(null);
+        showDistDetails(null);
+        
 
         medTable.getSelectionModel().selectedItemProperty().addListener(
                     (observable, oldValue, newValue) -> showMedDetails(newValue));
+        
+        distTable.getSelectionModel().selectedItemProperty().addListener((observable , oldValue, newValue) -> {
+            showDistDetails(newValue);
+        });
 
     }    
     

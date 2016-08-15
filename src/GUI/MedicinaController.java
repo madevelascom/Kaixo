@@ -2,6 +2,7 @@ package GUI;
 
 import elements.Medicina;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -75,7 +78,16 @@ public class MedicinaController implements Initializable {
     
     @FXML
         private void handleCancel() {
-            dialogStage.close();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmación de cancelar");
+                alert.setHeaderText("va a cancelar");
+                alert.setContentText("¿Estás seguro?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){
+                    dialogStage.close();
+                } 
         }
 
     private boolean isInputValid() {

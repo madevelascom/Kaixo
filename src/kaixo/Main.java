@@ -6,6 +6,7 @@
 package kaixo;
 
 import GUI.ConsultaController;
+import GUI.DistribuidorController;
 import utils.JavaSQL;
 import GUI.LoginController;
 import GUI.MedicinaController;
@@ -126,6 +127,37 @@ public class Main extends Application {
         }
     }
     
+    public static boolean showDistribuidorDialog(Distribuidor dist){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Distribuidor.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            Stage dialogStage = new Stage();
+	    dialogStage.setTitle("Crear/Editar Distribuidor");
+	    dialogStage.initModality(Modality.WINDOW_MODAL);
+	    dialogStage.initOwner(primaryStage);
+	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+	    Scene scene = new Scene(page);
+	    dialogStage.setScene(scene);
+            
+            
+            DistribuidorController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setDistribuidor(dist);
+            
+            dialogStage.showAndWait();
+
+	    return controller.isOkclicked();
+        }catch (IOException e){
+            e.printStackTrace();
+            System.out.println("2");
+            return false;
+        }
+    }
+    
+    
+    
     public static boolean showPaxNewDialog(Paciente pat){
         try{
              // Load the fxml file and create a new stage for the popup dialog.
@@ -226,6 +258,10 @@ public class Main extends Application {
     public static ObservableList<Consulta> getTodayConData(){
         return conHoyData;
     }
+    
+    public static ObservableList<Distribuidor> getDistData(){
+        return distData;
+    }
     /**
      * @param args the command line arguments
      * @throws javax.naming.NamingException
@@ -234,7 +270,8 @@ public class Main extends Application {
     public static void main(String[] args)throws NamingException, SQLException {
         
         actualDB = instanceDB.openConnection();
-        //System.out.println(cryptWithMD5("123456mon"+"test"));
+        /*/System.out.println(cryptWithMD5("123456mon"+"test"));
+        System.out.println(cryptWithMD5("vangelis7enposi"+"test2"));*/
         if(actualDB != null){
             System.out.println("Successful connection"); 
             medData = JavaSQL.loadMedicinas(actualDB);

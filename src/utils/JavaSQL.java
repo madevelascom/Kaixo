@@ -262,122 +262,90 @@ public class JavaSQL {
         
         return rs.next();
     }
-    
-    public static String showLastMedId(Connection conn) throws SQLException{
-        String maximo = "";
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT MAX(m.id) AS maximo FROM medicinas m ;";
+   
+    public static boolean medExists(Connection conn, Medicina med) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT * FROM medicinas WHERE "
+                + "nombre = '"+med.getNombre().getValue()+"' AND "
+                + "concentracion = '"+med.getConcentracion().getValue()+"' AND "
+                + "presentacion = '"+med.getPresentacion().getValue()+"';";
         ResultSet rs = stmt.executeQuery(sql);
         
-        if (rs.next()){
-            maximo = rs.getString("maximo");
-        }
-        return maximo;
+        return rs.next();
     }
     
+    public static void insertNewMed(Connection conn, Medicina med) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "INSERT INTO medicinas  (`nombre`, `concentracion`, `presentacion`) VALUES "
+                + "('"+med.getNombre().getValue()+"', "
+                + " '"+med.getConcentracion().getValue()+"',"
+                + " '"+med.getPresentacion().getValue()+"');";
+        stmt.executeQuery(sql);
+    }
     
-    public static String showLastDistId(Connection conn) throws SQLException{
-        String maximo = "";
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT MAX(d.id) AS maximo FROM distribuidores d ;";
+       
+    public static void deleteMed(Connection conn, Medicina med) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "DELETE FROM medicinas WHERE "
+                + "nombre = '"+med.getNombre().getValue()+"' AND "
+                + "concentracion = '"+med.getConcentracion().getValue()+"' AND "
+                + "presentacion = '"+med.getPresentacion().getValue()+"';";
+        stmt.executeQuery(sql);
+    }
+ 
+    public static void updateMed(Connection conn, Medicina med, Medicina prev) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "UPDATE medicinas SET "
+                + "nombre = '"+med.getNombre().getValue()+"', "
+                + "concentracion = '"+med.getConcentracion().getValue()+"', "
+                + "presentacion = '"+med.getPresentacion().getValue()+"' "
+                + "WHERE "
+                + "nombre = '"+prev.getNombre().getValue()+"' AND "
+                + "concentracion = '"+prev.getConcentracion().getValue()+"' AND "
+                + "presentacion = '"+prev.getPresentacion().getValue()+"';";
+        stmt.executeQuery(sql);
+    }
+   
+    public static boolean distExists(Connection conn, Distribuidor dist) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "SELECT * FROM distribuidores WHERE "
+                + "nombre = '"+dist.getNombre().getValue()+"' AND "
+                + "direccion  = '"+dist.getDireccion().getValue()+"' AND "
+                + "telefono  = '"+dist.getTelefono().getValue()+"';";
         ResultSet rs = stmt.executeQuery(sql);
         
-        if (rs.next()){
-            maximo = rs.getString("maximo");
-        }
-        return maximo;
+        return rs.next();
     }
     
-    public static void nuevoMed(Connection conn, Medicina med) throws SQLException{
-        Integer ent = Integer.parseInt(showLastMedId(conn)) +1;
-        Statement stmt = conn.createStatement();
-        String sql = "INSERT INTO medicinas (id,nombre,concentracion,presentacion) VALUES ("
-                +    ent + ",'"
-                +    med.getNombre().getValue()  + "', '"
-                +    med.getConcentracion().getValue() + "', '" 
-                +    med.getPresentacion().getValue() + "');  ";
-        stmt.executeQuery(sql);
-    }   
-    
-    
-    public static void nuevoDist(Connection conn, Distribuidor dist) throws SQLException{
-        Integer ent = Integer.parseInt(showLastDistId(conn)) +1;
-        Statement stmt = conn.createStatement();
-        String sql = "INSERT INTO distribuidores (id,nombre,direccion,telefono) VALUES ("
-                +    ent + ",'"
-                +     dist.getNombre().getValue() + "', '"
-                +     dist.getDireccion().getValue() + "', '"
-                +     dist.getTelefono().getValue() + "'); ";
+    public static void insertNewDist(Connection conn, Distribuidor dist) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "INSERT INTO distribuidores (`nombre`, `direccion`, `telefono`)  VALUES "
+                + "('"+dist.getNombre().getValue()+"', "
+                + " '"+dist.getDireccion().getValue()+"',"
+                + " '"+dist.getTelefono().getValue()+"');";
         stmt.executeQuery(sql);
     }
     
-    public static String showIDMed (Connection conn, Medicina med) throws SQLException{
-        String respuesta = "";
-        Statement stmt = conn.createStatement();
-        ResultSet rs;
-        String sql = "SELECT m.id FROM medicinas m WHERE m.nombre = '"
-                + med.getNombre().getValue() + "' AND m.concentracion = '"
-                + med.getConcentracion().getValue() + "' AND m.presentacion = '"
-                + med.getPresentacion().getValue() + "';";
-        rs = stmt.executeQuery(sql);
-        
-        if (rs.next()){
-            respuesta = rs.getString("id");
-        }
-        
-        return respuesta;
-    }
-    
-    public static String showIDDist( Connection conn, Distribuidor dist)throws SQLException{
-        String respuesta = "";
-        Statement stmt = conn.createStatement();
-        ResultSet rs;
-        String sql = "SELECT d.id FROM distribuidores d WHERE d.nombre = '"
-                + dist.getNombre().getValue() + "' AND d.direccion = '"
-                + dist.getDireccion().getValue() + "' AND d.telefono = '"
-                + dist.getTelefono().getValue() + "';";
-        rs = stmt.executeQuery(sql);
-        
-        if (rs.next()){
-            respuesta = rs.getString("id");
-        }
-        
-        return respuesta;
-    }
-    
-    public static void editMed(Connection conn, Medicina med, String medID) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "UPDATE medicinas SET " 
-                    +"nombre = '" + med.getNombre().getValue() + "',"
-                    +"concentracion = '" + med.getConcentracion().getValue() + "',"
-                    +"presentacion = '" + med.getPresentacion().getValue() + "'"
-                    +"WHERE id = " + medID + ";" ;
+       
+    public static void deleteDist(Connection conn, Distribuidor dist) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "DELETE FROM distribuidores WHERE "
+                + "nombre = '"+dist.getNombre().getValue()+"' AND "
+                + "direccion  = '"+dist.getDireccion().getValue()+"' AND "
+                + "telefono  = '"+dist.getTelefono().getValue()+"';";
         stmt.executeQuery(sql);
     }
-    
-    public static void editDist(Connection conn, Distribuidor dist, String distID) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "UPDATE distribuidores SET " 
-                    +"nombre = '" + dist.getNombre().getValue() + "',"
-                    +"direccion = '" + dist.getDireccion().getValue() + "',"
-                    +"telefono = '" + dist.getTelefono().getValue() + "'"
-                    +"WHERE id = " + distID + ";" ;
-        stmt.executeQuery(sql);
+ 
+    public static void updateDist(Connection conn, Distribuidor dist, Distribuidor prev) throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "UPDATE distribuidores SET "
+                + "nombre = '"+dist.getNombre().getValue()+"', "
+                + "direccion  = '"+dist.getDireccion().getValue()+"', "
+                + "telefono  = '"+dist.getTelefono().getValue()+"' "
+                + "WHERE "
+                + "nombre = '"+prev.getNombre().getValue()+"' AND "
+                + "direccion = '"+prev.getDireccion().getValue()+"' AND "
+                + "telefono = '"+prev.getTelefono().getValue()+"';";
+       stmt.executeQuery(sql);
     }
-    
-    public static void delMed (Connection conn, Medicina med) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String medID = showIDMed( conn, med);
-        String sql = " DELETE FROM medicinas WHERE id = " + medID +";";
-        stmt.executeQuery(sql);
-    }
-    
-    public static void delDist(Connection conn, Distribuidor dist) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String distID = showIDDist( conn, dist);
-        String sql = " DELETE FROM medicinas WHERE id = " + distID +";";
-        stmt.executeQuery(sql);
-    }
-    
-    
 }

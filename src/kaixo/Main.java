@@ -31,7 +31,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
-import static utils.CryptMD5.cryptWithMD5;
 
 /**
  *
@@ -127,14 +126,14 @@ public class Main extends Application {
         }
     }
     
-    public static boolean showDistribuidorDialog(Distribuidor dist){
+    public static boolean showDistDialog(Distribuidor dist){
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginController.class.getResource("Distribuidor.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             
             Stage dialogStage = new Stage();
-	    dialogStage.setTitle("Crear/Editar Distribuidor");
+	    dialogStage.setTitle("Distribuidor");
 	    dialogStage.initModality(Modality.WINDOW_MODAL);
 	    dialogStage.initOwner(primaryStage);
 	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
@@ -148,14 +147,11 @@ public class Main extends Application {
             
             dialogStage.showAndWait();
 
-	    return controller.isOkclicked();
+	    return controller.isOkClicked();
         }catch (IOException e){
-            e.printStackTrace();
-            System.out.println("2");
             return false;
         }
     }
-    
     
     
     public static boolean showPaxNewDialog(Paciente pat){
@@ -220,7 +216,7 @@ public class Main extends Application {
         }
     }
     
-    public static boolean showPaxeEditDialog(Paciente pat){
+    public static boolean showPaxEditDialog(Paciente pat){
         try{
              // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -274,8 +270,6 @@ public class Main extends Application {
     public static void main(String[] args)throws NamingException, SQLException {
         
         actualDB = instanceDB.openConnection();
-        /*/System.out.println(cryptWithMD5("123456mon"+"test"));
-        System.out.println(cryptWithMD5("vangelis7enposi"+"test2"));*/
         if(actualDB != null){
             System.out.println("Successful connection"); 
             medData = JavaSQL.loadMedicinas(actualDB);

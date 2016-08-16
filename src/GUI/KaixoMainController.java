@@ -6,7 +6,6 @@ import elements.Medicina;
 import elements.Paciente;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -29,6 +28,9 @@ import javafx.scene.control.TextField;
 import kaixo.Main;
 import static kaixo.Main.actualDB;
 import utils.JavaSQL;
+import static utils.JavaSQL.deleteDist;
+import static utils.JavaSQL.deleteMed;
+import static utils.JavaSQL.distExists;
 import static utils.JavaSQL.errorMsg;
 import static utils.JavaSQL.insertNewPax;
 import static utils.RegexMatcher.testPaxCISearch;
@@ -38,7 +40,12 @@ import static utils.JavaSQL.searchPaxNom;
 import static utils.JavaSQL.updatePax;
 import static utils.JavaSQL.existsPax;
 import static utils.JavaSQL.insertConsulta;
+import static utils.JavaSQL.insertNewDist;
+import static utils.JavaSQL.insertNewMed;
+import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
+import static utils.JavaSQL.updateDist;
+import static utils.JavaSQL.updateMed;
 
 /**
  * FXML Controller class
@@ -141,10 +148,10 @@ public class KaixoMainController extends Main implements Initializable {
     @FXML
     private void handleNewDestribuidor() throws SQLException{
         Distribuidor dist = new Distribuidor();
-        boolean onClicked = Main.showDistribuidorDialog(dist);
+        boolean onClicked = Main.showDistDialog(dist);
         if (onClicked){
             Main.getDistData().add(dist);
-            JavaSQL.nuevoDist(actualDB, dist);
+            insertNewDist(actualDB, dist);
         }
     }
     
@@ -173,90 +180,113 @@ public class KaixoMainController extends Main implements Initializable {
     
     @FXML
     private void handleEditDistribuidor() throws SQLException{
-        String distID;
         int selectedIndex = distTable.getSelectionModel().getSelectedIndex();	
-            if (selectedIndex >= 0) {			
-                    Distribuidor selected = distTable.getItems().get(selectedIndex);
-                    distID = JavaSQL.showIDDist(actualDB, selected);
-                    if (selected != null) {
-                        boolean okClicked = Main.showDistribuidorDialog(selected);
-                    if (okClicked) {
-                        showDistDetails(selected);
-                        JavaSQL.editDist(actualDB, selected, distID);
-                    }
-                } 
-            }    
+        if (selectedIndex >= 0) {			
+            Distribuidor temp = new Distribuidor(distNom.getText(), 
+                    distDir.getText(), distTel.getText() );
+            Distribuidor prev = new Distribuidor(distNom.getText(), 
+                    distDir.getText(), distTel.getText() );
+            if (distExists(actualDB, temp)) {
+                boolean okClicked = Main.showDistDialog(temp);
+                if (okClicked) {
+                    updateDist(actualDB, temp, prev);
+                                       
+                    distData = JavaSQL.loadDistribuidor(actualDB);
+                    distConHoy.setItems(Main.getTodayConData());
+                    distTable.setItems(Main.getDistData());
+                    showDistDetails(temp);
+                }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #4");
+                alert.setContentText(errorMsg(actualDB, 4));
+
+                alert.showAndWait();
+            }
+        }    
     }
     
     @FXML
     private void handleDelDist() throws SQLException{
         int selectedIndex = distTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-                Alert alert = new Alert(AlertType.CONFIRMATION);
+            Alert alert = new Alert(AlertType.CONFIRMATION);
 
-                alert.setTitle("Confirmación de borrado");
-                alert.setHeaderText("Vas a borrar el distribuidor que escogiste");
-                alert.setContentText("¿Estás seguro?");
+            alert.setTitle("Confirmación de borrado");
+            alert.setHeaderText("Vas a borrar el distribuidor que escogiste");
+            alert.setContentText("¿Estás seguro?");
 
-                Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == ButtonType.OK){
-                    Distribuidor dist =  distTable.getItems().get(selectedIndex); 
-                    distTable.getItems().remove(selectedIndex);
-                    JavaSQL.delDist(actualDB, dist);
-                    
-                }  
+            if (result.get() == ButtonType.OK){
+                Distribuidor dist =  distTable.getItems().get(selectedIndex); 
+                
+                deleteDist(actualDB, dist);
+                distData = JavaSQL.loadDistribuidor(actualDB);
+                distConHoy.setItems(Main.getTodayConData());
+                distTable.setItems(Main.getDistData());
+            }  
         }
    }
 
     /*Medicinas*/
     
-        @FXML
+    @FXML
     private void handleNewMedicina() throws SQLException{
        Medicina temp = new Medicina();
        boolean onClicked = Main.showMedicinaDialog(temp);
        if (onClicked){    
            Main.getMedData().add(temp);
-           JavaSQL.nuevoMed(actualDB, temp);
+           insertNewMed(actualDB, temp);
            
        }
     }
+    
     @FXML
     private void handleEditMedicina() throws SQLException{
-        String medID;
-        int selectedIndex = medTable.getSelectionModel().getSelectedIndex();	
-            if (selectedIndex >= 0) {			
-                    Medicina selected = medTable.getItems().get(selectedIndex);                   
-                    if (selected != null) {
-                        medID = JavaSQL.showIDMed(actualDB, selected);
-                        boolean okClicked = Main.showMedicinaDialog(selected);
-                    if (okClicked) {
-                        showMedDetails(selected);
-                        JavaSQL.editMed(actualDB, selected, medID);
-                    }
-                } 
-            }    
+        Medicina temp = new Medicina(medNom.getText(), medCon.getText(), medPres.getText());
+        Medicina prev = new Medicina(medNom.getText(), medCon.getText(), medPres.getText());
+        
+        if (medExists(actualDB, temp)){
+            boolean okClicked = Main.showMedicinaDialog(temp);
+            if (okClicked) {
+                updateMed(actualDB, temp, prev);
+                
+                medData = JavaSQL.loadMedicinas(actualDB);
+                medTable.setItems(Main.getMedData());
+                nomMed.setCellValueFactory(cellData -> cellData.getValue().getNombre());
+                showMedDetails(temp);            
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
+        }
+           
     }
     
     @FXML
     private void handleDelMed() throws SQLException{
         int selectedIndex = medTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-                Alert alert = new Alert(AlertType.CONFIRMATION);
+            Alert alert = new Alert(AlertType.CONFIRMATION);
 
-                alert.setTitle("Confirmación de borrado");
-                alert.setHeaderText("Vas a borrar la medicina que escogiste");
-                alert.setContentText("¿Estás seguro?");
+            alert.setTitle("Confirmación de borrado");
+            alert.setHeaderText("Vas a borrar la medicina que escogiste");
+            alert.setContentText("¿Estás seguro?");
 
-                Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == ButtonType.OK){ 
-                    //SQL STATEMENT ABOUT DELETE HERE 
-                    Medicina med =  medTable.getItems().get(selectedIndex);                   
-                    medTable.getItems().remove(selectedIndex);
-                    JavaSQL.delMed(actualDB, med);
-                    
-                }  
+            if (result.get() == ButtonType.OK){ 
+                Medicina med =  medTable.getItems().get(selectedIndex);                   
+                deleteMed(actualDB, med);
+                medData = JavaSQL.loadMedicinas(actualDB);
+                medTable.setItems(Main.getMedData());
+                nomMed.setCellValueFactory(cellData -> cellData.getValue().getNombre());
+
+            }  
         }
    }
     
@@ -359,7 +389,7 @@ public class KaixoMainController extends Main implements Initializable {
     private void handleEditPax() throws SQLException{
         if (existsPax(actualDB, paxCI.getText())){
             Paciente temp = searchPaxCI(actualDB, paxCI.getText());
-            boolean okClicked = Main.showPaxeEditDialog(temp);
+            boolean okClicked = Main.showPaxEditDialog(temp);
             if (okClicked){
                 updatePax(actualDB, temp);
             }

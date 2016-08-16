@@ -28,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import kaixo.Main;
 import static kaixo.Main.actualDB;
+import utils.JavaSQL;
 import static utils.JavaSQL.errorMsg;
 import static utils.JavaSQL.insertNewPax;
 import static utils.RegexMatcher.testPaxCISearch;
@@ -138,11 +139,12 @@ public class KaixoMainController extends Main implements Initializable {
     
     
     @FXML
-    private void handleNewDestribuidor(){
+    private void handleNewDestribuidor() throws SQLException{
         Distribuidor dist = new Distribuidor();
         boolean onClicked = Main.showDistribuidorDialog(dist);
         if (onClicked){
-            Main.getDistData().add(dist); 
+            Main.getDistData().add(dist);
+            JavaSQL.nuevoDist(actualDB, dist);
         }
     }
     
@@ -170,30 +172,24 @@ public class KaixoMainController extends Main implements Initializable {
     
     
     @FXML
-    private void handleNewMedicina(){
-       Medicina temp = new Medicina();
-       boolean onClicked = Main.showMedicinaDialog(temp);
-       if (onClicked){
-           Main.getMedData().add(temp);
-       }
-    }
-    
-    @FXML
-    private void handleEditDistribuidor(){
+    private void handleEditDistribuidor() throws SQLException{
+        String distID;
         int selectedIndex = distTable.getSelectionModel().getSelectedIndex();	
             if (selectedIndex >= 0) {			
                     Distribuidor selected = distTable.getItems().get(selectedIndex);
+                    distID = JavaSQL.showIDDist(actualDB, selected);
                     if (selected != null) {
-                    boolean okClicked = Main.showDistribuidorDialog(selected);
+                        boolean okClicked = Main.showDistribuidorDialog(selected);
                     if (okClicked) {
                         showDistDetails(selected);
+                        JavaSQL.editDist(actualDB, selected, distID);
                     }
                 } 
             }    
     }
     
     @FXML
-    private void handleDelDist(){
+    private void handleDelDist() throws SQLException{
         int selectedIndex = distTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
                 Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -204,28 +200,46 @@ public class KaixoMainController extends Main implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == ButtonType.OK){ 
+                if (result.get() == ButtonType.OK){
+                    Distribuidor dist =  distTable.getItems().get(selectedIndex); 
                     distTable.getItems().remove(selectedIndex);
+                    JavaSQL.delDist(actualDB, dist);
                     
                 }  
         }
    }
+
+    /*Medicinas*/
+    
+        @FXML
+    private void handleNewMedicina() throws SQLException{
+       Medicina temp = new Medicina();
+       boolean onClicked = Main.showMedicinaDialog(temp);
+       if (onClicked){    
+           Main.getMedData().add(temp);
+           JavaSQL.nuevoMed(actualDB, temp);
+           
+       }
+    }
     @FXML
-    private void handleEditMedicina(){
+    private void handleEditMedicina() throws SQLException{
+        String medID;
         int selectedIndex = medTable.getSelectionModel().getSelectedIndex();	
             if (selectedIndex >= 0) {			
-                    Medicina selected = medTable.getItems().get(selectedIndex);
+                    Medicina selected = medTable.getItems().get(selectedIndex);                   
                     if (selected != null) {
-                    boolean okClicked = Main.showMedicinaDialog(selected);
+                        medID = JavaSQL.showIDMed(actualDB, selected);
+                        boolean okClicked = Main.showMedicinaDialog(selected);
                     if (okClicked) {
                         showMedDetails(selected);
+                        JavaSQL.editMed(actualDB, selected, medID);
                     }
                 } 
             }    
     }
     
     @FXML
-    private void handleDelMed(){
+    private void handleDelMed() throws SQLException{
         int selectedIndex = medTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
                 Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -237,8 +251,10 @@ public class KaixoMainController extends Main implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == ButtonType.OK){ 
-                    //SQL STATEMENT ABOUT DELETE HERE
+                    //SQL STATEMENT ABOUT DELETE HERE 
+                    Medicina med =  medTable.getItems().get(selectedIndex);                   
                     medTable.getItems().remove(selectedIndex);
+                    JavaSQL.delMed(actualDB, med);
                     
                 }  
         }

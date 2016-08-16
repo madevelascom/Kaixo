@@ -262,6 +262,10 @@ public class Main extends Application {
     public static ObservableList<Distribuidor> getDistData(){
         return distData;
     }
+    
+    public static Connection getConn(){
+        return actualDB;
+    }
     /**
      * @param args the command line arguments
      * @throws javax.naming.NamingException

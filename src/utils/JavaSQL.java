@@ -9,6 +9,7 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Valoracion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -258,7 +259,6 @@ public class JavaSQL {
     }
     
     public static void updateConsulta(Connection conn, Consulta nuevo, Consulta old ) throws SQLException{
-        System.out.println("entro aqqui 3");
         Statement  stmt = conn.createStatement();
         String sql = "UPDATE consultas SET "
                 +" fecha = '" + nuevo.getFecha().getValue() + "', "
@@ -320,7 +320,7 @@ public class JavaSQL {
     
     public static void updateEstado( Connection conn, Consulta con, String estado) throws SQLException{
         Statement stmt = conn.createStatement();
-        String sql = "UPDATE consultas SET estado = '" + estado.toLowerCase() + "' WHERE  "
+        String sql = "UPDATE consultas SET estado = '" + estado + "' WHERE  "
                 + " fecha = '" + con.getFecha().getValue() + "' AND "
                 + " paciente = '" + con.getPaciente().getValue() + "';";
         
@@ -457,5 +457,19 @@ public class JavaSQL {
                 + "direccion = '"+prev.getDireccion().getValue()+"' AND "
                 + "telefono = '"+prev.getTelefono().getValue()+"';";
        stmt.executeQuery(sql);
+    }
+    
+    public static void insertValoracion(Connection conn, Valoracion val, Consulta con)throws SQLException{
+        Statement  stmt = conn.createStatement();
+        String sql = "INSERT INTO paciente_valoracion (`presion`, `glucosa`, `peso`)  VALUES "
+                + "('"+val.getPresion().getValue()+"', "
+                + " "+val.getGlucosa().getValue()+","
+                + " "+val.getPeso().getValue()+");"
+                ;
+        String sql2 = "UPDATE consultas SET id_valoracion = (SELECT MAX(id) FROM paciente_valoracion) WHERE "
+                + "fecha = '"+con.getFecha().getValue()+"';";
+        stmt.executeQuery(sql);
+        stmt.executeQuery(sql2);
+        
     }
 }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="GUI.ValoracionController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ValoracionController">
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
@@ -29,15 +33,15 @@
             <Label text="Glucosa" GridPane.rowIndex="1" />
             <Label text="Presión" />
             <Label text="Peso" GridPane.rowIndex="2" />
-            <TextField prefHeight="33.0" prefWidth="172.0" GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="presion" prefHeight="33.0" prefWidth="172.0" GridPane.columnIndex="1" />
+            <TextField fx:id="glucosa" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="peso" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <HBox layoutY="285.0" prefHeight="65.0" prefWidth="290.0" spacing="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Aceptar" />
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Cancelar" />
+            <Button mnemonicParsing="false" onAction="#handleOk" prefHeight="30.0" prefWidth="120.0" text="Aceptar" />
+            <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="30.0" prefWidth="120.0" text="Cancelar" />
          </children>
       </HBox>
    </children>

@@ -44,6 +44,7 @@ import static utils.JavaSQL.existsPax;
 import static utils.JavaSQL.insertConsulta;
 import static utils.JavaSQL.insertNewDist;
 import static utils.JavaSQL.insertNewMed;
+import static utils.JavaSQL.insertValoracion;
 import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
 import static utils.JavaSQL.updateDist;
@@ -461,19 +462,25 @@ public class KaixoMainController extends Main implements Initializable {
         if (selectedIndex >= 0) {
             Consulta selected = distConHoy.getItems().get(selectedIndex);
             if (selected != null) {
-                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
-                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
-                        JavaSQL.updateEstado(actualDB, selected, "asistio");
+                if (selected.getEstado().getValue().equals("Pendiente")){ 
+                        JavaSQL.updateEstado(actualDB, selected, "Asistida");
                         conHoyData = JavaSQL.loadConsultasHoy(actualDB);
                         distConHoy.setItems(Main.getTodayConData());
                         estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
                 }
-                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
-                    System.out.println("advertecnia1");            
-                }
                 else{
-                    System.out.println("advertencia2");
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #6");
+                    alert.setContentText(errorMsg(actualDB, 6));
+
+                    alert.showAndWait();
                 }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText(errorMsg(actualDB, 5));
+
+                alert.showAndWait();
             }
         }  
     }
@@ -484,19 +491,25 @@ public class KaixoMainController extends Main implements Initializable {
         if (selectedIndex >= 0) {
             Consulta selected = distConHoy.getItems().get(selectedIndex);
             if (selected != null) {
-                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
-                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
-                        JavaSQL.updateEstado(actualDB, selected, "no asistio");
-                        conHoyData = JavaSQL.loadConsultasHoy(actualDB);
-                        distConHoy.setItems(Main.getTodayConData());
-                        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
+                if (selected.getEstado().getValue().equals("Pendiente")){
+                    JavaSQL.updateEstado(actualDB, selected, "No asistida");
+                    conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                    distConHoy.setItems(Main.getTodayConData());
+                    estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
                 }
-                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
-                    System.out.println("advertecnia1");            
+                else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #6");
+                    alert.setContentText(errorMsg(actualDB, 6));
+
+                    alert.showAndWait();
                 }
-                else{
-                    System.out.println("advertencia2");
-                }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText(errorMsg(actualDB, 5));
+
+                alert.showAndWait();
             }
         }  
     }
@@ -506,67 +519,53 @@ public class KaixoMainController extends Main implements Initializable {
         int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             Consulta selected = distConHoy.getItems().get(selectedIndex);
-            if (selected != null) {
-                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
-                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
-                        JavaSQL.updateEstado(actualDB, selected, "cancelada");
-                        conHoyData = JavaSQL.loadConsultasHoy(actualDB);
-                        distConHoy.setItems(Main.getTodayConData());
-                        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
-                }
-                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
-                    System.out.println("advertecnia1");            
-                }
-                else{
-                    System.out.println("advertencia2");
-                }
+            if (selected.getEstado().getValue().equals("Pendiente")){
+                JavaSQL.updateEstado(actualDB, selected, "Cancelada");
+                conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                distConHoy.setItems(Main.getTodayConData());
+                estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
             }
-        }  
-    }
-    
-    
-    
-    
-   /* @FXML
-    private void handleNewConsulta() throws SQLException{
-        Consulta temp = new Consulta();
-        boolean okClicked = Main.showConsultaDialog(temp);
-        if (okClicked){
-            insertConsulta(actualDB, temp);
-            conHoyData = JavaSQL.loadConsultasHoy(actualDB);
-            distConHoy.setItems(Main.getTodayConData());
+            else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #6");
+                alert.setContentText(errorMsg(actualDB, 6));
 
+                alert.showAndWait();
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #5");
+            alert.setContentText(errorMsg(actualDB, 5));
+
+            alert.showAndWait();
         }
-   
+        
     }
-*/
+
     
     @FXML
     private void handleEditConsulta() throws SQLException{
         int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();	
         if (selectedIndex >= 0) {			
             Consulta temp = distConHoy.getItems().get(selectedIndex);
-            if (temp != null) {
-                Consulta old = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
-                Consulta nuevo = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
-                System.out.println(old.toString());
+            Consulta old = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
             
-                boolean okClicked = Main.showConsultaDialog(nuevo);
-                if (okClicked) {
-                    JavaSQL.updateConsulta(actualDB, nuevo, old);
-                    System.out.println(nuevo);
-                    conHoyData = JavaSQL.loadConsultasHoy(actualDB);
-                    distConHoy.setItems(Main.getTodayConData());
-                    estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());
-                }
-            }else{
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("Kaixo Error #4");
-                alert.setContentText(errorMsg(actualDB, 4));
-
-                alert.showAndWait();
+            boolean okClicked = Main.showConsultaDialog(temp);
+            if (okClicked) {
+                JavaSQL.updateConsulta(actualDB, temp, old);
+                conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                distConHoy.setItems(Main.getTodayConData());
+                estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());
+                
             }
-        }    
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #5");
+            alert.setContentText(errorMsg(actualDB, 5));
+
+            alert.showAndWait();
+        }
+          
     }
     
     @FXML
@@ -579,14 +578,14 @@ public class KaixoMainController extends Main implements Initializable {
                 TextInputDialog dialog = new TextInputDialog("");
                 dialog.setTitle("Diagnóstico");
                 dialog.setHeaderText("Diagnóstico");
-                dialog.setContentText("Por favor ingrese el diagnostico");
+                dialog.setContentText("Por favor ingrese el diagnóstico");
                 Optional<String> result = dialog.showAndWait();
                 if (result.isPresent()){
                     JavaSQL.updateDialog(actualDB, con, result.get());
                     Alert alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Atención");
                     alert.setHeaderText(null);
-                    alert.setContentText("diagnostico agregado exitoso!");
+                    alert.setContentText("¡Diagnóstico agregado!");
                     alert.showAndWait();
                     }
             }
@@ -594,12 +593,34 @@ public class KaixoMainController extends Main implements Initializable {
     }
     
     @FXML
-    private void handleValoracion(){
-        Valoracion val = new Valoracion();
-        boolean okClicked = Main.showValDialog(val);
-        if (okClicked){
-            //nada implementado aun, revisar constructor por defecto
+    private void handleValoracion() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            if (selected != null) {
+                if (selected.getEstado().getValue().equals("Asistida")){
+                    Valoracion temp = new Valoracion();
+                    boolean okClicked = Main.showValDialog(temp);
+                    if (okClicked){
+                        insertValoracion(actualDB, temp, selected);           
+                    }
+                }else{
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #7");
+                    alert.setContentText(errorMsg(actualDB, 7));
+
+                    alert.showAndWait();
+                }
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #5");
+            alert.setContentText(errorMsg(actualDB, 5));
+
+            alert.showAndWait();
         }
+        
+        
     }
     
         

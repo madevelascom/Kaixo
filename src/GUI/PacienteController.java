@@ -43,7 +43,7 @@ public class PacienteController extends Main implements Initializable {
     @FXML
     private DatePicker paxNacimiento;
     @FXML
-    private ChoiceBox paxSangre;
+    private ChoiceBox<String> paxSangre;
     @FXML
     private TextField paxCelular;
     @FXML
@@ -110,15 +110,15 @@ public class PacienteController extends Main implements Initializable {
     public void handleOk() throws SQLException{
         if(isInputValid()){
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            pat.setCI(new SimpleStringProperty(paxCI.getText()));
-            pat.setNombres(new SimpleStringProperty(paxNombre.getText()));
-            pat.setApellidos(new SimpleStringProperty(paxApellido.getText()));
+            pat.setCI(new SimpleStringProperty(paxCI.getText().trim()));
+            pat.setNombres(new SimpleStringProperty(paxNombre.getText().trim()));
+            pat.setApellidos(new SimpleStringProperty(paxApellido.getText().trim()));
             pat.setNacimiento(new SimpleStringProperty(paxNacimiento.getValue().format(fmt)));
-            pat.setSangre(new SimpleStringProperty(paxSangre.getValue().toString()));
-            pat.setCelular(new SimpleStringProperty(paxCelular.getText()));
-            pat.setCasa(new SimpleStringProperty(paxCasa.getText()));
-            pat.setDireccion(new SimpleStringProperty(paxDi.getText()));
-            pat.setEmail(new SimpleStringProperty(paxEmail.getText()));
+            pat.setSangre(new SimpleStringProperty(paxSangre.getValue()));
+            pat.setCelular(new SimpleStringProperty(paxCelular.getText().trim()));
+            pat.setCasa(new SimpleStringProperty(paxCasa.getText().trim()));
+            pat.setDireccion(new SimpleStringProperty(paxDi.getText().trim()));
+            pat.setEmail(new SimpleStringProperty(paxEmail.getText().trim()));
 
             okClicked = true;
             dialogStage.close();

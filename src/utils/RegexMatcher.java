@@ -3,7 +3,6 @@ package utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.regex.Pattern;
 import javax.mail.internet.AddressException;
@@ -75,5 +74,12 @@ public class RegexMatcher {
         return Pattern.matches("^\\pL+[\\pL\\pZ\\pP]{1,}$", nom);
     }   
     
+    public static boolean testGlucosa(String glucosa){
+        return Pattern.matches("\\d+", glucosa);
+    }
+    
+    public static boolean testPeso(String peso){
+        return Pattern.matches("\\d+\\.\\d+", peso);
+    }
 
 }

@@ -29,11 +29,11 @@ public class MedicinaController implements Initializable {
     @FXML
     private TextField concentracion;
     @FXML
-    private ChoiceBox presentacion;
+    private ChoiceBox<String> presentacion;
 
     
     ObservableList<String> options = FXCollections.observableArrayList(
-            "Pastilla","Jarabe");
+            "Tabletas","Jarabe", "Gotas", "Parche");
     
     private Stage dialogStage;
     private Medicina med;
@@ -65,8 +65,8 @@ public class MedicinaController implements Initializable {
     @FXML
     private void handleOk() throws SQLException {
         if (isInputValid()) {   	     	
-            med.setNombre(new SimpleStringProperty(nombre.getText()));
-            med.setConcentracion(new SimpleStringProperty(concentracion.getText()));
+            med.setNombre(new SimpleStringProperty(nombre.getText().trim()));
+            med.setConcentracion(new SimpleStringProperty(concentracion.getText().trim()));
             med.setPresentacion(new SimpleStringProperty(presentacion.getValue().toString()));
             
             okClicked = true;

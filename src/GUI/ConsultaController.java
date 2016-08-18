@@ -4,6 +4,8 @@ import elements.Consulta;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,11 +15,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import kaixo.Main;
 import static kaixo.Main.actualDB;
-import utils.JavaSQL;
 import static utils.JavaSQL.existsCons;
 
 /**
@@ -34,21 +34,14 @@ public class ConsultaController extends Main implements Initializable {
     @FXML
     private DatePicker conFecha;
     @FXML
-    private ChoiceBox conHora;
+    private ChoiceBox<String> conHora;
     @FXML
-    private ChoiceBox conEstado;
-    /*
-    @FXML
-    private TextField conNombres;
-    
-    @FXML
-    private TextField conApellidos;
-    */
+    private ChoiceBox<String> conEstado;
     
     ObservableList<String> conEstados = FXCollections.observableArrayList(
-    "pendiente", "cancelada","asistio","no asistio");
+    "Pendiente", "Cancelada","Asistida","No asistida");
     ObservableList<String> conHoras = FXCollections.observableArrayList(
-    "11:00", "12:00","13:00");
+    "16:00", "16:30","17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00");
     
     private Stage dialogStage;
     private Consulta con;
@@ -67,17 +60,13 @@ public class ConsultaController extends Main implements Initializable {
     
     public void setConsulta(Consulta con) throws SQLException{
         this.con = con;
-        /*
-        debe editarse
-        conFecha.setValue(LocalDate.MAX);
-        */
-        conHora.setValue(con.getFecha().getValue());
-        conEstado.setValue(con.getEstado().getValue());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        LocalDate date = LocalDate.parse(con.getFecha().getValue(), formatter);
+        LocalTime time = LocalTime.parse(con.getFecha().getValue(), formatter);
         
-        /*
-        conNombres.setText(JavaSQL.selecPaxName(actualDB, con.getPaciente().getValue()));
-        conApellidos.setText(JavaSQL.selecPaxName(actualDB, con.getPaciente().getValue())); 
-        */
+        conFecha.setValue(date);
+        conHora.setValue(time.toString());
+        conEstado.setValue(con.getEstado().getValue());
     }
     
     public void disableEstado(){
@@ -91,13 +80,8 @@ public class ConsultaController extends Main implements Initializable {
     @FXML
     public void handleOk() throws SQLException{
         if(isInputValid()){   
-            String S;
-            //S = JavaSQL.getCIByName(actualDB, conNombres.getText(), conApellidos.getText());
-            
-            //con.setPaciente(new SimpleStringProperty(S));
-            con.setEstado(new SimpleStringProperty(conEstado.getValue().toString()));
+            con.setEstado(new SimpleStringProperty(conEstado.getValue()));
             con.setFecha(new SimpleStringProperty(conFecha.getValue().toString()+ " "+ conHora.getValue()));
-            System.out.println(new SimpleStringProperty(conFecha.getValue().toString()));
             okClicked = true;
             dialogStage.close();
         }
@@ -121,11 +105,7 @@ public class ConsultaController extends Main implements Initializable {
         if (existsCons(actualDB, date)){
             errorMessage += "Ya tienes una consulta programada para ese día y hora \n";
         }
-        /*
-        if (!JavaSQL.existsPaxName(actualDB, conNombres.getText(), conApellidos.getText())){
-            errorMessage += "El paciente solicitado no existe, por favor ingresarlo \n";
-        }
-*/
+
         if (errorMessage.length() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

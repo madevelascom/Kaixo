@@ -69,9 +69,9 @@ public class DistribuidorController extends Main implements Initializable {
     @FXML
     public void handleOk() throws SQLException{
         if (isInputValid()){
-            dist.setNombre(new SimpleStringProperty(this.nombre.getText()));
-            dist.setDireccion(new SimpleStringProperty(this.direccion.getText()));
-            dist.setTelefono(new SimpleStringProperty(this.telefono.getText()));
+            dist.setNombre(new SimpleStringProperty(this.nombre.getText().trim()));
+            dist.setDireccion(new SimpleStringProperty(this.direccion.getText().trim()));
+            dist.setTelefono(new SimpleStringProperty(this.telefono.getText().trim()));
 
             this.okClicked = true;
             dialogStage.close();
@@ -87,7 +87,7 @@ public class DistribuidorController extends Main implements Initializable {
     public boolean isInputValid() throws SQLException{
         String errorMessage = "";
         
-        if (!nombre.getText().equals("")){
+        if (!nombre.getText().trim().equals("")){
             if (!testPaxNomSearch(nombre.getText())){
                 errorMessage += "Los nombres sólo tienen letras. \n"; 
             }
@@ -95,11 +95,11 @@ public class DistribuidorController extends Main implements Initializable {
             errorMessage += "Campo Nombre vacío \n"; 
         }
         
-        if (direccion.getText().equals("")){
+        if (direccion.getText().trim().equals("")){
             errorMessage += "Campo Direccion vacío \n";
         }
         
-        if (!telefono.getText().equals("")){
+        if (!telefono.getText().trim().equals("")){
             if (!testCasa(telefono.getText())){
                 errorMessage += "Los teléfonos tienen 9 dígitos \n";
             }

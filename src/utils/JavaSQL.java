@@ -198,6 +198,34 @@ public class JavaSQL {
         
     }
     
+    public static String selecPaxName(Connection conn, String id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String rslt = "";
+        String sql = "SELECT paciente.nombres "
+                + " FROM paciente WHERE CI = '"+id+"';";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()){
+            rslt = rs.getString("nombres");
+        }
+        return rslt;
+        
+    }
+    
+    public static String selecPaxLastName(Connection conn, String id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String rslt = "";
+        String sql = "SELECT paciente.apellidos "
+                + " FROM paciente WHERE CI = '"+id+"';";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()){
+            rslt = rs.getString("apellidos");
+        }
+        return rslt;
+        
+    }
+    
     public static void updatePax(Connection conn, Paciente pax)throws SQLException{
         Statement stmt = conn.createStatement();
         String sql = "UPDATE `paciente` SET   "
@@ -229,6 +257,19 @@ public class JavaSQL {
         stmt.executeQuery(sql);
     }
     
+    public static void updateConsulta(Connection conn, Consulta nuevo, Consulta old ) throws SQLException{
+        System.out.println("entro aqqui 3");
+        Statement  stmt = conn.createStatement();
+        String sql = "UPDATE consultas SET "
+                +" fecha = '" + nuevo.getFecha().getValue() + "', "
+                +" estado = '" + nuevo.getEstado().getValue() + "' "
+                +" WHERE paciente = '" + old.getPaciente().getValue() + "' AND "
+                +" fecha = '" + old.getFecha().getValue() + "' ;";
+                 
+        
+        stmt.executeQuery(sql);
+    }
+    
     public static ObservableList<Consulta> loadConsultasHoy(Connection conn) throws SQLException{
         ObservableList<Consulta> distConHoy = FXCollections.observableArrayList();
         Statement  stmt = conn.createStatement();
@@ -253,6 +294,75 @@ public class JavaSQL {
         }
         
         return distConHoy;
+    }
+    
+    
+    
+    public static ObservableList<Consulta> loadConsultasPasadas(Connection conn , String CI) throws SQLException{
+        ObservableList<Consulta> conPas = FXCollections.observableArrayList();
+        Statement  stmt = conn.createStatement();
+        
+        String sql = "SELECT c.paciente, c.fecha, c.estado FROM consultas c "
+                + "WHERE DATE(c.fecha) < CURDATE() AND c.paciente =" + CI  + ";";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        
+                if(rs.next()){
+            do{                      
+            Consulta con = new Consulta(rs.getString("fecha"),rs.getString("paciente") , 
+                    rs.getString("estado"));
+            conPas.add(con);
+            }while(rs.next());
+        }
+        
+        return conPas;
+    }
+    
+    public static void updateEstado( Connection conn, Consulta con, String estado) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "UPDATE consultas SET estado = '" + estado.toLowerCase() + "' WHERE  "
+                + " fecha = '" + con.getFecha().getValue() + "' AND "
+                + " paciente = '" + con.getPaciente().getValue() + "';";
+        
+        stmt.executeQuery(sql);
+    }
+    
+    
+    
+    public static boolean existsPaxName( Connection conn, String nombres, String apellidos) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT * FROM paciente p WHERE "
+                + "p.nombres = '" + nombres +"' AND "
+                + "p.apellidos = '" + apellidos +"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        return rs.next();
+    }
+    
+    public static String getCIByName (Connection conn, String nombres, String apellidos) throws SQLException{
+        Statement stmt = conn.createStatement();
+        String CI = "";
+        String sql = "SELECT p.CI FROM paciente p WHERE "
+                + "p.nombres = '" + nombres +"' AND "
+                + "p.apellidos = '" + apellidos +"';";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if (rs.next()){
+            CI = rs.getString("CI");
+        }
+        
+        return CI;
+    }
+    
+    public static void updateDialog(Connection conn, Consulta con, String Dialog) throws SQLException{
+        Statement stmt = conn.createStatement();
+        
+        String sql = "UPDATE consultas SET diagnostico = '" + Dialog + "' WHERE "
+                 + " paciente = '" + con.getPaciente().getValue() + "' AND "
+                 +" fecha = '" + con.getFecha().getValue() + "' ; ";
+                 
+        
+        stmt.executeQuery(sql);
     }
     
     public static boolean existsCons(Connection conn, String date) throws SQLException{

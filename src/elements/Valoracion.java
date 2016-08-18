@@ -20,6 +20,13 @@ public class Valoracion {
         this.peso = new SimpleDoubleProperty(peso);
     }
 
+    public Valoracion() {
+        this.presion = new SimpleIntegerProperty(0);
+        this.glucosa = new SimpleIntegerProperty(0);
+        this.peso = new SimpleDoubleProperty(0);
+        
+    }
+
     public IntegerProperty getPresion() {
         return presion;
     }

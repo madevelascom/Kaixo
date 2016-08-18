@@ -1,5 +1,10 @@
 package utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.regex.Pattern;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -25,6 +30,25 @@ public class RegexMatcher {
             result = false;
         }
          return result;
+    }
+    
+    public static boolean testDate( String dateString) {
+        Date fechaConsulta = new Date();
+        Date fechaActual = new Date();
+        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try
+        {
+            fechaConsulta = simpleDateFormat.parse(dateString);
+
+        }
+        catch (ParseException ex)
+        {
+            System.out.println("Exception "+ex);
+        }
+        
+        return fechaConsulta.before(fechaActual);
+        
+        
     }
     
     public static boolean testCel(String cel){

@@ -13,8 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import kaixo.Main;
+import static kaixo.Main.actualDB;
+import utils.JavaSQL;
 import static utils.JavaSQL.existsCons;
 
 /**
@@ -34,8 +37,16 @@ public class ConsultaController extends Main implements Initializable {
     private ChoiceBox conHora;
     @FXML
     private ChoiceBox conEstado;
+    /*
+    @FXML
+    private TextField conNombres;
+    
+    @FXML
+    private TextField conApellidos;
+    */
+    
     ObservableList<String> conEstados = FXCollections.observableArrayList(
-    "Pendiente", "Cancelada","Asistio");
+    "pendiente", "cancelada","asistio","no asistio");
     ObservableList<String> conHoras = FXCollections.observableArrayList(
     "11:00", "12:00","13:00");
     
@@ -54,9 +65,19 @@ public class ConsultaController extends Main implements Initializable {
         this.dialogStage = dialogStage;
     }
     
-    public void setConsulta(Consulta con){
+    public void setConsulta(Consulta con) throws SQLException{
         this.con = con;
-        /*SET*/
+        /*
+        debe editarse
+        conFecha.setValue(LocalDate.MAX);
+        */
+        conHora.setValue(con.getFecha().getValue());
+        conEstado.setValue(con.getEstado().getValue());
+        
+        /*
+        conNombres.setText(JavaSQL.selecPaxName(actualDB, con.getPaciente().getValue()));
+        conApellidos.setText(JavaSQL.selecPaxName(actualDB, con.getPaciente().getValue())); 
+        */
     }
     
     public void disableEstado(){
@@ -69,9 +90,14 @@ public class ConsultaController extends Main implements Initializable {
     
     @FXML
     public void handleOk() throws SQLException{
-        if(isInputValid()){         
+        if(isInputValid()){   
+            String S;
+            //S = JavaSQL.getCIByName(actualDB, conNombres.getText(), conApellidos.getText());
+            
+            //con.setPaciente(new SimpleStringProperty(S));
             con.setEstado(new SimpleStringProperty(conEstado.getValue().toString()));
             con.setFecha(new SimpleStringProperty(conFecha.getValue().toString()+ " "+ conHora.getValue()));
+            System.out.println(new SimpleStringProperty(conFecha.getValue().toString()));
             okClicked = true;
             dialogStage.close();
         }
@@ -82,7 +108,7 @@ public class ConsultaController extends Main implements Initializable {
         dialogStage.close();
     }
     
-    private boolean isInputValid() throws SQLException{
+    public boolean isInputValid() throws SQLException{
         String errorMessage = "";
         
         if(conFecha.getValue().isBefore(LocalDate.now())){
@@ -95,10 +121,12 @@ public class ConsultaController extends Main implements Initializable {
         if (existsCons(actualDB, date)){
             errorMessage += "Ya tienes una consulta programada para ese día y hora \n";
         }
-        
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
+        /*
+        if (!JavaSQL.existsPaxName(actualDB, conNombres.getText(), conApellidos.getText())){
+            errorMessage += "El paciente solicitado no existe, por favor ingresarlo \n";
+        }
+*/
+        if (errorMessage.length() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Tienes un(os) error(es) al ingresar los datos");
@@ -107,6 +135,10 @@ public class ConsultaController extends Main implements Initializable {
         	
             return false;
         }
+        
+        return true;
+        
+        
     }
     
     

@@ -4,6 +4,7 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Valoracion;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -25,6 +26,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import kaixo.Main;
 import static kaixo.Main.actualDB;
 import utils.JavaSQL;
@@ -46,6 +48,7 @@ import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
 import static utils.JavaSQL.updateDist;
 import static utils.JavaSQL.updateMed;
+import utils.RegexMatcher;
 
 /**
  * FXML Controller class
@@ -55,6 +58,8 @@ import static utils.JavaSQL.updateMed;
 public class KaixoMainController extends Main implements Initializable {
     
     private ObservableList<Medicina> masterMedData = Main.getMedData();
+    
+    private ObservableList<Consulta> conPas;
     //Medicina
     @FXML
     private TableView<Medicina> medTable;
@@ -118,6 +123,19 @@ public class KaixoMainController extends Main implements Initializable {
     private TableColumn<Consulta, String> paxConHoy;
     @FXML
     private TableColumn<Consulta, String> estConHoy;
+    
+    //Consultas pasadas
+    @FXML
+    private TableView<Consulta> conPasTable;
+    
+    @FXML
+    private TableColumn<Consulta, String> fechaConPas;
+    
+    @FXML
+    private TableColumn<Consulta, String> estadoConPas;
+            
+    
+            
     
     private void showMedDetails(Medicina med){
         if (med != null){
@@ -339,6 +357,7 @@ public class KaixoMainController extends Main implements Initializable {
             if(testPaxCISearch(searchCI)){
                 Paciente pac = searchPaxCI(actualDB, searchCI);
                 showPaxDetails(pac);
+                chargeConPasTable();
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Kaixo Error #5");
@@ -361,6 +380,7 @@ public class KaixoMainController extends Main implements Initializable {
             if (testPaxNomSearch(searchNom)){
                 Paciente pac = searchPaxNom(actualDB, searchNom);
                 showPaxDetails(pac);
+                chargeConPasTable();
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Kaixo Error #5");
@@ -402,6 +422,20 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
+    
+    private void chargeConPasTable() throws SQLException{
+        String CI = paxCI.getText();
+        this.conPas = JavaSQL.loadConsultasPasadas(actualDB, CI);
+        
+        if (!conPas.isEmpty()){
+            conPasTable.setItems(conPas);
+            fechaConPas.setCellValueFactory(cellData -> cellData.getValue().getFecha());
+            estadoConPas.setCellValueFactory(cellData -> cellData.getValue().getEstado());
+        }
+    }
+    
+    //Consultas
+    
     @FXML
     private void handleNewConsult() throws SQLException{
         if (existsPax(actualDB, paxCI.getText())){
@@ -409,6 +443,8 @@ public class KaixoMainController extends Main implements Initializable {
             boolean okClicked = Main.showPaxNewConsulta(temp);
             if (okClicked){
                 insertConsulta(actualDB, temp);
+                conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                distConHoy.setItems(Main.getTodayConData());
             }
         }else{
             Alert alert = new Alert(AlertType.ERROR);
@@ -418,6 +454,157 @@ public class KaixoMainController extends Main implements Initializable {
             alert.showAndWait();
         }
     }
+
+    @FXML
+    private void handleAsistio() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            if (selected != null) {
+                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
+                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
+                        JavaSQL.updateEstado(actualDB, selected, "asistio");
+                        conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                        distConHoy.setItems(Main.getTodayConData());
+                        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
+                }
+                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
+                    System.out.println("advertecnia1");            
+                }
+                else{
+                    System.out.println("advertencia2");
+                }
+            }
+        }  
+    }
+    
+    @FXML
+    private void handleNoAsistio() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            if (selected != null) {
+                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
+                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
+                        JavaSQL.updateEstado(actualDB, selected, "no asistio");
+                        conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                        distConHoy.setItems(Main.getTodayConData());
+                        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
+                }
+                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
+                    System.out.println("advertecnia1");            
+                }
+                else{
+                    System.out.println("advertencia2");
+                }
+            }
+        }  
+    }
+    
+    @FXML
+    private void handleCancelar() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            if (selected != null) {
+                if ((RegexMatcher.testDate(selected.getFecha().getValue())) && 
+                   (selected.getEstado().getValue().toLowerCase().equals("pendiente"))){ 
+                        JavaSQL.updateEstado(actualDB, selected, "cancelada");
+                        conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                        distConHoy.setItems(Main.getTodayConData());
+                        estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());        
+                }
+                else if ((RegexMatcher.testDate(selected.getFecha().getValue()))){
+                    System.out.println("advertecnia1");            
+                }
+                else{
+                    System.out.println("advertencia2");
+                }
+            }
+        }  
+    }
+    
+    
+    
+    
+   /* @FXML
+    private void handleNewConsulta() throws SQLException{
+        Consulta temp = new Consulta();
+        boolean okClicked = Main.showConsultaDialog(temp);
+        if (okClicked){
+            insertConsulta(actualDB, temp);
+            conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+            distConHoy.setItems(Main.getTodayConData());
+
+        }
+   
+    }
+*/
+    
+    @FXML
+    private void handleEditConsulta() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();	
+        if (selectedIndex >= 0) {			
+            Consulta temp = distConHoy.getItems().get(selectedIndex);
+            if (temp != null) {
+                Consulta old = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
+                Consulta nuevo = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
+                System.out.println(old.toString());
+            
+                boolean okClicked = Main.showConsultaDialog(nuevo);
+                if (okClicked) {
+                    JavaSQL.updateConsulta(actualDB, nuevo, old);
+                    System.out.println(nuevo);
+                    conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+                    distConHoy.setItems(Main.getTodayConData());
+                    estConHoy.setCellValueFactory(cellData -> cellData.getValue().getEstado());
+                }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #4");
+                alert.setContentText(errorMsg(actualDB, 4));
+
+                alert.showAndWait();
+            }
+        }    
+    }
+    
+    @FXML
+    public void handleDiagnostico() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta temp = distConHoy.getItems().get(selectedIndex);
+            if (temp != null) {
+                Consulta con = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
+                TextInputDialog dialog = new TextInputDialog("");
+                dialog.setTitle("Diagnóstico");
+                dialog.setHeaderText("Diagnóstico");
+                dialog.setContentText("Por favor ingrese el diagnostico");
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()){
+                    JavaSQL.updateDialog(actualDB, con, result.get());
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Atención");
+                    alert.setHeaderText(null);
+                    alert.setContentText("diagnostico agregado exitoso!");
+                    alert.showAndWait();
+                    }
+            }
+        }
+    }
+    
+    @FXML
+    private void handleValoracion(){
+        Valoracion val = new Valoracion();
+        boolean okClicked = Main.showValDialog(val);
+        if (okClicked){
+            //nada implementado aun, revisar constructor por defecto
+        }
+    }
+    
+        
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());
@@ -462,8 +649,8 @@ public class KaixoMainController extends Main implements Initializable {
         distTable.setItems(Main.getDistData());
         nomDist.setCellValueFactory(cellData -> cellData.getValue().getNombre());
         
-
-
+        
+        
         buscarMedicina();
         buscarDistribuidor();
 

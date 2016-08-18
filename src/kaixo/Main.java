@@ -11,10 +11,12 @@ import utils.JavaSQL;
 import GUI.LoginController;
 import GUI.MedicinaController;
 import GUI.PacienteController;
+import GUI.ValoracionController;
 import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Valoracion;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -100,6 +102,33 @@ public class Main extends Application {
 
     }
     
+    
+    public static boolean showConsultaDialog(Consulta cons) throws SQLException{
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Consulta.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            Stage dialogStage = new Stage();
+	    dialogStage.setTitle("Crear/Editar Consulta");
+	    dialogStage.initModality(Modality.WINDOW_MODAL);
+	    dialogStage.initOwner(primaryStage);
+	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+	    Scene scene = new Scene(page);
+	    dialogStage.setScene(scene);
+            
+            ConsultaController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setConsulta(cons);
+
+            dialogStage.showAndWait();
+
+	    return controller.isOkClicked();
+        }catch (IOException e){
+            return false;
+        }
+        
+    }
     public static boolean showMedicinaDialog(Medicina med){
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -153,6 +182,36 @@ public class Main extends Application {
         }
     }
     
+    public static boolean showValDialog( Valoracion vat){
+        try{
+             // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Valoracion.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Valoracion");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Set the person into the controller.
+            ValoracionController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setValoracion(vat);
+            
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+        }catch(IOException e){
+            return false;
+        }
+        
+    }
     
     public static boolean showPaxNewDialog(Paciente pat){
         try{
@@ -186,7 +245,7 @@ public class Main extends Application {
         }
     }
     
-    public static boolean showPaxNewConsulta(Consulta con){
+    public static boolean showPaxNewConsulta(Consulta con) throws SQLException{
         try{
              // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();

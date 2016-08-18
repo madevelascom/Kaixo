@@ -35,6 +35,13 @@ public class Consulta {
         this.paciente   = new SimpleStringProperty(paciente);
         this.estado     = new SimpleStringProperty("");
     }
+    
+    public Consulta(){
+        this.fecha      = new SimpleStringProperty("");
+        this.paciente   = new SimpleStringProperty("");
+        this.estado     = new SimpleStringProperty("");
+        
+    }
 
     public StringProperty getFecha() {
         return fecha;
@@ -75,6 +82,13 @@ public class Consulta {
     public void setValoracion(IntegerProperty valoracion) {
         this.valoracion = valoracion;
     }
+
+    @Override
+    public String toString() {
+        return "Consulta{" + "fecha=" + fecha + ", paciente=" + paciente + ", estado=" + estado + '}';
+    }
+    
+    
     
     
 }

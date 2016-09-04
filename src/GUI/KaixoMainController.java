@@ -7,7 +7,9 @@ import elements.Paciente;
 import elements.Valoracion;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -49,7 +51,7 @@ import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
 import static utils.JavaSQL.updateDist;
 import static utils.JavaSQL.updateMed;
-import utils.RegexMatcher;
+import static utils.JavaSQL.loadMedDist;
 
 /**
  * FXML Controller class
@@ -138,11 +140,12 @@ public class KaixoMainController extends Main implements Initializable {
     
             
     
-    private void showMedDetails(Medicina med){
+    private void showMedDetails(Medicina med)throws SQLException{
         if (med != null){
             medNom.setText(med.getNombre().getValue());
             medCon.setText(med.getConcentracion().getValue());
             medPres.setText(med.getPresentacion().getValue());
+            medDist.setText(loadMedDist(actualDB, med).toString());
         }else{
             medNom.setText("");
             medCon.setText("");
@@ -253,10 +256,11 @@ public class KaixoMainController extends Main implements Initializable {
     @FXML
     private void handleNewMedicina() throws SQLException{
        Medicina temp = new Medicina();
-       boolean onClicked = Main.showMedicinaDialog(temp);
+       List<String> resultDist = new ArrayList<>();
+       boolean onClicked = Main.showMedicinaDialog(temp, resultDist);
        if (onClicked){    
            Main.getMedData().add(temp);
-           insertNewMed(actualDB, temp);
+           insertNewMed(actualDB, temp, resultDist);
            
        }
     }
@@ -265,11 +269,12 @@ public class KaixoMainController extends Main implements Initializable {
     private void handleEditMedicina() throws SQLException{
         Medicina temp = new Medicina(medNom.getText(), medCon.getText(), medPres.getText());
         Medicina prev = new Medicina(medNom.getText(), medCon.getText(), medPres.getText());
+        List<String> resultDist = loadMedDist(actualDB, prev);
         
         if (medExists(actualDB, temp)){
-            boolean okClicked = Main.showMedicinaDialog(temp);
+            boolean okClicked = Main.showMedicinaDialog(temp, resultDist);
             if (okClicked) {
-                updateMed(actualDB, temp, prev);
+                updateMed(actualDB, temp, prev, resultDist);
                 
                 medData = JavaSQL.loadMedicinas(actualDB);
                 medTable.setItems(Main.getMedData());
@@ -675,13 +680,23 @@ public class KaixoMainController extends Main implements Initializable {
         buscarMedicina();
         buscarDistribuidor();
 
-        showMedDetails(null);
+        try {
+            showMedDetails(null);
+        } catch (SQLException ex) {
+            System.out.println("ERROR MED LOAD");
+        }
         showPaxDetails(null);
         showDistDetails(null);
         
 
         medTable.getSelectionModel().selectedItemProperty().addListener(
-                    (observable, oldValue, newValue) -> showMedDetails(newValue));
+                    (observable, oldValue, newValue) -> {
+            try {
+                showMedDetails(newValue);
+            } catch (SQLException ex) {
+                System.out.println("ERROR MED LOAD LISTENER");
+            }
+        });
         
         distTable.getSelectionModel().selectedItemProperty().addListener((observable , oldValue, newValue) -> {
             showDistDetails(newValue);

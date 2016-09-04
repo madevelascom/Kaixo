@@ -16,6 +16,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.naming.NamingException;
@@ -62,15 +64,7 @@ public class JavaSQL {
         return null;
     }
 
-    public void closeConnection(Connection salida){
-        try{
-            salida.close();
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("error al conectar ");
-        }
-    } 
-    
+   
     //SQL statements here
     
     public static ObservableList<Medicina> loadMedicinas(Connection conn) throws SQLException{
@@ -90,6 +84,21 @@ public class JavaSQL {
         
         return medData;
     }
+    
+    public static ObservableList<String> loadDistribuidorNames(Connection conn, 
+        ObservableList<String> options) throws SQLException{
+        String sql = "SELECT nombre FROM distribuidores;";
+        Statement  stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if(rs.next()){
+            do{                      
+            options.add(rs.getString("nombre"));
+            }while(rs.next());
+        }        
+        return options;
+    }
+    
     
     public static ObservableList<Distribuidor> loadDistribuidor(Connection conn) throws SQLException{
         ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
@@ -406,15 +415,44 @@ public class JavaSQL {
         return rs.next();
     }
     
-    public static void insertNewMed(Connection conn, Medicina med) throws SQLException{
+    public static void insertNewMed(Connection conn, Medicina med, List<String> dists) throws SQLException{
         String query = "{CALL insertNewMed(?,?,?)}";
         CallableStatement  stmt = conn.prepareCall(query);
         stmt.setString("nombre", med.getNombre().getValue());
         stmt.setString("concentracion", med.getConcentracion().getValue());
         stmt.setString("presentacion", med.getPresentacion().getValue());
         stmt.executeQuery();
+   
+        for (String x : dists){
+            Statement  stmt_rep = conn.createStatement();
+            String sql = "INSERT INTO medicina_dist (`id_medicina`, `id_distribuidor`) "
+                    + "SELECT medicinas.id, distribuidores.id FROM medicinas, distribuidores "
+                    + "WHERE medicinas.nombre = '"+med.getNombre().getValue()+"' AND "
+                    + "medicinas.concentracion = '"+med.getConcentracion().getValue()+"' AND "
+                    + "medicinas.presentacion = '"+med.getPresentacion().getValue()+"' AND "
+                    + "distribuidores.nombre = '"+x+"';";      
+            stmt_rep.executeQuery(sql);
+        }     
     }
     
+    public static List<String> loadMedDist(Connection conn, Medicina med) throws SQLException{
+        List<String> result = new ArrayList<>();
+        String sql = "SELECT distribuidores.nombre FROM distribuidores WHERE distribuidores.id IN "
+                + "(SELECT medicina_dist.id_distribuidor FROM medicina_dist "
+                + "WHERE medicina_dist.id_medicina =  (SELECT medicinas.id FROM medicinas "
+                + "WHERE medicinas.nombre = '"+med.getNombre().getValue()+"' AND "
+                + "medicinas.concentracion = '"+med.getConcentracion().getValue()+"' AND "
+                + "medicinas.presentacion = '"+med.getPresentacion().getValue()+"'));";
+        Statement  stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        if(rs.next()){
+            do{
+                result.add(rs.getString("distribuidores.nombre"));
+            }while(rs.next());
+        }
+        return result;
+    }
        
     public static void deleteMed(Connection conn, Medicina med) throws SQLException{
         String query = "{CALL deleteMed(?,?,?)}";
@@ -425,7 +463,7 @@ public class JavaSQL {
         stmt.executeQuery();
     }
  
-    public static void updateMed(Connection conn, Medicina med, Medicina prev) throws SQLException{
+    public static void updateMed(Connection conn, Medicina med, Medicina prev, List<String> result) throws SQLException{
         String query = "{CALL updateMed(?,?,?,?,?,?)}";
         CallableStatement  stmt = conn.prepareCall(query);
         stmt.setString("nombre_a", prev.getNombre().getValue());
@@ -436,6 +474,26 @@ public class JavaSQL {
         stmt.setString("presentacion_n", med.getPresentacion().getValue());
 
         stmt.executeQuery();
+        
+        String sql = "DELETE FROM medicina_dist WHERE id_medicina = ( "
+                + "SELECT medicinas.id FROM medicinas WHERE "
+                + "medicinas.nombre = '"+prev.getNombre().getValue()+"' AND "
+                + "medicinas.concentracion = '"+prev.getConcentracion().getValue()+"' AND "
+                + "medicinas.presentacion = '"+prev.getPresentacion().getValue()+"');";
+        Statement  stmt_1 = conn.createStatement();
+        stmt_1.executeQuery(sql);
+        
+        for (String x : result){
+            Statement  stmt_rep = conn.createStatement();
+            String sql_insert = "INSERT INTO medicina_dist (`id_medicina`, `id_distribuidor`) "
+                    + "SELECT medicinas.id, distribuidores.id FROM medicinas, distribuidores "
+                    + "WHERE medicinas.nombre = '"+med.getNombre().getValue()+"' AND "
+                    + "medicinas.concentracion = '"+med.getConcentracion().getValue()+"' AND "
+                    + "medicinas.presentacion = '"+med.getPresentacion().getValue()+"' AND "
+                    + "distribuidores.nombre = '"+x+"';";     
+            stmt_rep.executeQuery(sql_insert);
+        } 
+        
     }
    
     public static boolean distExists(Connection conn, Distribuidor dist) throws SQLException{

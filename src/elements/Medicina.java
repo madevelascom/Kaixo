@@ -20,8 +20,8 @@ public class Medicina {
     }
 
     public Medicina() {
-        this.nombre         = new SimpleStringProperty(" ");
-        this.concentracion  = new SimpleStringProperty(" ");
+        this.nombre         = new SimpleStringProperty("");
+        this.concentracion  = new SimpleStringProperty("");
         this.presentacion   = new SimpleStringProperty("Pastilla")  ;
     }
     

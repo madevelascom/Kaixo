@@ -20,6 +20,7 @@ import elements.Valoracion;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -129,7 +130,7 @@ public class Main extends Application {
         }
         
     }
-    public static boolean showMedicinaDialog(Medicina med){
+    public static boolean showMedicinaDialog(Medicina med, List<String> resultDist){
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginController.class.getResource("Medicina.fxml"));
@@ -139,13 +140,13 @@ public class Main extends Application {
 	    dialogStage.setTitle("Crear/Editar Medicina");
 	    dialogStage.initModality(Modality.WINDOW_MODAL);
 	    dialogStage.initOwner(primaryStage);
-	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+	    dialogStage.getIcons().add(new Image("file:../resources/icon.png"));
 	    Scene scene = new Scene(page);
 	    dialogStage.setScene(scene);
             
             MedicinaController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setMedicina(med);
+            controller.setMedicina(med, resultDist);
 
             dialogStage.showAndWait();
 

@@ -4,6 +4,7 @@ import elements.Consulta;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -60,7 +61,7 @@ public class ConsultaController extends Main implements Initializable {
     
     public void setConsulta(Consulta con) throws SQLException{
         this.con = con;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDate date = LocalDate.parse(con.getFecha().getValue(), formatter);
         LocalTime time = LocalTime.parse(con.getFecha().getValue(), formatter);
         
@@ -94,14 +95,15 @@ public class ConsultaController extends Main implements Initializable {
     
     public boolean isInputValid() throws SQLException{
         String errorMessage = "";
+        String date = conFecha.getValue().toString()+ " "+ conHora.getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime consult = LocalDateTime.parse(date, formatter);
         
-        if(conFecha.getValue().isBefore(LocalDate.now())){
+        if(consult.isBefore(LocalDateTime.now())){
             errorMessage += "La fecha de la consulta es incorrecta. "
                     + "No puede ser menor al día de hoy \n";
         }
-        
-        String date = conFecha.getValue().toString()+ " "+ conHora.getValue();
-        
+    
         if (existsCons(actualDB, date)){
             errorMessage += "Ya tienes una consulta programada para ese día y hora \n";
         }

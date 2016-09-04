@@ -1,5 +1,7 @@
 package elements;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,9 +33,10 @@ public class Consulta {
     }
     
     public Consulta(String paciente){
-        this.fecha      = new SimpleStringProperty("");
+        this.fecha      = new SimpleStringProperty(new 
+            SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime()));
         this.paciente   = new SimpleStringProperty(paciente);
-        this.estado     = new SimpleStringProperty("");
+        this.estado     = new SimpleStringProperty("Pendiente");
     }
     
     public Consulta(){

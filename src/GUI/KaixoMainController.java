@@ -317,7 +317,7 @@ public class KaixoMainController extends Main implements Initializable {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;}
                 String lowerCaseFilter = newValue.toLowerCase();
-                return ( med.getNombre().getValue()).toLowerCase().contains(lowerCaseFilter); // Does not match.
+                return ( med.getNombre().getValue()).toLowerCase().contains(lowerCaseFilter);
             });
         });
             SortedList<Medicina> sortedData = new SortedList<>(filteredData);
@@ -361,15 +361,15 @@ public class KaixoMainController extends Main implements Initializable {
                 chargeConPasTable();
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("Kaixo Error #5");
-                alert.setContentText("Ingresa datos válidos");
+                alert.setHeaderText("Kaixo Error #9");
+                alert.setContentText(errorMsg(actualDB, 9));
                 alert.showAndWait();
             }
         }else{
             paxCISearch.clear();
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #4");
-            alert.setContentText("Campo vacío");
+            alert.setHeaderText("Kaixo Error #8");
+            alert.setContentText(errorMsg(actualDB, 8));
             alert.showAndWait();
         }
     }
@@ -384,15 +384,15 @@ public class KaixoMainController extends Main implements Initializable {
                 chargeConPasTable();
             }else{
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("Kaixo Error #5");
-                alert.setContentText("Ingresa datos válidos");
+                alert.setHeaderText("Kaixo Error #10");
+                alert.setContentText(errorMsg(actualDB, 10));
                 alert.showAndWait();
             }
         }else{
             paxNomSearch.clear();
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #4");
-            alert.setContentText("Campo vacío");
+            alert.setHeaderText("Kaixo Error #8");
+            alert.setContentText(errorMsg(actualDB, 8));
             alert.showAndWait();
         }
     }

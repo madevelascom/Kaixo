@@ -10,6 +10,7 @@ import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
 import elements.Valoracion;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -74,9 +75,10 @@ public class JavaSQL {
     
     public static ObservableList<Medicina> loadMedicinas(Connection conn) throws SQLException{
         ObservableList<Medicina> medData = FXCollections.observableArrayList();
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT nombre, concentracion, presentacion FROM medicinas;";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL loadMedicinas()}";
+        
+        CallableStatement stmt = conn.prepareCall(query);
+        ResultSet rs = stmt.executeQuery();
         
         if(rs.next()){
             do{                      
@@ -91,9 +93,10 @@ public class JavaSQL {
     
     public static ObservableList<Distribuidor> loadDistribuidor(Connection conn) throws SQLException{
         ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT nombre, direccion, telefono FROM distribuidores;";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL loadDistribuidor()}";
+        
+        CallableStatement stmt = conn.prepareCall(query);
+        ResultSet rs = stmt.executeQuery();
         
         if(rs.next()){
             do{                      
@@ -106,18 +109,22 @@ public class JavaSQL {
     }
     
     public static boolean loginSession(Connection conn, String user, String pass) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT username, password FROM users WHERE username = '"
-                +user+"' AND password = '"+pass+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL loginSession(?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("user1", user); 
+        stmt.setString("pass", pass);
+
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
     
     public static int userLevel (Connection conn, String user) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT level FROM users WHERE username = '"+user+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL userLevel(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("user1", user); 
+
+        ResultSet rs = stmt.executeQuery();
         
         int level = 0;
         if(rs.next()){
@@ -128,10 +135,11 @@ public class JavaSQL {
     }
     
     public static String errorMsg(Connection conn, int id) throws SQLException{
-        Statement stmt = conn.createStatement();
         String result = "";
-        String sql = "SELECT error FROM errores WHERE id = "+String.valueOf(id)+";";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL errorMsg(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setInt("id", id);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()){
             result = rs.getString("error");
         }
@@ -139,9 +147,10 @@ public class JavaSQL {
     }
     
     public static Paciente searchPaxCI(Connection conn, String pax) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT * FROM paciente WHERE CI = '"+pax+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL searchPaxCI(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("pax", pax);
+        ResultSet rs = stmt.executeQuery();
         
         if (rs.next()){
             Paciente paciente = new Paciente (rs.getString("CI"), rs.getString("nombres"),
@@ -155,10 +164,10 @@ public class JavaSQL {
     }
     
     public static Paciente searchPaxNom(Connection conn, String pax) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT * FROM paciente WHERE CI IN "
-                + "(SELECT CI FROM paciente WHERE CONCAT(nombres, ' ', apellidos)='"+pax+"');";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL searchPaxNom(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("pax", pax);
+        ResultSet rs = stmt.executeQuery();
         
         if (rs.next()){
             Paciente paciente = new Paciente (rs.getString("CI"), rs.getString("nombres"),
@@ -172,26 +181,27 @@ public class JavaSQL {
     }
     
     public static void insertNewPax(Connection conn, Paciente pax) throws SQLException{ 
-       Statement stmt = conn.createStatement();
-        String sql = "INSERT INTO `paciente` VALUES ('"+pax.getCI().getValue()+"',"
-                + " '"+pax.getNombres().getValue()+"',"
-                + " '"+pax.getApellidos().getValue()+"', "
-                + " '"+pax.getNacimiento().getValue()+"', "
-                + " '"+pax.getSangre().getValue()+"',"
-                + " '"+pax.getCelular().getValue()+"',"
-                + " '"+pax.getCasa().getValue()+"',"
-                + " '"+pax.getDireccion().getValue()+"',"
-                + " '"+pax.getEmail().getValue()+"') ";
-        stmt.executeQuery(sql);
+        String query = "{CALL insertNewPax(?,?,?,?,?,?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("CI", pax.getCI().getValue());
+        stmt.setString("apellidos", pax.getApellidos().getValue());
+        stmt.setString("nombres", pax.getNombres().getValue());
+
+        stmt.setString("fechanacimiento", pax.getNacimiento().getValue());
+        stmt.setString("tiposangre", pax.getSangre().getValue());
+        stmt.setString("numcelular", pax.getCelular().getValue());
+        stmt.setString("numcasa", pax.getCasa().getValue());
+        stmt.setString("dircasa", pax.getDireccion().getValue());
+        stmt.setString("email", pax.getEmail().getValue());
+        stmt.executeQuery();
     }
     
     public static String selecPaxNameConcat(Connection conn, String id) throws SQLException{
-        Statement stmt = conn.createStatement();
         String rslt = "";
-        String sql = "SELECT CONCAT(paciente.nombres, ' ', paciente.apellidos) "
-                + "AS 'paciente' FROM paciente WHERE CI = '"+id+"';";
-        
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL selectPaxNameConcat(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("id", id);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()){
             rslt = rs.getString("paciente");
         }
@@ -200,12 +210,11 @@ public class JavaSQL {
     }
     
     public static String selecPaxName(Connection conn, String id) throws SQLException{
-        Statement stmt = conn.createStatement();
         String rslt = "";
-        String sql = "SELECT paciente.nombres "
-                + " FROM paciente WHERE CI = '"+id+"';";
-        
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL selectPaxName(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("id", id);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()){
             rslt = rs.getString("nombres");
         }
@@ -214,12 +223,11 @@ public class JavaSQL {
     }
     
     public static String selecPaxLastName(Connection conn, String id) throws SQLException{
-        Statement stmt = conn.createStatement();
         String rslt = "";
-        String sql = "SELECT paciente.apellidos "
-                + " FROM paciente WHERE CI = '"+id+"';";
-        
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL selectPaxLastName(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("id", id);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()){
             rslt = rs.getString("apellidos");
         }
@@ -228,51 +236,54 @@ public class JavaSQL {
     }
     
     public static void updatePax(Connection conn, Paciente pax)throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "UPDATE `paciente` SET   "
-                + "nombres = '"+pax.getNombres().getValue()+"', "
-                + "apellidos = '"+pax.getApellidos().getValue()+"', "
-                + "fechanacimiento = '"+pax.getNacimiento().getValue()+"', "
-                + "tiposangre = '"+pax.getSangre().getValue()+"', "
-                + "numcelular = '"+pax.getCelular().getValue()+"', "
-                + "numcasa = '"+pax.getCasa().getValue()+"', "
-                + "dircasa = '"+pax.getDireccion().getValue()+"', "
-                + "email = '"+pax.getEmail().getValue()+"' "
-                + "WHERE CI = '"+pax.getCI().getValue()+"';";
-        stmt.executeQuery(sql);
+        String query = "{CALL updatePax(?,?,?,?,?,?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("CI", pax.getCI().getValue());
+        stmt.setString("nombres", pax.getNombres().getValue());
+        stmt.setString("apellidos", pax.getApellidos().getValue());
+        stmt.setString("fechanacimiento", pax.getNacimiento().getValue());
+        stmt.setString("tiposangre", pax.getSangre().getValue());
+        stmt.setString("numcelular", pax.getCelular().getValue());
+        stmt.setString("numcasa", pax.getCasa().getValue());
+        stmt.setString("dircasa", pax.getDireccion().getValue());
+        stmt.setString("email", pax.getEmail().getValue());
+        stmt.executeQuery();
     }
     public static boolean existsPax(Connection conn, String CI) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT * FROM paciente WHERE CI = '"+CI+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL existsPax(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("CI", CI);
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
     
     public static void insertConsulta(Connection conn, Consulta con) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "INSERT INTO consultas (`fecha`, `paciente`, `estado`) VALUES "
-                + "('"+con.getFecha().getValue()+"', "
-                + " '"+con.getPaciente().getValue()+"',"
-                + " '"+con.getEstado().getValue()+"');";
-        stmt.executeQuery(sql);
+        String query = "{CALL insertConsulta(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("fecha", con.getFecha().getValue());
+        stmt.setString("patient", con.getPaciente().getValue());
+        stmt.setString("estado", con.getEstado().getValue());
+
+        stmt.executeQuery();
     }
     
     public static void updateConsulta(Connection conn, Consulta nuevo, Consulta old ) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "UPDATE consultas SET "
-                +" fecha = '" + nuevo.getFecha().getValue() + "', "
-                +" estado = '" + nuevo.getEstado().getValue() + "' "
-                +" WHERE paciente = '" + old.getPaciente().getValue() + "' AND "
-                +" fecha = '" + old.getFecha().getValue() + "' ;";
+        String query = "{CALL updateConsulta(?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nuevafecha", nuevo.getFecha().getValue());
+        stmt.setString("nuevoestado", nuevo.getEstado().getValue());
+        stmt.setString("viejopaciente", old.getPaciente().getValue());
+        stmt.setString("viejafecha", old.getFecha().getValue());
                  
         
-        stmt.executeQuery(sql);
+        stmt.executeQuery();
     }
     
     public static ObservableList<Consulta> loadConsultasHoy(Connection conn) throws SQLException{
         ObservableList<Consulta> distConHoy = FXCollections.observableArrayList();
-        Statement  stmt = conn.createStatement();
+        String query = "{CALL loadConsultasHoy()}";
+        CallableStatement  stmt = conn.prepareCall(query);
         
         /*SELECT TIME(consultas.fecha) as 'hora_con', consultas.fecha, 
         CONCAT(paciente.nombres, ' ', paciente.apellidos) as 'paciente', 
@@ -280,10 +291,8 @@ public class JavaSQL {
         ON consultas.paciente = paciente.CI  
         WHERE DATE(consultas.fecha) = DATE(NOW()) ;*/
         
-        String sql = "SELECT fecha, paciente, estado FROM consultas "
-                + "WHERE DATE(consultas.fecha) = DATE(NOW());";
         
-        ResultSet rs = stmt.executeQuery(sql);
+        ResultSet rs = stmt.executeQuery();
         
         if(rs.next()){
             do{                      
@@ -300,14 +309,16 @@ public class JavaSQL {
     
     public static ObservableList<Consulta> loadConsultasPasadas(Connection conn , String CI) throws SQLException{
         ObservableList<Consulta> conPas = FXCollections.observableArrayList();
-        Statement  stmt = conn.createStatement();
+        String query = "{CALL loadConsultasPasadas(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
         
-        String sql = "SELECT c.paciente, c.fecha, c.estado FROM consultas c "
-                + "WHERE DATE(c.fecha) < CURDATE() AND c.paciente =" + CI  + ";";
+        stmt.setString("CI", CI);
         
-        ResultSet rs = stmt.executeQuery(sql);
+
         
-                if(rs.next()){
+        ResultSet rs = stmt.executeQuery();
+        
+        if(rs.next()){
             do{                      
             Consulta con = new Consulta(rs.getString("fecha"),rs.getString("paciente") , 
                     rs.getString("estado"));
@@ -319,33 +330,39 @@ public class JavaSQL {
     }
     
     public static void updateEstado( Connection conn, Consulta con, String estado) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "UPDATE consultas SET estado = '" + estado + "' WHERE  "
-                + " fecha = '" + con.getFecha().getValue() + "' AND "
-                + " paciente = '" + con.getPaciente().getValue() + "';";
+        String query = "{CALL updateEstado(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
         
-        stmt.executeQuery(sql);
+        stmt.setString("paciente", con.getPaciente().getValue());
+        stmt.setString("fecha", con.getFecha().getValue());
+        stmt.setString("estado", estado);
+        
+      
+        
+        stmt.executeQuery();
     }
     
     
     
     public static boolean existsPaxName( Connection conn, String nombres, String apellidos) throws SQLException{
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT * FROM paciente p WHERE "
-                + "p.nombres = '" + nombres +"' AND "
-                + "p.apellidos = '" + apellidos +"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL existsPaxName(?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombres", nombres);
+        stmt.setString("apellidos", apellidos);
+
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
     
     public static String getCIByName (Connection conn, String nombres, String apellidos) throws SQLException{
-        Statement stmt = conn.createStatement();
+        String query = "{CALL getCIByName(?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombres", nombres);
+        stmt.setString("apellidos", apellidos);
         String CI = "";
-        String sql = "SELECT p.CI FROM paciente p WHERE "
-                + "p.nombres = '" + nombres +"' AND "
-                + "p.apellidos = '" + apellidos +"';";
-        ResultSet rs = stmt.executeQuery(sql);
+
+        ResultSet rs = stmt.executeQuery();
         
         if (rs.next()){
             CI = rs.getString("CI");
@@ -355,121 +372,126 @@ public class JavaSQL {
     }
     
     public static void updateDialog(Connection conn, Consulta con, String Dialog) throws SQLException{
-        Statement stmt = conn.createStatement();
+        String query = "{CALL updateDialog(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
         
-        String sql = "UPDATE consultas SET diagnostico = '" + Dialog + "' WHERE "
-                 + " paciente = '" + con.getPaciente().getValue() + "' AND "
-                 +" fecha = '" + con.getFecha().getValue() + "' ; ";
-                 
+        stmt.setString("paciente", con.getPaciente().getValue());
+        stmt.setString("fecha", con.getFecha().getValue());
+        stmt.setString("diagnostico", Dialog);
         
-        stmt.executeQuery(sql);
+     
+        
+        stmt.executeQuery();
     }
     
     public static boolean existsCons(Connection conn, String date) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT * FROM consultas WHERE fecha = '"+date+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL existsCons(?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("fecha", date);
+        
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
    
     public static boolean medExists(Connection conn, Medicina med) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT * FROM medicinas WHERE "
-                + "nombre = '"+med.getNombre().getValue()+"' AND "
-                + "concentracion = '"+med.getConcentracion().getValue()+"' AND "
-                + "presentacion = '"+med.getPresentacion().getValue()+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL medExists(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", med.getNombre().getValue());
+        stmt.setString("concentracion", med.getConcentracion().getValue());
+        stmt.setString("presentacion", med.getPresentacion().getValue());
+
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
     
     public static void insertNewMed(Connection conn, Medicina med) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "INSERT INTO medicinas  (`nombre`, `concentracion`, `presentacion`) VALUES "
-                + "('"+med.getNombre().getValue()+"', "
-                + " '"+med.getConcentracion().getValue()+"',"
-                + " '"+med.getPresentacion().getValue()+"');";
-        stmt.executeQuery(sql);
+        String query = "{CALL insertNewMed(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", med.getNombre().getValue());
+        stmt.setString("concentracion", med.getConcentracion().getValue());
+        stmt.setString("presentacion", med.getPresentacion().getValue());
+        stmt.executeQuery();
     }
     
        
     public static void deleteMed(Connection conn, Medicina med) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "DELETE FROM medicinas WHERE "
-                + "nombre = '"+med.getNombre().getValue()+"' AND "
-                + "concentracion = '"+med.getConcentracion().getValue()+"' AND "
-                + "presentacion = '"+med.getPresentacion().getValue()+"';";
-        stmt.executeQuery(sql);
+        String query = "{CALL deleteMed(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", med.getNombre().getValue());
+        stmt.setString("concentracion", med.getConcentracion().getValue());
+        stmt.setString("presentacion", med.getPresentacion().getValue());
+        stmt.executeQuery();
     }
  
     public static void updateMed(Connection conn, Medicina med, Medicina prev) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "UPDATE medicinas SET "
-                + "nombre = '"+med.getNombre().getValue()+"', "
-                + "concentracion = '"+med.getConcentracion().getValue()+"', "
-                + "presentacion = '"+med.getPresentacion().getValue()+"' "
-                + "WHERE "
-                + "nombre = '"+prev.getNombre().getValue()+"' AND "
-                + "concentracion = '"+prev.getConcentracion().getValue()+"' AND "
-                + "presentacion = '"+prev.getPresentacion().getValue()+"';";
-        stmt.executeQuery(sql);
+        String query = "{CALL updateMed(?,?,?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre_a", prev.getNombre().getValue());
+        stmt.setString("concentracion_a", prev.getConcentracion().getValue());
+        stmt.setString("presentacion_a", prev.getPresentacion().getValue());
+        stmt.setString("nombre_n", med.getNombre().getValue());
+        stmt.setString("concentracion_n", med.getConcentracion().getValue());
+        stmt.setString("presentacion_n", med.getPresentacion().getValue());
+
+        stmt.executeQuery();
     }
    
     public static boolean distExists(Connection conn, Distribuidor dist) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "SELECT * FROM distribuidores WHERE "
-                + "nombre = '"+dist.getNombre().getValue()+"' AND "
-                + "direccion  = '"+dist.getDireccion().getValue()+"' AND "
-                + "telefono  = '"+dist.getTelefono().getValue()+"';";
-        ResultSet rs = stmt.executeQuery(sql);
+        String query = "{CALL distExists(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", dist.getNombre().getValue());
+        stmt.setString("direccion", dist.getDireccion().getValue());
+        stmt.setString("telefono", dist.getTelefono().getValue());
+
+        ResultSet rs = stmt.executeQuery();
         
         return rs.next();
     }
     
     public static void insertNewDist(Connection conn, Distribuidor dist) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "INSERT INTO distribuidores (`nombre`, `direccion`, `telefono`)  VALUES "
-                + "('"+dist.getNombre().getValue()+"', "
-                + " '"+dist.getDireccion().getValue()+"',"
-                + " '"+dist.getTelefono().getValue()+"');";
-        stmt.executeQuery(sql);
+        String query = "{CALL insertNewDist(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", dist.getNombre().getValue());
+        stmt.setString("direccion", dist.getDireccion().getValue());
+        stmt.setString("telefono", dist.getTelefono().getValue());
+        stmt.executeQuery();
     }
     
        
     public static void deleteDist(Connection conn, Distribuidor dist) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "DELETE FROM distribuidores WHERE "
-                + "nombre = '"+dist.getNombre().getValue()+"' AND "
-                + "direccion  = '"+dist.getDireccion().getValue()+"' AND "
-                + "telefono  = '"+dist.getTelefono().getValue()+"';";
-        stmt.executeQuery(sql);
+        String query = "{CALL deleteDist(?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre", dist.getNombre().getValue());
+        stmt.setString("direccion", dist.getDireccion().getValue());
+        stmt.setString("telefono", dist.getTelefono().getValue());
+        stmt.executeQuery();
     }
  
     public static void updateDist(Connection conn, Distribuidor dist, Distribuidor prev) throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "UPDATE distribuidores SET "
-                + "nombre = '"+dist.getNombre().getValue()+"', "
-                + "direccion  = '"+dist.getDireccion().getValue()+"', "
-                + "telefono  = '"+dist.getTelefono().getValue()+"' "
-                + "WHERE "
-                + "nombre = '"+prev.getNombre().getValue()+"' AND "
-                + "direccion = '"+prev.getDireccion().getValue()+"' AND "
-                + "telefono = '"+prev.getTelefono().getValue()+"';";
-       stmt.executeQuery(sql);
+        String query = "{CALL updateDist(?,?,?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("nombre_a", prev.getNombre().getValue());
+        stmt.setString("direccion_a", prev.getDireccion().getValue());
+        stmt.setString("telefono_a", prev.getTelefono().getValue());
+        stmt.setString("nombre_n", dist.getNombre().getValue());
+        stmt.setString("direccion_n", dist.getDireccion().getValue());
+        stmt.setString("telefono_n", dist.getTelefono().getValue());
+
+       stmt.executeQuery();
     }
     
     public static void insertValoracion(Connection conn, Valoracion val, Consulta con)throws SQLException{
-        Statement  stmt = conn.createStatement();
-        String sql = "INSERT INTO paciente_valoracion (`presion`, `glucosa`, `peso`)  VALUES "
-                + "('"+val.getPresion().getValue()+"', "
-                + " "+val.getGlucosa().getValue()+","
-                + " "+val.getPeso().getValue()+");"
-                ;
-        String sql2 = "UPDATE consultas SET id_valoracion = (SELECT MAX(id) FROM paciente_valoracion) WHERE "
-                + "fecha = '"+con.getFecha().getValue()+"';";
-        stmt.executeQuery(sql);
-        stmt.executeQuery(sql2);
+        String query = "{CALL insertValoracion(?,?,?,?)}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        stmt.setString("presion", val.getPresion().getValue());
+        stmt.setInt("glucosa", val.getGlucosa().getValue());
+        stmt.setDouble("peso", val.getPeso().getValue());
+        stmt.setString("fecha", con.getFecha().getValue());
+        
+        stmt.executeQuery();
+
         
     }
 }

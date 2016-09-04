@@ -3,12 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/KaixoMainController.java</file>
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/MedicinaController.java</file>
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/ConsultaController.java</file>
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/utils/JavaSQL.java</file>
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/kaixo/Main.java</file>
             <file>file:/C:/Users/Administrator/Documents/GitHub/Kaixo/src/GUI/DistribuidorController.java</file>
+=======
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/utils/JavaSQL.java</file>
+            <file>file:/C:/Users/INTEL/Documents/NetBeansProjects/proyectosGit/Kaixo/src/kaixo/Main.java</file>
+>>>>>>> origin/master
         </group>
     </open-files>
 </project-private>

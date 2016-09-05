@@ -563,6 +563,78 @@ IN fecha TIMESTAMP)
 
 
 
+DROP PROCEDURE IF EXISTS insertNewUser;
+CREATE PROCEDURE insertNewUser(
+IN username VARCHAR(50),
+IN passworda VARCHAR(200))
+
+	BEGIN
+	
+	INSERT INTO users VALUES(username,passworda,2);
+	
+	END
+
+//
+
+DROP PROCEDURE IF EXISTS editUser;
+CREATE PROCEDURE editUser(
+IN username VARCHAR(50),
+IN passworda VARCHAR(200))
+
+BEGIN
+
+	UPDATE users
+	SET users.password = passworda 
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS deleteUser;
+CREATE PROCEDURE deleteUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	DELETE FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS existUser;
+CREATE PROCEDURE existUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	SELECT *
+	FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS searchUser;
+CREATE PROCEDURE searchUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	SELECT *
+	FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
 DELIMITER ;
 
 

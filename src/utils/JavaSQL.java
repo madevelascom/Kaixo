@@ -10,6 +10,7 @@ import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
 import elements.Receta;
+import elements.Usuario;
 import elements.Valoracion;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -46,7 +47,7 @@ public class JavaSQL {
         this.dbName = "Kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "antrax95"; 
+        this.password = "rubik"; 
         
         /*
         this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
@@ -597,6 +598,70 @@ public class JavaSQL {
 
         return recData;
     }
+     
+     public static void insertNewUser(Connection conn, Usuario us) throws SQLException{
+         String query = "{CALL insertNewUser(?,?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("username", us.getUsername().getValue());
+         stmt.setString("passworda", us.getPassword().getValue());
+         
+         stmt.executeQuery();
+         
+     }
+     
+    public static void editUser(Connection conn, Usuario us) throws SQLException{
+         String query = "{CALL editUser(?,?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("username", us.getUsername().getValue());
+         stmt.setString("passworda", us.getPassword().getValue());
+         
+         stmt.executeQuery();
+         
+     }
+    
+    public static void deleteUser(Connection conn, Usuario us) throws SQLException{
+         String query = "{CALL deleteUser(?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("username", us.getUsername().getValue());
+         
+         stmt.executeQuery();
+         
+     }
+    
+    public static boolean existUser(Connection conn, String us) throws SQLException{
+         String query = "{CALL existUser(?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("username", us);
+         
+         ResultSet rs = stmt.executeQuery();
+         
+         return rs.next();
+         
+     }
+    
+    public static Usuario searchUser(Connection conn, String us) throws SQLException{
+         String query = "{CALL searchUser(?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("username", us);
+         
+         ResultSet rs = stmt.executeQuery();
+         
+         
+        if (rs.next()){
+            Usuario usa = new Usuario (rs.getString("username"), rs.getString("password"),
+            rs.getString("level"));
+            return usa;
+        }else{
+            Usuario usa = new Usuario();
+            return usa;
+        }
+    }
+         
+}
+    
+    
     
 
-}
+    
+
+

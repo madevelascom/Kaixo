@@ -9,7 +9,6 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
-import elements.Receta;
 import elements.Valoracion;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -18,10 +17,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.naming.NamingException;
@@ -46,7 +45,7 @@ public class JavaSQL {
         this.dbName = "Kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "antrax95"; 
+        this.password = "rubik"; 
         
         /*
         this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
@@ -552,9 +551,7 @@ public class JavaSQL {
         stmt.setDouble("peso", val.getPeso().getValue());
         stmt.setString("fecha", con.getFecha().getValue());
         
-        stmt.executeQuery();
-
-        
+        stmt.executeQuery();     
     }
     
     public static ObservableList<String> loadMedicinasNameCon(Connection conn) throws SQLException{
@@ -572,31 +569,24 @@ public class JavaSQL {
         return medData;
     }
     
-     public static ObservableList<Receta> loadMedicinasFrecuencies(Connection conn, Consulta cons) {
-        String query = "{CALL loadMedicinasFrecuencies(?,?)}";
-        ObservableList<Receta> recData = FXCollections.observableArrayList();
+    public static void insertReceta(Connection conn, Consulta cons, HashMap<Medicina, String> result) throws SQLException{
         
-        CallableStatement  stmt;
-        try {
-            stmt = conn.prepareCall(query);
-
-            stmt.setString("paciente", cons.getPaciente().getValue());
-            stmt.setString("fecha", cons.getFecha().getValue());
-            ResultSet rs = stmt.executeQuery();
-
-
-            if(rs.next()){
-                do{                      
-                recData.add(new Receta(rs.getString("id_consulta"), rs.getString("id_medicina"), rs.getString("frecuencia")
-                , rs.getString("nombre"), rs.getString("concentracion")));
-                }while(rs.next());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JavaSQL.class.getName()).log(Level.SEVERE, null, ex);
+        if (!result.isEmpty()){
+            for(Entry<Medicina, String> entry: result.entrySet()){
+            Medicina key = entry.getKey();
+            String value = entry.getValue();
+            
+            Statement  stmt_rep = conn.createStatement();
+            String sql_insert = "INSERT INTO consulta_medicina (`id_consulta`, `id_medicina`, `frecuencia`) "
+                    + "SELECT consultas.id, medicinas.id, '"+value+"' FROM medicinas, consultas "
+                    + "WHERE medicinas.nombre = '"+key.getNombre().getValue()+"' AND "
+                    + "medicinas.concentracion = '"+key.getConcentracion().getValue()+"' AND "
+                    + "medicinas.presentacion = '"+key.getPresentacion().getValue()+"' AND "
+                    + "consultas.fecha = '"+cons.getFecha().getValue()+"' AND "
+                    + "consultas.paciente = '"+cons.getPaciente().getValue()+"';";
+            stmt_rep.executeQuery(sql_insert);
         }
-
-        return recData;
+        }
+        
     }
-    
-
 }

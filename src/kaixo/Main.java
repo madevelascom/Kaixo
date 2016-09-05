@@ -17,11 +17,12 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
-import elements.Receta;
 import elements.Valoracion;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -36,7 +37,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
-import static kaixo.Main.medFrecuencies;
+
 
 /**
  *
@@ -45,6 +46,8 @@ import static kaixo.Main.medFrecuencies;
 public class Main extends Application {
     
     public static Stage primaryStage;
+
+    
     private BorderPane rootLayout;
     private BorderPane KaixoLogin;
     private BorderPane KaixoInterface;
@@ -59,7 +62,6 @@ public class Main extends Application {
     public static ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
     public static ObservableList<Consulta> conHoyData = FXCollections.observableArrayList();
     
-    public static ObservableList<Receta> medFrecuencies = FXCollections.observableArrayList();
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -162,6 +164,32 @@ public class Main extends Application {
         }
     }
     
+    public static boolean showRecetaDialog(HashMap<Medicina, String> result) {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Receta.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            Stage dialogStage = new Stage();
+	    dialogStage.setTitle("Crear/Editar Receta");
+	    dialogStage.initModality(Modality.WINDOW_MODAL);
+	    dialogStage.initOwner(primaryStage);
+	    dialogStage.getIcons().add(new Image("file:../resources/icon.png"));
+	    Scene scene = new Scene(page);
+	    dialogStage.setScene(scene);
+            
+            RecetaController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMedList(result);
+            
+            dialogStage.showAndWait();
+
+	    return controller.isOkClicked();
+        }catch (IOException e){
+            return false;
+        }
+    }
+    
     public static boolean showDistDialog(Distribuidor dist){
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -219,45 +247,7 @@ public class Main extends Application {
         }
         
     }
-    
-    public static boolean showRecetaDialog( Receta rec, Consulta cons, ObservableList<Receta> recetas){
-        try{
-            
-            
-             // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LoginController.class.getResource("Receta.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Receta");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-            dialogStage.getIcons().add(new Image("file:resources/icon.png"));
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            
-            // Set the person into the controller.
-            RecetaController controller;
-            
-            controller = loader.getController();
-            controller.setMedicinasFrecuencias(recetas);
-            controller.setDialogStage(dialogStage);
-            controller.setReceta(rec);
-            controller.setConsulta(cons);
-            
-            
-            // Show the dialog and wait until the user closes it
-            dialogStage.showAndWait();
-
-            return controller.isOkClicked();
-        }catch(IOException e){
-            return false;
-        }
-        
-    }
-    
+       
     public static boolean showPaxNewDialog(Paciente pat){
         try{
              // Load the fxml file and create a new stage for the popup dialog.
@@ -371,18 +361,6 @@ public class Main extends Application {
         return medDataNames;
     }
 
-    public static ObservableList<Receta> getMedFrecuencies() {
-        return medFrecuencies;
-    }
-
-    public static void setMedFrecuencies(ObservableList<Receta> medFrecuencies) {
-        Main.medFrecuencies = medFrecuencies;
-    }
-    
-    
-    
-    
-    
     
     /**
      * @param args the command line arguments

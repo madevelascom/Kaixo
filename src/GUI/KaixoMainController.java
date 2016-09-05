@@ -4,19 +4,19 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
-import elements.Receta;
 import elements.Valoracion;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -48,6 +48,7 @@ import static utils.JavaSQL.existsPax;
 import static utils.JavaSQL.insertConsulta;
 import static utils.JavaSQL.insertNewDist;
 import static utils.JavaSQL.insertNewMed;
+import static utils.JavaSQL.insertReceta;
 import static utils.JavaSQL.insertValoracion;
 import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
@@ -446,6 +447,9 @@ public class KaixoMainController extends Main implements Initializable {
     
     //Consultas
     
+    
+   
+    
     @FXML
     private void handleNewConsult() throws SQLException{
         if (existsPax(actualDB, paxCI.getText())){
@@ -464,7 +468,36 @@ public class KaixoMainController extends Main implements Initializable {
             alert.showAndWait();
         }
     }
+    
+    @FXML
+    private void handleConsultaMedicina()throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            if (selected != null) {
+                if (selected.getEstado().getValue().equals("Asistida")){
+                    HashMap<Medicina, String> result = new HashMap<>();
+                    boolean okClicked = Main.showRecetaDialog(result);
+                    if (okClicked){
+                        insertReceta(actualDB, selected, result);           
+                    }
+                }else{
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #7");
+                    alert.setContentText(errorMsg(actualDB, 7));
 
+                    alert.showAndWait();
+                }
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #5");
+            alert.setContentText(errorMsg(actualDB, 5));
+
+            alert.showAndWait();
+        }      
+    }
+    
     @FXML
     private void handleAsistio() throws SQLException{
         int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
@@ -633,47 +666,7 @@ public class KaixoMainController extends Main implements Initializable {
         
         
     }
-    
-    @FXML
-    private void handleReceta() throws SQLException{
-        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Consulta selected = distConHoy.getItems().get(selectedIndex);
-            ObservableList<Receta> recetitas;
-            recetitas = FXCollections.observableArrayList();
-            recetitas = JavaSQL.loadMedicinasFrecuencies(actualDB, selected);
-            if (selected != null) {
-                if (selected.getEstado().getValue().equals("Asistida")){
-                    Receta temp = new Receta();
-                    boolean okClicked = Main.showRecetaDialog(temp, selected, recetitas); 
-                    if (okClicked){
-                        //insertValoracion(actualDB, temp, selected);           
-                    }
-                }else{
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setHeaderText("Kaixo Error #7");
-                    alert.setContentText(errorMsg(actualDB, 7));
-
-                    alert.showAndWait();
-                }
-            }
-        }else{
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #5");
-            alert.setContentText(errorMsg(actualDB, 5));
-
-            alert.showAndWait();
-        }
-        
-        
-    }
-    
-    
-    
-    
-        
-    
-    
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());
@@ -745,6 +738,6 @@ public class KaixoMainController extends Main implements Initializable {
             showDistDetails(newValue);
         });
 
-    }    
+    } 
     
 }

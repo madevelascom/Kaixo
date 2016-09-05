@@ -46,7 +46,7 @@
                                     <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCancelar" prefHeight="35.0" prefWidth="120.0" text="Cancelar" />
                                     <Button mnemonicParsing="false" onAction="#handleValoracion" prefHeight="35.0" prefWidth="120.0" text="Valoración" />
                                     <Button mnemonicParsing="false" onAction="#handleDiagnostico" prefHeight="35.0" prefWidth="120.0" text="Diagnóstico" />
-                                    <Button layoutX="10.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleReceta" prefHeight="35.0" prefWidth="120.0" text="Receta" />
+                                    <Button layoutX="10.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleConsultaMedicina" prefHeight="35.0" prefWidth="120.0" text="Receta" />
                                  </children>
                               </VBox>
                            </children>
@@ -146,7 +146,6 @@
                            </columnResizePolicy>
                         </TableView>
                         <Label layoutX="420.0" layoutY="70.0" styleClass="label-header" text="Consultas pasadas" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="70.0" />
-                        <Button layoutX="571.0" layoutY="435.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Ver" AnchorPane.rightAnchor="160.0" />
                      </children></AnchorPane>
             </content>
           </Tab>

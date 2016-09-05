@@ -531,6 +531,20 @@ IN fecha TIMESTAMP)
 
 //
 
+DROP PROCEDURE IF EXISTS loadMedicinasName;
+CREATE PROCEDURE loadMedicinasName()
+
+	BEGIN
+	
+	SELECT nombre
+	FROM medicinas;
+	
+	END
+	
+//
+
+
+
 
 DELIMITER ;
 

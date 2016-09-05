@@ -9,6 +9,7 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Receta;
 import elements.Valoracion;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -17,7 +18,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.naming.NamingException;
@@ -552,4 +556,47 @@ public class JavaSQL {
 
         
     }
+    
+    public static ObservableList<String> loadMedicinasNameCon(Connection conn) throws SQLException{
+        String query = "{CALL loadMedicinasNameCon()}";
+        CallableStatement  stmt = conn.prepareCall(query);
+        ResultSet rs = stmt.executeQuery();
+        ObservableList<String> medData = FXCollections.observableArrayList();
+        
+        if(rs.next()){
+            do{                      
+            medData.add(rs.getString("nombre"));
+            }while(rs.next());
+        }
+        
+        return medData;
+    }
+    
+     public static ObservableList<Receta> loadMedicinasFrecuencies(Connection conn, Consulta cons) {
+        String query = "{CALL loadMedicinasFrecuencies(?,?)}";
+        ObservableList<Receta> recData = FXCollections.observableArrayList();
+        
+        CallableStatement  stmt;
+        try {
+            stmt = conn.prepareCall(query);
+
+            stmt.setString("paciente", cons.getPaciente().getValue());
+            stmt.setString("fecha", cons.getFecha().getValue());
+            ResultSet rs = stmt.executeQuery();
+
+
+            if(rs.next()){
+                do{                      
+                recData.add(new Receta(rs.getString("id_consulta"), rs.getString("id_medicina"), rs.getString("frecuencia")
+                , rs.getString("nombre"), rs.getString("concentracion")));
+                }while(rs.next());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JavaSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return recData;
+    }
+    
+
 }

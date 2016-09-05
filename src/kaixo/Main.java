@@ -11,11 +11,13 @@ import utils.JavaSQL;
 import GUI.LoginController;
 import GUI.MedicinaController;
 import GUI.PacienteController;
+import GUI.RecetaController;
 import GUI.ValoracionController;
 import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Receta;
 import elements.Valoracion;
 import java.io.IOException;
 import java.sql.Connection;
@@ -34,6 +36,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.NamingException;
+import static kaixo.Main.medFrecuencies;
 
 /**
  *
@@ -51,9 +54,12 @@ public class Main extends Application {
     public static Connection actualDB;
     public static JavaSQL instanceDB = new JavaSQL();
     
+    public static ObservableList<String> medDataNames = FXCollections.observableArrayList();
     public static ObservableList<Medicina> medData = FXCollections.observableArrayList();
     public static ObservableList<Distribuidor> distData = FXCollections.observableArrayList();
     public static ObservableList<Consulta> conHoyData = FXCollections.observableArrayList();
+    
+    public static ObservableList<Receta> medFrecuencies = FXCollections.observableArrayList();
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -214,6 +220,44 @@ public class Main extends Application {
         
     }
     
+    public static boolean showRecetaDialog( Receta rec, Consulta cons, ObservableList<Receta> recetas){
+        try{
+            
+            
+             // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("Receta.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Receta");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Set the person into the controller.
+            RecetaController controller;
+            
+            controller = loader.getController();
+            controller.setMedicinasFrecuencias(recetas);
+            controller.setDialogStage(dialogStage);
+            controller.setReceta(rec);
+            controller.setConsulta(cons);
+            
+            
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+        }catch(IOException e){
+            return false;
+        }
+        
+    }
+    
     public static boolean showPaxNewDialog(Paciente pat){
         try{
              // Load the fxml file and create a new stage for the popup dialog.
@@ -322,6 +366,24 @@ public class Main extends Application {
     public static Connection getConn(){
         return actualDB;
     }
+
+    public static ObservableList<String> getMedDataNames() {
+        return medDataNames;
+    }
+
+    public static ObservableList<Receta> getMedFrecuencies() {
+        return medFrecuencies;
+    }
+
+    public static void setMedFrecuencies(ObservableList<Receta> medFrecuencies) {
+        Main.medFrecuencies = medFrecuencies;
+    }
+    
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      * @throws javax.naming.NamingException
@@ -335,6 +397,7 @@ public class Main extends Application {
             medData = JavaSQL.loadMedicinas(actualDB);
             distData = JavaSQL.loadDistribuidor(actualDB);
             conHoyData = JavaSQL.loadConsultasHoy(actualDB);
+            medDataNames = JavaSQL.loadMedicinasNameCon(actualDB);
             launch(args);
         }else{
             Alert no_conn = new Alert(AlertType.ERROR);

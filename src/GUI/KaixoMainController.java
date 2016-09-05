@@ -4,6 +4,7 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Receta;
 import elements.Valoracion;
 import java.net.URL;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -597,6 +599,8 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
+    
+    
     @FXML
     private void handleValoracion() throws SQLException{
         int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
@@ -627,6 +631,42 @@ public class KaixoMainController extends Main implements Initializable {
         
         
     }
+    
+    @FXML
+    private void handleReceta() throws SQLException{
+        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Consulta selected = distConHoy.getItems().get(selectedIndex);
+            ObservableList<Receta> recetitas = FXCollections.observableArrayList();
+            recetitas = JavaSQL.loadMedicinasFrecuencies(actualDB, selected);
+            if (selected != null) {
+                if (selected.getEstado().getValue().equals("Asistida")){
+                    Receta temp = new Receta();
+                    boolean okClicked = Main.showRecetaDialog(temp, selected, recetitas); 
+                    if (okClicked){
+                        //insertValoracion(actualDB, temp, selected);           
+                    }
+                }else{
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #7");
+                    alert.setContentText(errorMsg(actualDB, 7));
+
+                    alert.showAndWait();
+                }
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #5");
+            alert.setContentText(errorMsg(actualDB, 5));
+
+            alert.showAndWait();
+        }
+        
+        
+    }
+    
+    
+    
     
         
     

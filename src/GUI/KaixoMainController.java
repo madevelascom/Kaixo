@@ -37,6 +37,7 @@ import static kaixo.Main.actualDB;
 import utils.JavaSQL;
 import static utils.JavaSQL.deleteDist;
 import static utils.JavaSQL.deleteMed;
+import static utils.JavaSQL.deleteUser;
 import static utils.JavaSQL.distExists;
 import static utils.JavaSQL.editUser;
 import static utils.JavaSQL.errorMsg;
@@ -738,7 +739,35 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
-    
+    @FXML
+    public void delUsuario() throws SQLException{
+        if (existUser(actualDB, user.getText())){
+            Usuario temp = searchUser(actualDB, user.getText());
+            if( !super.usuario.equals(user.getText())){
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+
+                alert.setTitle("Confirmación de borrado");
+                alert.setHeaderText("Vas a borrar el usuario que escogio");
+                alert.setContentText("¿Estás seguro?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){                    
+                    deleteUser(actualDB, temp);
+                
+            }else{
+                System.out.println("error no puede eliminarse a si mismo");
+            }
+        
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
+        }
+    }
+    }
     
         
     

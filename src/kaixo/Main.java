@@ -63,6 +63,8 @@ public class Main extends Application {
     
     public static ObservableList<Receta> medFrecuencies = FXCollections.observableArrayList();
     
+    public String usuario;
+    
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
@@ -97,7 +99,9 @@ public class Main extends Application {
         rootLayout.setCenter(KaixoLogin); 
     }
     
-    public void showKaixoMain() throws IOException{
+    public void showKaixoMain( String usuariod) throws IOException{
+        
+        this.usuario = usuariod;
         String css = LoginController.class.getResource("style.css").toExternalForm();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(LoginController.class.getResource("KaixoMain.fxml"));

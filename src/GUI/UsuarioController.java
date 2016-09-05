@@ -72,7 +72,9 @@ public class UsuarioController implements Initializable {
     public void handleOk() throws SQLException{
         if(isInputValid()){
             us.setUsername(new SimpleStringProperty(user.getText().trim()));
-            String cript = CryptMD5.cryptWithMD5((user.getText().trim()) + pass_1.getText().trim());
+            System.out.println(user.getText().trim());
+            System.out.println(pass_1.getText().trim());
+            String cript = CryptMD5.cryptWithMD5((  pass_1.getText().trim() + user.getText().trim()));
             us.setPassword(new SimpleStringProperty(cript));
             us.setLevel(new SimpleStringProperty("2"));
             

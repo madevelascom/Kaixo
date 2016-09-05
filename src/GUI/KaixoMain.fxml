@@ -304,7 +304,7 @@
                            <children>
                               <Button mnemonicParsing="false" onAction="#handleNewUser" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
                               <Button mnemonicParsing="false" onAction="#handleEditUser" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+                              <Button mnemonicParsing="false" onAction="#delUsuario" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
                            </children>
                         </HBox>
                      </children></AnchorPane>

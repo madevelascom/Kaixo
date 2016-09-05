@@ -58,7 +58,8 @@ import static utils.RegexMatcher.testPassword;
                 if (loginSession(actualDB, userm, passmd5)){
                     int level = userLevel(actualDB,userm);
                      try {
-                         showKaixoMain();
+                         
+                         showKaixoMain(user.getText());
                      } catch (IOException ex) {
                          Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                      }

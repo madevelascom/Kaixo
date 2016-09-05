@@ -273,8 +273,8 @@
                            </rowConstraints>
                            <children>
                               <Label text="Usuario" />
-                              <TextField fx:id="paxCISearch1" prefWidth="155.0" GridPane.columnIndex="1" />
-                              <Button mnemonicParsing="false" onAction="#handleSearchCI" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
+                              <TextField prefWidth="155.0" GridPane.columnIndex="1" />
+                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding>
@@ -295,16 +295,16 @@
                            </rowConstraints>
                            <children>
                               <Label text="Nivel  " GridPane.rowIndex="1" />
-                              <Label fx:id="paxNombre1" text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label text="Usuario  " />
-                              <Label fx:id="paxCI1" text="1234567890" GridPane.columnIndex="1" />
+                              <Label text="1234567890" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <HBox prefHeight="35.0" prefWidth="381.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#handleNewMedicina" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
-                              <Button mnemonicParsing="false" onAction="#handleEditMedicina" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                              <Button mnemonicParsing="false" onAction="#handleDelMed" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
+                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
+                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
                            </children>
                         </HBox>
                      </children></AnchorPane>

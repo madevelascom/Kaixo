@@ -4,13 +4,13 @@ import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
 import elements.Paciente;
+import elements.Usuario;
 import elements.Valoracion;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -36,8 +36,11 @@ import static kaixo.Main.actualDB;
 import utils.JavaSQL;
 import static utils.JavaSQL.deleteDist;
 import static utils.JavaSQL.deleteMed;
+import static utils.JavaSQL.deleteUser;
 import static utils.JavaSQL.distExists;
+import static utils.JavaSQL.editUser;
 import static utils.JavaSQL.errorMsg;
+import static utils.JavaSQL.existUser;
 import static utils.JavaSQL.insertNewPax;
 import static utils.RegexMatcher.testPaxCISearch;
 import static utils.RegexMatcher.testPaxNomSearch;
@@ -49,12 +52,14 @@ import static utils.JavaSQL.insertConsulta;
 import static utils.JavaSQL.insertNewDist;
 import static utils.JavaSQL.insertNewMed;
 import static utils.JavaSQL.insertReceta;
+import static utils.JavaSQL.insertNewUser;
 import static utils.JavaSQL.insertValoracion;
 import static utils.JavaSQL.medExists;
 import static utils.JavaSQL.selecPaxNameConcat;
 import static utils.JavaSQL.updateDist;
 import static utils.JavaSQL.updateMed;
 import static utils.JavaSQL.loadMedDist;
+import static utils.JavaSQL.searchUser;
 
 /**
  * FXML Controller class
@@ -142,6 +147,13 @@ public class KaixoMainController extends Main implements Initializable {
     @FXML
     private TableColumn<Consulta, String> estadoConPas;
             
+    //Usuarios
+    @FXML
+    private Label user;
+    @FXML
+    private Label userLevel; 
+    @FXML
+    private TextField userSearch; 
     
             
     
@@ -666,7 +678,96 @@ public class KaixoMainController extends Main implements Initializable {
         
         
     }
-   
+    
+    //Usuarios
+    private void showUserDetails (Usuario us){
+        if (us != null){
+           user.setText(us.getUsername().getValue());
+           userLevel.setText(us.getLevel().getValue());
+
+        }else{
+           user.setText("");
+           userLevel.setText("");
+
+        }
+    }
+    
+    @FXML
+    private void handleNewUser() throws SQLException{
+        Usuario temp = new Usuario();
+        boolean okClicked = Main.showUserNewDialog(temp, false);
+        if (okClicked){
+            insertNewUser(actualDB, temp);
+        }
+    }
+    
+
+    
+    @FXML 
+    private void handleEditUser() throws SQLException{
+        if (existUser(actualDB, user.getText())){
+            Usuario temp = searchUser(actualDB, user.getText());
+            boolean okClicked = Main.showUserNewDialog(temp, true);
+            if (okClicked){
+                editUser(actualDB, temp);
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
+        }
+    }
+    
+    
+    @FXML
+    private void handleSearchUser() throws SQLException{
+        String searchUs = userSearch.getText();
+        if(!searchUs.equals("")){
+            Usuario us = searchUser(actualDB, searchUs);
+            showUserDetails(us);
+
+        }else{
+            paxNomSearch.clear();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #8");
+            alert.setContentText(errorMsg(actualDB, 8));
+            alert.showAndWait();
+        }
+    }
+    
+    @FXML
+    public void delUsuario() throws SQLException{
+        if (existUser(actualDB, user.getText())){
+            Usuario temp = searchUser(actualDB, user.getText());
+            if( true){
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+
+                alert.setTitle("Confirmación de borrado");
+                alert.setHeaderText("Vas a borrar el usuario que escogio");
+                alert.setContentText("¿Estás seguro?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){                    
+                    deleteUser(actualDB, temp);
+                
+            }else{
+                System.out.println("error no puede eliminarse a si mismo");
+            }
+        
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #4");
+            alert.setContentText(errorMsg(actualDB, 4));
+
+            alert.showAndWait();
+        }
+    }
+    }
+    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         medTable.setItems(Main.getMedData());

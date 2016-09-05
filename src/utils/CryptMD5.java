@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CryptMD5 {
+    
 	  private static MessageDigest md;
 
 	   public static String cryptWithMD5(String pass){

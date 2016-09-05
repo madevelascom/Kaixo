@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
+<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="background" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -272,8 +272,8 @@
                            </rowConstraints>
                            <children>
                               <Label text="Usuario" />
-                              <TextField prefWidth="155.0" GridPane.columnIndex="1" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
+                              <TextField fx:id="userSearch" prefWidth="155.0" GridPane.columnIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#handleSearchUser" prefHeight="35.0" prefWidth="120.0" text="Buscar" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding>
@@ -294,16 +294,16 @@
                            </rowConstraints>
                            <children>
                               <Label text="Nivel  " GridPane.rowIndex="1" />
-                              <Label text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="userLevel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label text="Usuario  " />
-                              <Label text="1234567890" GridPane.columnIndex="1" />
+                              <Label fx:id="user" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <HBox prefHeight="35.0" prefWidth="381.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Editar" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
+                              <Button mnemonicParsing="false" onAction="#handleNewUser" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
+                              <Button mnemonicParsing="false" onAction="#handleEditUser" prefHeight="35.0" prefWidth="120.0" text="Editar" />
+                              <Button mnemonicParsing="false" onAction="#delUsuario" prefHeight="35.0" prefWidth="120.0" text="Borrar" />
                            </children>
                         </HBox>
                      </children></AnchorPane>

@@ -531,20 +531,109 @@ IN fecha TIMESTAMP)
 
 //
 
-DROP PROCEDURE IF EXISTS loadMedicinasName;
-CREATE PROCEDURE loadMedicinasName()
+DROP PROCEDURE IF EXISTS loadMedicinasNameCon;
+CREATE PROCEDURE loadMedicinasNameCon()
 
 	BEGIN
 	
-	SELECT nombre
+	SELECT CONCAT(medicinas.nombre, '  ', medicinas.concentracion) as nombre
 	FROM medicinas;
 	
 	END
 	
 //
 
+DROP PROCEDURE IF EXISTS loadMedicinasFrecuencies;
+CREATE PROCEDURE loadMedicinasFrecuencies(
+IN paciente VARCHAR(10),
+IN fecha TIMESTAMP)
+
+	BEGIN
+	
+	SELECT cm.frecuencia ,cm.id_consulta ,cm.id_medicina, m.nombre, m.concentracion  
+	FROM medicinas m, consulta_medicina cm
+	WHERE cm.id_medicina = m.id AND cm.id_consulta IN (SELECT id
+																		FROM consultas
+																		WHERE  BINARY consultas.paciente = BINARY paciente AND BINARY consultas.fecha = BINARY fecha);
+	
+	END
+	
+
+//
 
 
+
+DROP PROCEDURE IF EXISTS insertNewUser;
+CREATE PROCEDURE insertNewUser(
+IN username VARCHAR(50),
+IN passworda VARCHAR(200))
+
+	BEGIN
+	
+	INSERT INTO users VALUES(username,passworda,2);
+	
+	END
+
+//
+
+DROP PROCEDURE IF EXISTS editUser;
+CREATE PROCEDURE editUser(
+IN username VARCHAR(50),
+IN passworda VARCHAR(200))
+
+BEGIN
+
+	UPDATE users
+	SET users.password = passworda 
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS deleteUser;
+CREATE PROCEDURE deleteUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	DELETE FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS existUser;
+CREATE PROCEDURE existUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	SELECT *
+	FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
+
+DROP PROCEDURE IF EXISTS searchUser;
+CREATE PROCEDURE searchUser(
+IN username VARCHAR(50))
+
+
+BEGIN
+
+	SELECT *
+	FROM users
+	WHERE BINARY users.username = BINARY username;
+
+END
+
+//
 
 DELIMITER ;
 

@@ -1,8 +1,11 @@
 package GUI;
 
+import elements.Usuario;
+import utils.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -30,6 +33,8 @@ public class UsuarioController implements Initializable {
     private boolean okClicked = false;
     private boolean isUpdate = true;
     
+    private Usuario us;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -45,18 +50,37 @@ public class UsuarioController implements Initializable {
          System.exit(0);
     }
      
-    public void disableUsername(){
-        user.setDisable(true);
+    public void disableUsername(boolean bandera){
+        user.setDisable(bandera);
     }
     
     public boolean isOkClicked(){
         return okClicked;
     }
+
+    public void setUsuario(Usuario us) {
+        this.us = us;
+        
+        user.setText(us.getUsername().getValue());
+        pass_1.setText(us.getPassword().getValue());
+        pass_2.setText(us.getPassword().getValue());
+    }
+    
+    
     
     @FXML
     public void handleOk() throws SQLException{
         if(isInputValid()){
+            us.setUsername(new SimpleStringProperty(user.getText().trim()));
+            System.out.println(user.getText().trim());
+            System.out.println(pass_1.getText().trim());
+            String cript = CryptMD5.cryptWithMD5((  pass_1.getText().trim() + user.getText().trim()));
+            us.setPassword(new SimpleStringProperty(cript));
+            us.setLevel(new SimpleStringProperty("2"));
             
+            okClicked = true;
+            dialogStage.close();
+                
         }
     }
     

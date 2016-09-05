@@ -56,7 +56,7 @@ public class UsuarioController implements Initializable {
     @FXML
     public void handleOk() throws SQLException{
         if(isInputValid()){
-            
+                
         }
     }
     

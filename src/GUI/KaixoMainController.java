@@ -743,7 +743,7 @@ public class KaixoMainController extends Main implements Initializable {
     public void delUsuario() throws SQLException{
         if (existUser(actualDB, user.getText())){
             Usuario temp = searchUser(actualDB, user.getText());
-            if( !super.usuario.equals(user.getText())){
+            if( true){
                 Alert alert = new Alert(AlertType.CONFIRMATION);
 
                 alert.setTitle("Confirmación de borrado");

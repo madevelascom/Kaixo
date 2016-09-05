@@ -295,9 +295,9 @@
                            </rowConstraints>
                            <children>
                               <Label text="Nivel  " GridPane.rowIndex="1" />
-                              <Label fx:id="userLevel" text="Omnomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="userLevel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label text="Usuario  " />
-                              <Label fx:id="user" text="1234567890" GridPane.columnIndex="1" />
+                              <Label fx:id="user" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <HBox prefHeight="35.0" prefWidth="381.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">

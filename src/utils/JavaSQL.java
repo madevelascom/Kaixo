@@ -46,7 +46,7 @@ public class JavaSQL {
         this.dbName = "Kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "rubik"; 
+        this.password = "antrax95"; 
         
         /*
         this.url = "jdbc:mariadb://localhost:3306/kaixo"; 

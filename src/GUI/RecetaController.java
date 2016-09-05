@@ -82,8 +82,6 @@ public class RecetaController implements Initializable  {
 
     public void setMedicinasFrecuencias(ObservableList<Receta> MedicinasFrecuencias) {
         this.MedicinasFrecuencias = MedicinasFrecuencias;
-        for (Receta r : this.MedicinasFrecuencias)
-            System.out.println(r);
     }
     
     
@@ -107,7 +105,7 @@ public class RecetaController implements Initializable  {
         medicina.setItems(Names);
         
         
-
+        
 
         recTable.setItems(MedicinasFrecuencias);
         recMedicina.setCellValueFactory(cellData -> cellData.getValue().getNombre());

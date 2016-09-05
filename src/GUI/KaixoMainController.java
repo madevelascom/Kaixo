@@ -64,6 +64,8 @@ public class KaixoMainController extends Main implements Initializable {
     
     private ObservableList<Medicina> masterMedData = Main.getMedData();
     
+
+    
     private ObservableList<Consulta> conPas;
     //Medicina
     @FXML
@@ -637,7 +639,8 @@ public class KaixoMainController extends Main implements Initializable {
         int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             Consulta selected = distConHoy.getItems().get(selectedIndex);
-            ObservableList<Receta> recetitas = FXCollections.observableArrayList();
+            ObservableList<Receta> recetitas;
+            recetitas = FXCollections.observableArrayList();
             recetitas = JavaSQL.loadMedicinasFrecuencies(actualDB, selected);
             if (selected != null) {
                 if (selected.getEstado().getValue().equals("Asistida")){

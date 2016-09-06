@@ -185,6 +185,23 @@ public class KaixoMainController extends Main implements Initializable {
     
     
     @FXML
+    private void handleConsultaView() throws SQLException{
+    int selectedIndex = conPasTable.getSelectionModel().getSelectedIndex();	
+        if (selectedIndex >= 0) {
+                        Alert alert = new Alert(AlertType.INFORMATION);
+
+            alert.setTitle("Confirmación de borrado");
+            alert.setHeaderText("Vas a borrar la medicina que escogiste");
+            alert.setContentText("¿Estás seguro?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+        }
+    
+    
+    }
+    
+    
+    @FXML
     private void handleNewDestribuidor() throws SQLException{
         Distribuidor dist = new Distribuidor();
         boolean onClicked = Main.showDistDialog(dist);
@@ -489,7 +506,7 @@ public class KaixoMainController extends Main implements Initializable {
             if (selected != null) {
                 if (selected.getEstado().getValue().equals("Asistida")){
                     HashMap<Medicina, String> result = new HashMap<>();
-                    boolean okClicked = Main.showRecetaDialog(result);
+                    boolean okClicked = Main.showRecetaDialog(result, selected);
                     if (okClicked){
                         insertReceta(actualDB, selected, result);           
                     }

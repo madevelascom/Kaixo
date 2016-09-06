@@ -171,7 +171,7 @@ public class Main extends Application {
         }
     }
     
-    public static boolean showRecetaDialog(HashMap<Medicina, String> result) {
+    public static boolean showRecetaDialog(HashMap<Medicina, String> result, Consulta consulta) {
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginController.class.getResource("Receta.fxml"));
@@ -188,6 +188,7 @@ public class Main extends Application {
             RecetaController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setMedList(result);
+            controller.setConsulta(consulta);
             
             dialogStage.showAndWait();
 

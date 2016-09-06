@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -17,7 +21,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
+<BorderPane maxHeight="600.0" maxWidth="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.KaixoMainController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="background" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -146,6 +150,7 @@
                            </columnResizePolicy>
                         </TableView>
                         <Label layoutX="420.0" layoutY="70.0" styleClass="label-header" text="Consultas pasadas" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="70.0" />
+                        <Button fx:id="botVerCon" layoutX="443.0" layoutY="444.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="280.0" text="VER CONSULTA SELECCIONADA" />
                      </children></AnchorPane>
             </content>
           </Tab>

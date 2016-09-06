@@ -47,7 +47,7 @@ public class JavaSQL {
         this.dbName = "Kaixo"; 
         this.driver = "org.mariadb.jdbc.Driver";  
         this.userName = "root"; 
-        this.password = "rubik"; 
+        this.password = "antrax95"; 
         
         /*
         this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
@@ -474,6 +474,8 @@ public class JavaSQL {
         stmt.setString("nombre_a", prev.getNombre().getValue());
         stmt.setString("concentracion_a", prev.getConcentracion().getValue());
         stmt.setString("presentacion_a", prev.getPresentacion().getValue());
+        
+        
         stmt.setString("nombre_n", med.getNombre().getValue());
         stmt.setString("concentracion_n", med.getConcentracion().getValue());
         stmt.setString("presentacion_n", med.getPresentacion().getValue());
@@ -575,20 +577,32 @@ public class JavaSQL {
         
         if (!result.isEmpty()){
             for(Entry<Medicina, String> entry: result.entrySet()){
-            Medicina key = entry.getKey();
-            String value = entry.getValue();
-            
-            Statement  stmt_rep = conn.createStatement();
-            String sql_insert = "INSERT INTO consulta_medicina (`id_consulta`, `id_medicina`, `frecuencia`) "
-                    + "SELECT consultas.id, medicinas.id, '"+value+"' FROM medicinas, consultas "
-                    + "WHERE medicinas.nombre = '"+key.getNombre().getValue()+"' AND "
-                    + "medicinas.concentracion = '"+key.getConcentracion().getValue()+"' AND "
-                    + "medicinas.presentacion = '"+key.getPresentacion().getValue()+"' AND "
-                    + "consultas.fecha = '"+cons.getFecha().getValue()+"' AND "
-                    + "consultas.paciente = '"+cons.getPaciente().getValue()+"';";
-            stmt_rep.executeQuery(sql_insert);
+                Medicina key = entry.getKey();
+                String value = entry.getValue();
+
+                Statement  stmt_rep = conn.createStatement();
+                String sql_insert = "INSERT INTO consulta_medicina (`id_consulta`, `id_medicina`, `frecuencia`) "
+                        + "SELECT consultas.id, medicinas.id, '"+value+"' FROM medicinas, consultas "
+                        + "WHERE medicinas.nombre = '"+key.getNombre().getValue()+"' AND "
+                        + "medicinas.concentracion = '"+key.getConcentracion().getValue()+"' AND "
+                        + "medicinas.presentacion = '"+key.getPresentacion().getValue()+"' AND "
+                        + "consultas.fecha = '"+cons.getFecha().getValue()+"' AND "
+                        + "consultas.paciente = '"+cons.getPaciente().getValue()+"';";
+                stmt_rep.executeQuery(sql_insert);
+                }   
         }
+        
+    }
+    
+    public static Paciente generarPaciente(Connection conn, Consulta cons) throws SQLException{
+        Paciente pac = new Paciente();
+        Statement  stmt = conn.createStatement();
+        String sql = " SELECT * FROM paciente WHERE paciente.CI =" + cons.getPaciente().getValue() + ";";
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            pac= new Paciente( rs.getString("CI"), rs.getString("nombres"), rs.getString("apellidos"), rs.getString("fechanacimiento"), rs.getString("tiposangre"), rs.getString("numcelular"), rs.getString("numcasa"), rs.getString("dircasa"), rs.getString("email")); 
         }
+        return pac;
         
     }
 

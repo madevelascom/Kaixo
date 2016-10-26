@@ -51,6 +51,7 @@
                                     <Button mnemonicParsing="false" onAction="#handleValoracion" prefHeight="35.0" prefWidth="120.0" text="Valoración" />
                                     <Button mnemonicParsing="false" onAction="#handleDiagnostico" prefHeight="35.0" prefWidth="120.0" text="Diagnóstico" />
                                     <Button layoutX="10.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleConsultaMedicina" prefHeight="35.0" prefWidth="120.0" text="Receta" />
+                                    <Button layoutX="10.0" layoutY="328.0" mnemonicParsing="false" onAction="#handleLogOut" prefHeight="35.0" prefWidth="120.0" text="Log Out" />
                                  </children>
                               </VBox>
                            </children>
@@ -112,8 +113,8 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Nombres  " GridPane.rowIndex="1" />
-                              <Label text="Apellidos  " GridPane.rowIndex="2" />
+                              <Label text="Apellidos" GridPane.rowIndex="1" />
+                              <Label text="Nombres" GridPane.rowIndex="2" />
                               <Label text="Fecha de nacimiento  " GridPane.rowIndex="3" />
                               <Label text="Tipo de sangre  " GridPane.rowIndex="4" />
                               <Label text="Celular  " GridPane.rowIndex="5" />
@@ -133,11 +134,11 @@
                            </children>
                         </GridPane>
                         <Label layoutX="279.0" layoutY="79.0" styleClass="label-header" text="Información" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0" />
-                        <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="379.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                        <HBox layoutX="382.0" layoutY="443.0" prefHeight="35.0" prefWidth="427.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#handleNewConsult" prefHeight="35.0" prefWidth="120.0" text="Consulta" />
-                              <Button mnemonicParsing="false" onAction="#handleNewPax" prefHeight="35.0" prefWidth="120.0" text="Nuevo" />
-                              <Button mnemonicParsing="false" onAction="#handleEditPax" prefHeight="35.0" prefWidth="120.0" text="Editar" />
+                              <Button mnemonicParsing="false" onAction="#handleNewConsult" prefHeight="35.0" prefWidth="144.0" text="Consulta" />
+                              <Button mnemonicParsing="false" onAction="#handleNewPax" prefHeight="35.0" prefWidth="142.0" text="Nuevo" />
+                              <Button mnemonicParsing="false" onAction="#handleEditPax" prefHeight="35.0" prefWidth="115.0" text="Editar" />
                            </children>
                         </HBox>
                         <TableView fx:id="conPasTable" layoutX="431.0" layoutY="120.0" prefHeight="300.0" prefWidth="400.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="120.0">
@@ -150,7 +151,7 @@
                            </columnResizePolicy>
                         </TableView>
                         <Label layoutX="420.0" layoutY="70.0" styleClass="label-header" text="Consultas pasadas" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="70.0" />
-                        <Button fx:id="botVerCon" layoutX="443.0" layoutY="444.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="280.0" text="VER CONSULTA SELECCIONADA" />
+                        <Button fx:id="botVerCon" layoutX="391.0" layoutY="444.0" mnemonicParsing="false" onAction="#showValoracion" prefHeight="36.0" prefWidth="298.0" text="Ver consulta " />
                      </children></AnchorPane>
             </content>
           </Tab>

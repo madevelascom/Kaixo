@@ -43,9 +43,9 @@ public class JavaSQL {
         //Connection information. This can change from host to host.
         // driver on win this.driver = "com.mysql.jdbc.Driver"; 
         // url on made's win:  "jdbc:mysql://localhost:3306/rubik"; 
-        this.url = "jdbc:mariadb://localhost:3306/kaixo"; 
+        this.url = "jdbc:mysql://localhost:3306/kaixo"; 
         this.dbName = "Kaixo"; 
-        this.driver = "org.mariadb.jdbc.Driver";  
+        this.driver = "com.mysql.jdbc.Driver";  
         this.userName = "root"; 
         this.password = "antrax95"; 
         
@@ -176,6 +176,39 @@ public class JavaSQL {
             return paciente;
         }
     }
+    
+    public static Valoracion showValoracion (Connection conn, Consulta cons) throws SQLException {
+         String query = "{CALL showValoracion(?,?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("fecha", cons.getFecha().getValue());
+         stmt.setString("paciente", cons.getPaciente().getValue());
+         
+         ResultSet rs = stmt.executeQuery();
+         
+        if (rs.next()){
+            Valoracion usa = new Valoracion (rs.getString("presion"), rs.getInt("glucosa"), rs.getDouble("peso"));
+            return usa;
+        }else{
+            return null;
+        }   
+    }
+    
+    public static String showDiagnostico (Connection conn, Consulta cons) throws SQLException {
+         String query = "{CALL showDiagnostico(?,?)}";
+         CallableStatement  stmt = conn.prepareCall(query);
+         stmt.setString("fecha", cons.getFecha().getValue());
+         stmt.setString("paciente", cons.getPaciente().getValue());
+         
+         ResultSet rs = stmt.executeQuery();
+         
+        if (rs.next()){
+            return rs.getString("diagnostico");
+ 
+        }else{
+            return null;
+        }   
+    }
+         
     
     public static Paciente searchPaxNom(Connection conn, String pax) throws SQLException{
         String query = "{CALL searchPaxNom(?)}";
@@ -481,6 +514,10 @@ public class JavaSQL {
         stmt.setString("presentacion_n", med.getPresentacion().getValue());
 
         stmt.executeQuery();
+        
+        
+        
+        
         
         String sql = "DELETE FROM medicina_dist WHERE id_medicina = ( "
                 + "SELECT medicinas.id FROM medicinas WHERE "

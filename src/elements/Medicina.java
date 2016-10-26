@@ -49,4 +49,11 @@ public class Medicina {
         this.presentacion = presentacion;
     }
 
+    @Override
+    public String toString() {
+        return nombre.getValue() + "" + concentracion.getValue() + '}';
+    }
+    
+    
+
 }

@@ -5,6 +5,7 @@
   */
 package GUI;
  
+import elements.Usuario;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import kaixo.Main;
 import static utils.CryptMD5.cryptWithMD5;
+import utils.JavaSQL;
 import static utils.JavaSQL.errorMsg;
 import static utils.JavaSQL.loginSession;
 import static utils.JavaSQL.userLevel;
@@ -58,8 +60,10 @@ import static utils.RegexMatcher.testPassword;
                 if (loginSession(actualDB, userm, passmd5)){
                     int level = userLevel(actualDB,userm);
                      try {
-                         
-                         showKaixoMain(user.getText());
+                         System.out.println(user.getText());
+                         Usuario us = new Usuario();
+                         us = JavaSQL.searchUser(actualDB, user.getText());
+                         showKaixoMain(us);
                      } catch (IOException ex) {
                          Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                      }

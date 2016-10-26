@@ -49,6 +49,11 @@ public class Usuario {
     public void setLevel(StringProperty level) {
         this.level = level;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "username=" + username + ", password=" + password + ", level=" + level + '}';
+    }
     
     
     

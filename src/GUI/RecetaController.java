@@ -26,6 +26,8 @@ import utils.ConnectedComboBox;
 import utils.JavaSQL;
 import static utils.JavaSQL.loadMedicinas;
 import utils.MedicinaConverter;
+import utils.EmailAttachmentSender;
+import static utils.EmailAttachmentSender.sendEmailWithAttachments;
 import utils.PDF;
 
 /**
@@ -184,7 +186,20 @@ public class RecetaController extends Main implements Initializable {
             
             pac = JavaSQL.generarPaciente(actualDB, consulta);
             
+            System.out.println(consulta.getFecha().getValue());
+            
            PDF.print(consulta.getFecha().getValue(), pac, mapa);
+
+        String[] attachFiles = new String[1];
+        attachFiles[0] = "/home/efmoran/Downloads/Kaixo_Viteri/Proy/facturas/"+pac.getCI().getValue()+" "+consulta.getFecha().getValue()+".pdf";
+  
+        try {
+            sendEmailWithAttachments(pac.getEmail().getValue(), attachFiles);
+            System.out.println("Email sent.");
+        } catch (Exception ex) {
+            System.out.println("Could not send email.");
+            ex.printStackTrace();
+        }
             //PDF(mapa, consulta , medicina);
             
             

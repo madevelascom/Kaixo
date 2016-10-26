@@ -14,6 +14,7 @@ import GUI.PacienteController;
 import GUI.RecetaController;
 import GUI.UsuarioController;
 import GUI.ValoracionController;
+import GUI.ValoracionDiagnosticoController;
 import elements.Consulta;
 import elements.Distribuidor;
 import elements.Medicina;
@@ -66,7 +67,7 @@ public class Main extends Application {
     public static ObservableList<Consulta> conHoyData = FXCollections.observableArrayList();
     
     
-    public String usuario;
+    public static Usuario usuario;
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -96,13 +97,21 @@ public class Main extends Application {
     
     public void showKaixoLogin() throws IOException{
         FXMLLoader loader = new FXMLLoader();
+        String css = LoginController.class.getResource("style.css").toExternalForm();
         loader.setLocation(LoginController.class.getResource("Login.fxml"));
         KaixoLogin = (BorderPane) loader.load();
 
-        rootLayout.setCenter(KaixoLogin); 
+        sceneMain = new Scene(KaixoLogin);           
+        sceneMain.getStylesheets().clear();
+        sceneMain.getStylesheets().add(css);
+        primaryStage.setScene(sceneMain);
+        primaryStage.setHeight(250);
+        primaryStage.setWidth(500);
+        primaryStage.show(); 
+        
     }
     
-    public void showKaixoMain( String usuariod) throws IOException{
+    public void showKaixoMain( Usuario usuariod) throws IOException{
         
         this.usuario = usuariod;
         String css = LoginController.class.getResource("style.css").toExternalForm();
@@ -113,6 +122,8 @@ public class Main extends Application {
         sceneMain = new Scene(KaixoInterface);           
         sceneMain.getStylesheets().clear();
         sceneMain.getStylesheets().add(css);
+        primaryStage.setHeight(700);
+        primaryStage.setWidth(1000);
         primaryStage.setScene(sceneMain);         
         primaryStage.show();  
 
@@ -402,6 +413,50 @@ public class Main extends Application {
     public static ObservableList<String> getMedDataNames() {
         return medDataNames;
     }
+    
+    
+    
+        public static boolean showValDiagDialog(Valoracion vat, String diag ,Consulta cons){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginController.class.getResource("ValoracionDiagnostico.fxml"));
+            System.out.println(1);
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            System.out.println(2);
+            Stage dialogStage = new Stage();
+	    dialogStage.setTitle("ValoracionDiagnostico");
+	    dialogStage.initModality(Modality.WINDOW_MODAL);
+            
+	    dialogStage.initOwner(primaryStage);
+	    dialogStage.getIcons().add(new Image("file:resources/icon.png"));
+	    Scene scene = new Scene(page);
+            System.out.println(3);
+	    dialogStage.setScene(scene);
+            
+            
+            ValoracionDiagnosticoController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setValoracion(vat);
+
+            controller.setDiagnostico(diag);
+            
+            System.out.println(vat);
+            System.out.println(diag);
+            controller.setConsulta(cons);
+            controller.setTextos();
+            System.out.println("entro");
+            
+            dialogStage.showAndWait();
+
+	    return controller.isOkClicked();
+        }catch (IOException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    
 
     
     /**

@@ -90,10 +90,10 @@ public class MedicinaController extends Main implements Initializable{
             med.setNombre(new SimpleStringProperty(nombre.getText().trim()));
             med.setConcentracion(new SimpleStringProperty(concentracion.getText().trim()));
             med.setPresentacion(new SimpleStringProperty(presentacion.getValue()));
-            
+            System.out.println(resultDist.toString());
             resultDist.clear();
             resultDist.addAll(dists.getCheckModel().getCheckedItems().parallelStream().distinct().collect(Collectors.toList()));
-            
+            System.out.println(resultDist.toString());
             okClicked = true;
             dialogStage.close();
         }                  

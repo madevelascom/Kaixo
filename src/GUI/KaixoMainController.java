@@ -6,11 +6,15 @@ import elements.Medicina;
 import elements.Paciente;
 import elements.Usuario;
 import elements.Valoracion;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -307,7 +311,10 @@ public class KaixoMainController extends Main implements Initializable {
         
         if (medExists(actualDB, temp)){
             boolean okClicked = Main.showMedicinaDialog(temp, resultDist);
+            
+            
             if (okClicked) {
+             
                 updateMed(actualDB, temp, prev, resultDist);
                 
                 medData = JavaSQL.loadMedicinas(actualDB);
@@ -498,33 +505,64 @@ public class KaixoMainController extends Main implements Initializable {
         }
     }
     
+     @FXML
+    private void handleLogOut()throws IOException{
+    
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Look, a Confirmation Dialog");
+        alert.setContentText("Are you ok with this?");
+         System.out.println("segura?");
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        
+        if (result.get() == ButtonType.OK){
+            showKaixoLogin(); 
+        } else {
+            // ... user chose CANCEL or closed the dialog
+            
+        }
+    
+    }
+    
+    
+    
     @FXML
     private void handleConsultaMedicina()throws SQLException{
-        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Consulta selected = distConHoy.getItems().get(selectedIndex);
-            if (selected != null) {
-                if (selected.getEstado().getValue().equals("Asistida")){
-                    HashMap<Medicina, String> result = new HashMap<>();
-                    boolean okClicked = Main.showRecetaDialog(result, selected);
-                    if (okClicked){
-                        insertReceta(actualDB, selected, result);           
-                    }
-                }else{
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setHeaderText("Kaixo Error #7");
-                    alert.setContentText(errorMsg(actualDB, 7));
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+            int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Consulta selected = distConHoy.getItems().get(selectedIndex);
+                if (selected != null) {
+                    if (selected.getEstado().getValue().equals("Asistida")){
+                        HashMap<Medicina, String> result = new HashMap<>();
+                        boolean okClicked = Main.showRecetaDialog(result, selected);
+                        if (okClicked){
+                            insertReceta(actualDB, selected, result);           
+                        }
+                    }else{
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText("Kaixo Error #7");
+                        alert.setContentText(errorMsg(actualDB, 7));
 
-                    alert.showAndWait();
+                        alert.showAndWait();
+                    }
                 }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText(errorMsg(actualDB, 5));
+
+                alert.showAndWait();
             }
         }else{
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #5");
-            alert.setContentText(errorMsg(actualDB, 5));
+            alert.setHeaderText("Kaixo Error #11");
+            alert.setContentText(errorMsg(actualDB, 11));
 
             alert.showAndWait();
-        }      
+            
+        }
     }
     
     @FXML
@@ -641,25 +679,36 @@ public class KaixoMainController extends Main implements Initializable {
     
     @FXML
     public void handleDiagnostico() throws SQLException{
-        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Consulta temp = distConHoy.getItems().get(selectedIndex);
-            if (temp != null) {
-                Consulta con = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
-                TextInputDialog dialog = new TextInputDialog("");
-                dialog.setTitle("Diagnóstico");
-                dialog.setHeaderText("Diagnóstico");
-                dialog.setContentText("Por favor ingrese el diagnóstico");
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()){
-                    JavaSQL.updateDialog(actualDB, con, result.get());
-                    Alert alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Atención");
-                    alert.setHeaderText(null);
-                    alert.setContentText("¡Diagnóstico agregado!");
-                    alert.showAndWait();
-                    }
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+            int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Consulta temp = distConHoy.getItems().get(selectedIndex);
+                if (temp != null) {
+                    Consulta con = new Consulta(temp.getFecha().getValue(),temp.getPaciente().getValue(),temp.getEstado().getValue());
+                    TextInputDialog dialog = new TextInputDialog("");
+                    dialog.setTitle("Diagnóstico");
+                    dialog.setHeaderText("Diagnóstico");
+                    dialog.setContentText("Por favor ingrese el diagnóstico");
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent()){
+                        JavaSQL.updateDialog(actualDB, con, result.get());
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Atención");
+                        alert.setHeaderText(null);
+                        alert.setContentText("¡Diagnóstico agregado!");
+                        alert.showAndWait();
+                        }
+                }
             }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #11");
+            alert.setContentText(errorMsg(actualDB, 11));
+
+            alert.showAndWait();
+            
+            
+            
         }
     }
     
@@ -667,30 +716,40 @@ public class KaixoMainController extends Main implements Initializable {
     
     @FXML
     private void handleValoracion() throws SQLException{
-        int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Consulta selected = distConHoy.getItems().get(selectedIndex);
-            if (selected != null) {
-                if (selected.getEstado().getValue().equals("Asistida")){
-                    Valoracion temp = new Valoracion();
-                    boolean okClicked = Main.showValDialog(temp);
-                    if (okClicked){
-                        insertValoracion(actualDB, temp, selected);           
-                    }
-                }else{
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setHeaderText("Kaixo Error #7");
-                    alert.setContentText(errorMsg(actualDB, 7));
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+            int selectedIndex = distConHoy.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Consulta selected = distConHoy.getItems().get(selectedIndex);
+                if (selected != null) {
+                    if (selected.getEstado().getValue().equals("Asistida")){
+                        Valoracion temp = new Valoracion();
+                        boolean okClicked = Main.showValDialog(temp);
+                        if (okClicked){
+                            insertValoracion(actualDB, temp, selected);           
+                        }
+                    }else{
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText("Kaixo Error #7");
+                        alert.setContentText(errorMsg(actualDB, 7));
 
-                    alert.showAndWait();
+                        alert.showAndWait();
+                    }
                 }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText(errorMsg(actualDB, 5));
+
+                alert.showAndWait();
             }
         }else{
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #5");
-            alert.setContentText(errorMsg(actualDB, 5));
+             Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #11");
+            alert.setContentText(errorMsg(actualDB, 11));
 
             alert.showAndWait();
+            
+            
         }
         
         
@@ -698,23 +757,34 @@ public class KaixoMainController extends Main implements Initializable {
     
     //Usuarios
     private void showUserDetails (Usuario us){
-        if (us != null){
-           user.setText(us.getUsername().getValue());
-           userLevel.setText(us.getLevel().getValue());
+            if (us != null){
+               user.setText(us.getUsername().getValue());
+               userLevel.setText(us.getLevel().getValue());
 
-        }else{
-           user.setText("");
-           userLevel.setText("");
+            }else{
+               user.setText("");
+               userLevel.setText("");
 
-        }
+            }
     }
+
+    
     
     @FXML
     private void handleNewUser() throws SQLException{
-        Usuario temp = new Usuario();
-        boolean okClicked = Main.showUserNewDialog(temp, false);
-        if (okClicked){
-            insertNewUser(actualDB, temp);
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+            Usuario temp = new Usuario();
+            boolean okClicked = Main.showUserNewDialog(temp, false);
+            if (okClicked){
+                insertNewUser(actualDB, temp);
+            }
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Kaixo Error #11");
+            alert.setContentText(errorMsg(actualDB, 11));
+
+            alert.showAndWait();
+            
         }
     }
     
@@ -730,58 +800,125 @@ public class KaixoMainController extends Main implements Initializable {
             }
         }else{
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #4");
-            alert.setContentText(errorMsg(actualDB, 4));
+            alert.setHeaderText("Kaixo Error #11");
+            alert.setContentText(errorMsg(actualDB, 11));
 
             alert.showAndWait();
         }
     }
+    
+    
+    @FXML
+    public void showValoracion() throws SQLException{
+        int selectedIndex = conPasTable.getSelectionModel().getSelectedIndex();
+              System.out.println(selectedIndex);
+            if (selectedIndex >= 0) {
+              
+                Consulta selected = conPasTable.getItems().get(selectedIndex);
+                if (selected != null) {
+                    if (selected.getEstado().getValue().equals("Asistida")){
+                        Valoracion temp = JavaSQL.showValoracion(actualDB, selected);
+                        
+                        String diagnostico = JavaSQL.showDiagnostico(actualDB, selected);
+                        if (temp != null || diagnostico != null){
+                                boolean okClicked = Main.showValDiagDialog(temp, diagnostico, selected);
+                          }else{
+                            Alert alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText("No se puede ver algo vacio");
+                        alert.setContentText(errorMsg(actualDB, 7));
+
+                        alert.showAndWait();
+                        }
+                            
+
+                    }else{
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText("Kaixo Error #7");
+                        alert.setContentText(errorMsg(actualDB, 7));
+
+                        alert.showAndWait();
+                    }
+                }
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #5");
+                alert.setContentText(errorMsg(actualDB, 5));
+
+                alert.showAndWait();
+            }
+
+
+    }
+
+
+    
     
     
     @FXML
     private void handleSearchUser() throws SQLException{
-        String searchUs = userSearch.getText();
-        if(!searchUs.equals("")){
-            Usuario us = searchUser(actualDB, searchUs);
-            showUserDetails(us);
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+                String searchUs = userSearch.getText();
+                if(!searchUs.equals("")){
+                    Usuario us = searchUser(actualDB, searchUs);
+                    showUserDetails(us);
 
+                }else{
+                    paxNomSearch.clear();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Kaixo Error #8");
+                    alert.setContentText(errorMsg(actualDB, 8));
+                    alert.showAndWait();
+                }
         }else{
-            paxNomSearch.clear();
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #8");
-            alert.setContentText(errorMsg(actualDB, 8));
-            alert.showAndWait();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #11");
+                alert.setContentText(errorMsg(actualDB, 11));
+                alert.showAndWait();
         }
+        
+        
     }
     
     @FXML
     public void delUsuario() throws SQLException{
-        if (existUser(actualDB, user.getText())){
-            Usuario temp = searchUser(actualDB, user.getText());
-            if( true){
-                Alert alert = new Alert(AlertType.CONFIRMATION);
+        if (!(1==Integer.parseInt(usuario.getLevel().getValue()))){
+            if (existUser(actualDB, user.getText())){
+                Usuario temp = searchUser(actualDB, user.getText());
+                if( !(2==Integer.parseInt(usuario.getLevel().getValue()))){
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
 
-                alert.setTitle("Confirmación de borrado");
-                alert.setHeaderText("Vas a borrar el usuario que escogio");
-                alert.setContentText("¿Estás seguro?");
+                    alert.setTitle("Confirmación de borrado");
+                    alert.setHeaderText("Vas a borrar el usuario que escogio");
+                    alert.setContentText("¿Estás seguro?");
 
-                Optional<ButtonType> result = alert.showAndWait();
+                    Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == ButtonType.OK){                    
-                    deleteUser(actualDB, temp);
-                
+                    if (result.get() == ButtonType.OK){                    
+                        deleteUser(actualDB, temp);
+
+                }else{
+                    Alert alerta = new Alert(AlertType.ERROR);
+                    alerta.setHeaderText("Kaixo Error 12");
+                    alerta.setContentText(errorMsg(actualDB, 12));
+
+                    alerta.showAndWait();
+                }
+
             }else{
-                System.out.println("error no puede eliminarse a si mismo");
-            }
-        
-        }else{
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Kaixo Error #4");
-            alert.setContentText(errorMsg(actualDB, 4));
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #12");
+                alert.setContentText(errorMsg(actualDB, 12));
 
-            alert.showAndWait();
-        }
-    }
+                alert.showAndWait();
+            }
+        }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Kaixo Error #11");
+                alert.setContentText(errorMsg(actualDB, 11));
+                alert.showAndWait();
+            }
+                
+            }
     }
     
 
